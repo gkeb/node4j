@@ -1,0 +1,40 @@
+[project]
+name = "Node4j"
+version = "0.2.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "neo4j>=5.28.1",
+    "pydantic>=2.11.7",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "python-dotenv>=1.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.1",
+]
+
+
+
+# Konfiguracja dla Ruff - lintera i formattera
+[tool.ruff]
+# Ustawia maksymalną długość linii na 88 znaków (jak w popularnym formatterze `black`)
+line-length = 88
+# Wybierz reguły, które Ruff ma sprawdzać. Dobry, podstawowy zestaw:
+# E - błędy (pycodestyle)
+# W - ostrzeżenia (pycodestyle)
+# F - błędy logiczne (Pyflakes)
+# I - błędy sortowania importów (isort)
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# Włącz możliwość automatycznej naprawy dla wszystkich możliwych reguł
+fixable = ["ALL"]
+
+
+# Konfiguracja dla formattera wbudowanego w Ruff
+[tool.ruff.format]
+# Styl cytatów - używaj podwójnych cudzysłowów
+quote-style = "double"
