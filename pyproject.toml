@@ -39,3 +39,4 @@ fixable = ["ALL"]
 [tool.ruff.format]
 # Styl cytatów - używaj podwójnych cudzysłowów
 quote-style = "double"
+
