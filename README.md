@@ -41,9 +41,9 @@ pip install pydantic neo4j-driver python-dotenv
 Create a `.env` file in the project root:
 
 ```
-NEO4J_URI="bolt://localhost:7687"
-NEO4J_USER="neo4j"
-NEO4J_PASSWORD="password"
+NODE4J_URI="bolt://localhost:7687"
+NODE4J_USER="neo4j"
+NODE4J_PASSWORD="password"
 ```
 
 #### 2. Defining Models
