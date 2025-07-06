@@ -6,6 +6,8 @@ from contextvars import ContextVar  # <-- NOWY IMPORT
 from neo4j import AsyncGraphDatabase, basic_auth, AsyncTransaction
 from contextlib import asynccontextmanager
 
+from .config import settings # <-- NOWY IMPORT
+
 # +++ NOWA SEKCJA: CONTEXT VAR +++
 # Tworzymy zmienną kontekstową, która będzie przechowywać aktywną transakcję.
 # Domyślnie jest pusta.
@@ -31,13 +33,17 @@ class AsyncDatabase:
         """
         if self.driver is not None:
             return
+        # +++ POCZĄTEK ZMIANY +++
+        # Zamiast os.getenv, używamy naszego obiektu konfiguracyjnego.
+        # Kod jest czystszy, a wartości są już zwalidowane.
         self.driver = AsyncGraphDatabase.driver(
-            os.getenv("NEO4J_URI", "bolt://127.0.0.1:7687"),
+            settings.uri,
             auth=basic_auth(
-                os.getenv("NEO4J_USER", "neo4j"),
-                os.getenv("NEO4J_PASSWORD", "password"),
+                settings.user,
+                settings.password,
             ),
         )
+        # +++ KONIEC ZMIANY +++
         await self.driver.verify_connectivity()
         print("Połączono z Neo4j.")
 

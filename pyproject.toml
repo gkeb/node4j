@@ -1,12 +1,13 @@
 [project]
 name = "Node4j"
-version = "0.2.0"
+version = "0.2.2"
 description = "Modern, async OGM for Neo4j, built with Pydantic and the official driver."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "neo4j>=5.28.1",
     "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.0.0",
     "python-dotenv>=1.1.0",
