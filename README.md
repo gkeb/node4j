@@ -156,14 +156,14 @@ companies = await Company.q.match_all(
 Avoid N+1 query issues by loading relationships upfront:
 
 ```python
-# Pobierz wszystkie osoby i od razu załaduj informacje o ich miejscach pracy
+# Fetch all people and eagerly load their job information
 people_with_jobs = await Person.q.match_all(prefetch=["works_at"])
 
 for person in people_with_jobs:
-    # To odwołanie NIE wykonuje nowego zapytania do bazy
-    # `person._works_at` jest już w cache'u
-    if person.works_at: 
-        print(f"{person.name} pracuje w {len(await person.works_at)} firmach.")
+    # The 'await' below uses cached data - it does NOT execute a new DB query
+    jobs = await person.works_at
+    if jobs: 
+        print(f"{person.name} works at {len(jobs)} companies.")
 ```
 
 #### Bulk Operations
@@ -250,41 +250,55 @@ await link.save_with_expiry(lifespan=datetime.timedelta(hours=24))
 ```
 
 ### Soft Delete
-
 Instead of permanently removing data, the soft delete pattern marks it as inactive—allowing for auditing and potential recovery.
 
-1. Define a model inheriting `SoftDeleteMixin`:
+1.  Define a model inheriting `SoftDeleteMixin`:
+    ```python
+    # models.py
+    from node4j.mixins import SoftDeleteMixin
 
-```python
-# models.py
-from node4j.mixins import SoftDeleteMixin
+    class Article(SoftDeleteMixin):
+        title: str
+        content: str
+    ```
 
-class Article(SoftDeleteMixin):
-    title: str
-    content: str
-```
+2.  Activate the dual-manager system:
 
-2. Activate magic filtering (optional):
+    The `.setup_soft_delete_manager()` method installs two query managers to give you full control over data visibility:
+    *   `.q` – The default manager, which automatically **hides** "deleted" objects.
+    *   `.all_objects` – A special manager that **always sees all** objects, including deleted ones.
 
-```python
-# main.py
-from models import Article
+    ```python
+    # main.py
+    from models import Article
 
-Article.setup_soft_delete_manager()
-```
+    Article.setup_soft_delete_manager()
+    ```
 
-3. Use `.soft_delete()`:
+3.  Use the `.soft_delete()` and `.restore()` methods:
+    ```python
+    article = await Article.q.create(title="My Article", content="...")
 
-```python
-article = await Article.q.create(title="Mój Artykuł", content="...")
+    # Mark the article as deleted
+    await article.soft_delete()
 
-# Oznacz artykuł jako usunięty
-await article.soft_delete()
+    # The default .q manager will not find the article
+    results = await Article.q.match_all(filters={"title": "My Article"})
+    print(len(results)) # -> 0
 
-# To zapytanie nie znajdzie artykułu, ponieważ został on odfiltrowany
-results = await Article.q.match_all(filters={"title": "Mój Artykuł"})
-print(len(results)) # -> 0
-```
+    # Use the .all_objects manager to find the deleted article
+    deleted_article = await Article.all_objects.match_one(filters={"title": "My Article"})
+    if deleted_article:
+        print(f"Found deleted article: {deleted_article.title}")
+        
+        # Restore the article
+        await deleted_article.restore()
+
+    # Now, the default .q manager can see it again
+    restored_article = await Article.q.match_one(filters={"title": "My Article"})
+    print(f"Article restored: {restored_article is not None}") # -> True
+    ```
+
 
 ## Extensions: APOC and Graph Data Science
 

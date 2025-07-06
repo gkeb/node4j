@@ -2,6 +2,8 @@
 from __future__ import annotations
 from typing import Type, Any, TYPE_CHECKING, Optional
 import uuid
+import neo4j  # +++ NOWY IMPORT +++
+
 
 from .db import connection, _current_transaction
 from .registry import node_registry
@@ -14,6 +16,30 @@ if TYPE_CHECKING:
     from .properties import RelationshipProperty
 
 LABEL_TYPE_MARKER = ":"
+
+# +++ NOWA FUNKCJA POMOCNICZA (Twoja propozycja) +++
+def _convert_neo4j_temporals(obj: Any) -> Any:
+    """
+    Rekurencyjnie przechodzi przez obiekt (słownik/listę) i konwertuje
+    specyficzne dla sterownika neo4j typy temporalne (DateTime, Date, etc.)
+    na natywne typy Pythona.
+    """
+    if isinstance(obj, dict):
+        return {k: _convert_neo4j_temporals(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_convert_neo4j_temporals(v) for v in obj]
+    if isinstance(
+        obj,
+        (
+            neo4j.time.DateTime,
+            neo4j.time.Date,
+            neo4j.time.Time,
+            neo4j.time.Duration,
+        ),
+    ):
+        return obj.to_native()
+    return obj
+# +++ KONIEC NOWEJ FUNKCJI +++
 
 
 class NodeManager:
@@ -490,6 +516,10 @@ class NodeManager:
                         f"Nie znaleziono modelu dla etykiety '{rel_descriptor.target_node_label}'"
                     )
 
+                # +++ WYWOŁANIE KONWERSJI DLA DANYCH RELACJI +++
+                # Robimy to tutaj, aby mieć pewność, że właściwości na relacjach też są konwertowane
+                value = _convert_neo4j_temporals(value)
+                
                 hydrated_rel_list = []
                 for rel_map in value:
                     nested_node_data = rel_map.get("node")
@@ -515,6 +545,9 @@ class NodeManager:
             else:
                 fields_to_validate[key] = value
 
+        # +++ WYWOŁANIE KONWERSJI PRZED WALIDACJĄ PYDANTIC +++
+        fields_to_validate = _convert_neo4j_temporals(fields_to_validate)
+        
         node_instance = model_class.model_validate(fields_to_validate)
         if internal_id:
             node_instance._internal_id = internal_id

@@ -150,11 +150,12 @@ Unikaj problemu N+1 zapytań, ładując relacje z góry.
 people_with_jobs = await Person.q.match_all(prefetch=["works_at"])
 
 for person in people_with_jobs:
-    # To odwołanie NIE wykonuje nowego zapytania do bazy
-    # `person._works_at` jest już w cache'u
-    if person.works_at: 
-        print(f"{person.name} pracuje w {len(await person.works_at)} firmach.")
+    # Poniższe 'await' używa danych z cache'u - NIE wykonuje nowego zapytania do bazy
+    jobs = await person.works_at 
+    if jobs: 
+        print(f"{person.name} pracuje w {len(jobs)} firmach.")
 ```
+
 #### Operacje Masowe
 
 Wydajnie twórz i aktualizuj wiele węzłów naraz.
@@ -231,34 +232,53 @@ await link.save_with_expiry(lifespan=datetime.timedelta(hours=24))
 ```
 ### Miękkie Usuwanie (Soft Delete)
 Zamiast trwale usuwać dane, wzorzec "soft delete" oznacza je jako nieaktywne. Pozwala to na zachowanie historii, audyt i możliwość łatwego przywrócenia danych.
-1. Zdefiniuj model dziedziczący po `SoftDeleteMixin`:
-```python
-# models.py
-from node4j.mixins import SoftDeleteMixin
+1.  Zdefiniuj model dziedziczący po `SoftDeleteMixin`:
+    ```python
+    # models.py
+    from node4j.mixins import SoftDeleteMixin
 
-class Article(SoftDeleteMixin):
-    title: str
-    content: str
-```
-2. Aktywuj "magiczne" filtrowanie (opcjonalnie):
-Możesz skonfigurować menedżer `.q`, aby automatycznie ukrywał "usunięte" obiekty w zapytaniach `match_all`.
-```python
-# main.py
-from models import Article
+    class Article(SoftDeleteMixin):
+        title: str
+        content: str
+    ```
 
-Article.setup_soft_delete_manager()
-```
-3. Używaj metody `.soft_delete()`:
-```python
-article = await Article.q.create(title="Mój Artykuł", content="...")
+2.  Aktywuj system podwójnego menedżera:
 
-# Oznacz artykuł jako usunięty
-await article.soft_delete()
+    Metoda `.setup_soft_delete_manager()` instaluje dwa menedżery zapytań, aby zapewnić pełną kontrolę nad widocznością danych:
+    *   `.q` – Domyślny menedżer, który automatycznie **ukrywa** "usunięte" obiekty.
+    *   `.all_objects` – Specjalny menedżer, który **zawsze widzi wszystkie** obiekty, również te usunięte.
 
-# To zapytanie nie znajdzie artykułu, ponieważ został on odfiltrowany
-results = await Article.q.match_all(filters={"title": "Mój Artykuł"})
-print(len(results)) # -> 0
-```
+    ```python
+    # main.py
+    from models import Article
+
+    Article.setup_soft_delete_manager()
+    ```
+
+33.  Używaj metod `.soft_delete()` i `.restore()`:
+
+    ```python
+    article = await Article.q.create(title="Mój Artykuł", content="...")
+
+    # Oznacz artykuł jako usunięty
+    await article.soft_delete()
+
+    # Domyślny menedżer .q nie znajdzie artykułu
+    results = await Article.q.match_all(filters={"title": "Mój Artykuł"})
+    print(len(results)) # -> 0
+
+    # Użyj menedżera .all_objects, aby znaleźć usunięty artykuł
+    deleted_article = await Article.all_objects.match_one(filters={"title": "Mój Artykuł"})
+    if deleted_article:
+        print(f"Znaleziono usunięty artykuł: {deleted_article.title}")
+        
+        # Przywróć artykuł
+        await deleted_article.restore()
+
+    # Teraz domyślny menedżer .q znowu go widzi
+    restored_article = await Article.q.match_one(filters={"title": "Mój Artykuł"})
+    print(f"Przywrócono artykuł: {restored_article is not None}") # -> True
+    ```
 
 ## Rozszerzenia: APOC i Graph Data Science
 **node4j** oferuje opcjonalną, ścisłą integrację z popularnymi bibliotekami rozszerzeń Neo4j: **APOC** i **Graph Data Science (GDS)**. Moduły te dostarczają wygodne, pythonowe opakowania dla najczęściej używanych procedur, umożliwiając zaawansowaną analizę i manipulację danymi bezpośrednio z poziomu Twojego kodu.
