@@ -1,0 +1,508 @@
+{"event": "Using proactor: IocpProactor", "level": "debug", "logger": "asyncio", "timestamp": "2025-07-13T16:24:24.086265Z"}
+{"event": ">>> Starting OGM tests for Neo4j <<<", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.092271Z"}
+{"event": "Attempting to connect to Neo4j database", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.093272Z"}
+{"event": "Successfully connected to Neo4j.", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.237164Z"}
+{"event": "--- 1. Cleaning database and schema ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.237164Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.237164Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.269396Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.269396Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.362202Z"}
+{"event": "Cleaned all indexes and constraints using APOC.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.362202Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.362202Z"}
+{"event": "Query execution failed", "exc_info": ["<class 'neo4j.exceptions.ClientError'>", "ClientError(\"There is no procedure with the name `apoc.periodic.drop` registered for this database instance. Please ensure you've spelled the procedure name correctly and that the procedure is properly deployed.\")", "<traceback object at 0x000001C7C807FDC0>"], "level": "error", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.374200Z"}
+{"event": "Database has been cleaned.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.374200Z"}
+{"event": "Applying schema for model...", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.374200Z"}
+{"event": "Executing schema query", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.375201Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.375201Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.389209Z"}
+{"event": "Executing schema query", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.390210Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.390210Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.455985Z"}
+{"event": "Schema applied successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.456984Z"}
+{"event": "Applying schema for model...", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.456984Z"}
+{"event": "Executing schema query", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.456984Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.456984Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.515429Z"}
+{"event": "Schema applied successfully.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.516425Z"}
+{"event": "No schema (indexes/constraints) defined for model.", "level": "info", "logger": "node4j.manager.Post", "timestamp": "2025-07-13T16:24:24.516425Z"}
+{"event": "--- 2. Creating nodes and testing constraints ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.516425Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.516425Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea", "timestamp": "2025-07-13T16:24:24.517427Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.517427Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.544141Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea", "timestamp": "2025-07-13T16:24:24.544141Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.545140Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.546168Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.571287Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.572287Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.572287Z"}
+{"node": "<Person uid=ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea>", "event": "Created main Alice", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.572287Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.572287Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.aeabcac2-382f-4518-8663-34385c2be23c", "timestamp": "2025-07-13T16:24:24.573286Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.573286Z"}
+{"event": "Query execution failed", "exc_info": ["<class 'neo4j.exceptions.ConstraintError'>", "ConstraintError(\"Node(20) already exists with label `Person` and property `email` = 'alice@example.com'\")", "<traceback object at 0x000001C7C80F5240>"], "level": "error", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.620892Z"}
+{"error_type": "ConstraintError", "event": "Attempt to create person with duplicate email correctly failed.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.620892Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.620892Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:24.620892Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.621887Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.643112Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:24.644103Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.644103Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.644103Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.654058Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.654058Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.654058Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.654999Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:24.654999Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.654999Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.665105Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:24.666007Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.666007Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.666007Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.674182Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.674182Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.675187Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.675187Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.675187Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.701284Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.701284Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.701284Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.702290Z"}
+{"event": "Query execution failed", "exc_info": ["<class 'neo4j.exceptions.ConstraintError'>", "ConstraintError(\"Node(36) already exists with label `Company` and property `name` = 'Neo4j Inc.'\")", "<traceback object at 0x000001C7C807C200>"], "level": "error", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.709958Z"}
+{"error_type": "ConstraintError", "event": "Attempt to create company with duplicate name correctly failed.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.710946Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.710946Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.711948Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.721948Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:24.721948Z"}
+{"data_summary": "<Person uid=7279f843-c5e2-48fe-8685-7611c8563dac>, <Person uid=5a3fda22-5d68-442e-a92a-a4fd7c2b111e>, <Company uid=94d6422c-6f2a-4278-8a41-44e30aae0ed1>, <Company uid=b0a54b7b-9b49-43dc-9390-c003ffc1fa21>", "event": "Created remaining test data", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.721948Z"}
+{"event": "--- 3. Creating relationships ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.722948Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.722948Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.722948Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.760488Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.760488Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.761482Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.771403Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.772366Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.772366Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.782499Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.783423Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.783423Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.811710Z"}
+{"event": "Relationships created.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.811710Z"}
+{"event": "--- 4. Basic search ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.811710Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.813235Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.838931Z"}
+{"node": "<Person uid=7279f843-c5e2-48fe-8685-7611c8563dac>", "event": "Found Bob", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.838931Z"}
+{"event": "--- 5. Updating ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.839932Z"}
+{"event": "Update operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.839932Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.840932Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.864136Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.865124Z"}
+{"event": "Found 1 nodes to update.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.866119Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.869118Z"}
+{"event": "Updating node", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.869118Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:24.870624Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.870624Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.894799Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:24.895807Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.895807Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.895807Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.919051Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:24.919051Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.924561Z"}
+{"event": "Successfully updated 1 nodes.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.925563Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.925563Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.957369Z"}
+{"age": 41, "event": "Bob's age after update", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.957897Z"}
+{"event": "--- 6. Deleting ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:24.958429Z"}
+{"event": "Delete operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.958959Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.958959Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.988655Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.989161Z"}
+{"event": "Found 1 nodes to delete.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.989161Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.991257Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:24.991781Z"}
+{"event": "Executing pre_delete hook", "level": "debug", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:24.991781Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:24.992303Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.023336Z"}
+{"event": "Executing post_delete hook, creating and cleaning up audit logs.", "level": "info", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:25.023986Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.023986Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.024639Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.031298Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.031298Z"}
+{"event": "Deleting audit logs for the deleted person.", "level": "debug", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:25.032307Z"}
+{"event": "Delete operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.032814Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.033356Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.059399Z"}
+{"event": "match_all found 2 nodes.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.059399Z"}
+{"event": "Found 2 nodes to delete.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.060400Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.060400Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.061398Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.076952Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.077960Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.078959Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.085548Z"}
+{"event": "Successfully deleted 2 nodes.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.085548Z"}
+{"event": "Audit logs for deleted person have been removed.", "level": "info", "logger": "models.Person.5a3fda22-5d68-442e-a92a-a4fd7c2b111e", "timestamp": "2025-07-13T16:24:25.086541Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.101056Z"}
+{"event": "Successfully deleted 1 nodes.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.102057Z"}
+{"event": "Charlie deleted.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.102057Z"}
+{"event": "--- 7. Testing relationships ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.102057Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.102057Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.107056Z"}
+{"event": "Cache miss. Fetching relationship data from database.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:25.108057Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.109057Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.199877Z"}
+{"event": "Fetched 1 related nodes.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:25.200883Z"}
+{"data": [["<Company uid=94d6422c-6f2a-4278-8a41-44e30aae0ed1>", {"role": "Engineer", "start_year": 2020}]], "event": "Alice works at", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.200883Z"}
+{"event": "--- 8. Testing incoming relationships ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.201387Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.201910Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.234522Z"}
+{"event": "Cache miss. Fetching relationship data from database.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Company[94d6422c-6f2a-4278-8a41-44e30aae0ed1].employees", "timestamp": "2025-07-13T16:24:25.235045Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.235045Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.273876Z"}
+{"event": "Fetched 2 related nodes.", "level": "info", "logger": "node4j.properties.RelationshipManager.Company[94d6422c-6f2a-4278-8a41-44e30aae0ed1].employees", "timestamp": "2025-07-13T16:24:25.273876Z"}
+{"names": ["Bob", "Alice"], "event": "Employees at Neo4j Inc.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.274879Z"}
+{"event": "--- 9. Testing nodes with multiple labels ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.274879Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Employee", "timestamp": "2025-07-13T16:24:25.274879Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Employee.32d1a286-dcc8-434a-9b15-93aadbf77ff6", "timestamp": "2025-07-13T16:24:25.275878Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.276537Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.300619Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Employee.32d1a286-dcc8-434a-9b15-93aadbf77ff6", "timestamp": "2025-07-13T16:24:25.301617Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.301617Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.301617Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.310322Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.311648Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Employee", "timestamp": "2025-07-13T16:24:25.313177Z"}
+{"node": "<Employee uid=32d1a286-dcc8-434a-9b15-93aadbf77ff6>", "employee_id": "8cbc5d8c", "event": "Created employee", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.313177Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.314184Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.352785Z"}
+{"result": true, "event": "Found Diana via Employee.q", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.354288Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.355056Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.373546Z"}
+{"event": "match_all found 3 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.374546Z"}
+{"names": "{'Bob', 'Alice', 'Diana'}", "event": "All people in DB", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.374546Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.374546Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.382063Z"}
+{"event": "match_one did not find any matching node.", "level": "debug", "logger": "node4j.manager.Employee", "timestamp": "2025-07-13T16:24:25.383061Z"}
+{"result": null, "event": "Attempt to find Alice via Employee.q", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.383061Z"}
+{"event": "--- 10. Advanced filtering ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.383061Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.383061Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.419343Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.419343Z"}
+{"names": ["Bob"], "event": "People over 35", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.420344Z"}
+{"event": "--- 11. Relationship properties ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.420344Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.420344Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.420344Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.440569Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.442073Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.451859Z"}
+{"event": "Cache miss. Fetching relationship data from database.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:25.452796Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.452796Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.465465Z"}
+{"event": "Fetched 2 related nodes.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:25.469984Z"}
+{"data": [["<Company uid=b0a54b7b-9b49-43dc-9390-c003ffc1fa21>", {"role": "Consultant", "start_year": 2022}], ["<Company uid=94d6422c-6f2a-4278-8a41-44e30aae0ed1>", {"role": "Engineer", "start_year": 2020}]], "event": "Alice's work data", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.469984Z"}
+{"event": "--- 12. Disconnecting relationships ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.470982Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.470982Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.479520Z"}
+{"event": "Disconnecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.481532Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.482524Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.522234Z"}
+{"event": "Disconnected Alice from Bob.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.522234Z"}
+{"event": "--- 13. Prefetching (Eager Loading) ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.522234Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.523234Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.570375Z"}
+{"event": "match_all found 3 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.571375Z"}
+{"count": 3, "event": "Fetched all people with companies prefetched", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.571375Z"}
+{"event": "--- 14. Nested Prefetching ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.571375Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.572374Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.6e186276-d07d-4d55-a5f0-753cc46883a4", "timestamp": "2025-07-13T16:24:25.572374Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.572374Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.582326Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.6e186276-d07d-4d55-a5f0-753cc46883a4", "timestamp": "2025-07-13T16:24:25.583334Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.583334Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.583334Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.597336Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:25.597336Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.598842Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Post", "timestamp": "2025-07-13T16:24:25.599899Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.600853Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.636775Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Post", "timestamp": "2025-07-13T16:24:25.636775Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.637773Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.637773Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.667812Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.667812Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:25.668812Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.668812Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.719517Z"}
+{"event": "Connecting nodes.", "level": "debug", "logger": "node4j.manager.Post", "timestamp": "2025-07-13T16:24:25.719517Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.719517Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.772696Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.773696Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.847184Z"}
+{"tester_uid": "6e186276-d07d-4d55-a5f0-753cc46883a4", "event": "Fetched tester with nested posts and tags.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.847184Z"}
+{"event": "--- 15. get_or_create ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.847184Z"}
+{"event": "get_or_create operation started.", "level": "debug", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.847184Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.848535Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.871162Z"}
+{"event": "match_one did not find any matching node.", "level": "debug", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.871162Z"}
+{"event": "get_or_create did not find a node, creating a new one.", "level": "info", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.871162Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.871162Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.873171Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.969110Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:25.972114Z"}
+{"created": true, "tag_name": "NewTag", "event": "get_or_create for 'NewTag'", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.972114Z"}
+{"event": "--- 16. update_or_create ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:25.973110Z"}
+{"event": "update_or_create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:25.974110Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:25.974110Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.007831Z"}
+{"event": "match_one did not find any matching node.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.007831Z"}
+{"event": "update_or_create did not find a node, creating a new one.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.008838Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.008838Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.008838Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.059842Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.061349Z"}
+{"created": true, "company_name": "Innovate LLC", "founded": 2024, "event": "update_or_create for 'Innovate LLC'", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.061349Z"}
+{"event": "--- 17. Sorting (order_by) ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.062371Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.063362Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.154007Z"}
+{"event": "match_all found 4 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.154007Z"}
+{"names": ["Alice", "Bob", "Diana", "Tester"], "event": "People sorted by name asc", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.154536Z"}
+{"event": "--- 18. Aggregations ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.154536Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.155066Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.181179Z"}
+{"event": "Count operation returned 4.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.182171Z"}
+{"count": 4, "event": "Total person count", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.183172Z"}
+{"event": "Aggregate operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.184170Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.184170Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.215827Z"}
+{"event": "Aggregate operation finished.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.215827Z"}
+{"stats": {"avg_age": 49.5, "oldest": 99}, "event": "Age statistics", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.215827Z"}
+{"event": "--- 19. Lifecycle Hooks ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.216346Z"}
+{"event": "get_or_create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.216346Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.216346Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.220352Z"}
+{"event": "match_one did not find any matching node.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.220352Z"}
+{"event": "get_or_create did not find a node, creating a new one.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.221351Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.221351Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.221351Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.221351Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.233441Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.234439Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.234439Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.234439Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.243078Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.243078Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.244075Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.244075Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.272226Z"}
+{"eve_last_modified": "datetime.datetime(2025, 7, 13, 16, 24, 26, 221351)", "audit_log_exists": true, "event": "Lifecycle hook test: CREATE", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.272226Z"}
+{"event": "Delete operation started.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.272226Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.272226Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.276444Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.277443Z"}
+{"event": "Found 1 nodes to delete.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.277443Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.281969Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.281969Z"}
+{"event": "Executing pre_delete hook", "level": "debug", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.281969Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.281969Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.285684Z"}
+{"event": "Executing post_delete hook, creating and cleaning up audit logs.", "level": "info", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.285684Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.285684Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.285684Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.289150Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.289150Z"}
+{"event": "Deleting audit logs for the deleted person.", "level": "debug", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.289150Z"}
+{"event": "Delete operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.289150Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.289150Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.293174Z"}
+{"event": "match_all found 2 nodes.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.293174Z"}
+{"event": "Found 2 nodes to delete.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.294164Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.294164Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.294164Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.299163Z"}
+{"event": "Deleting node", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.299163Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.300163Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.303163Z"}
+{"event": "Successfully deleted 2 nodes.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.303163Z"}
+{"event": "Audit logs for deleted person have been removed.", "level": "info", "logger": "models.Person.3f18db5c-f20a-489e-8220-1d2d397b2eeb", "timestamp": "2025-07-13T16:24:26.303163Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.307319Z"}
+{"event": "Successfully deleted 1 nodes.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.307319Z"}
+{"event": "Lifecycle hook test: DELETE complete.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.307319Z"}
+{"event": "--- 20. Bulk Operations ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.307319Z"}
+{"event": "Starting bulk_create for 3 nodes.", "level": "info", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:26.307319Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.308328Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.332503Z"}
+{"event": "Successfully finished bulk_create, created 3 nodes.", "level": "info", "logger": "node4j.manager.Tag", "timestamp": "2025-07-13T16:24:26.332503Z"}
+{"count": 3, "event": "bulk_create result", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.332503Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.333482Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.353956Z"}
+{"event": "match_all found 2 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.354953Z"}
+{"event": "Starting bulk_update for 2 nodes, matching on 'uid'.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.354953Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.354953Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.386257Z"}
+{"event": "match_all found 2 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.386257Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea", "timestamp": "2025-07-13T16:24:26.386257Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:26.387266Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.387266Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.422399Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea", "timestamp": "2025-07-13T16:24:26.422399Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.423396Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.423396Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.434643Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.435643Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Person.7279f843-c5e2-48fe-8685-7611c8563dac", "timestamp": "2025-07-13T16:24:26.435643Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.435643Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.436643Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.445945Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.447945Z"}
+{"event": "Successfully finished bulk_update, updated 2 nodes.", "level": "info", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.447945Z"}
+{"count": 2, "event": "bulk_update result", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.447945Z"}
+{"event": "--- 21. Instance Relationship Management ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.448945Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Employee", "timestamp": "2025-07-13T16:24:26.448945Z"}
+{"event": "Executing pre_save hook", "level": "debug", "logger": "models.Employee.12eefb0b-03fe-48c2-b138-68217aa1148b", "timestamp": "2025-07-13T16:24:26.448945Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.449944Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.457241Z"}
+{"event": "Executing post_save hook, creating audit log.", "level": "info", "logger": "models.Employee.12eefb0b-03fe-48c2-b138-68217aa1148b", "timestamp": "2025-07-13T16:24:26.458240Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.459247Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.459247Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.470642Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.AuditLog", "timestamp": "2025-07-13T16:24:26.470642Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Employee", "timestamp": "2025-07-13T16:24:26.470642Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.470642Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.470642Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.482169Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.Company", "timestamp": "2025-07-13T16:24:26.482169Z"}
+{"event": "Connecting to node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.483169Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.483169Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.517972Z"}
+{"event": "Connection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.517972Z"}
+{"event": "Connected Dave to Graph Corp via instance method.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.517972Z"}
+{"event": "Cache miss. Fetching relationship data from database.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.518965Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.518965Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.526483Z"}
+{"event": "Fetched 1 related nodes.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.527482Z"}
+{"event": "Disconnecting from node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.527482Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.527482Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.571082Z"}
+{"event": "Clearing relationship cache due to modification.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.571082Z"}
+{"event": "Disconnection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.571082Z"}
+{"event": "Disconnected Dave from Graph Corp via instance method.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.571082Z"}
+{"event": "Cache miss. Fetching relationship data from database.", "level": "debug", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.572083Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.572083Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.576089Z"}
+{"event": "Fetched 0 related nodes.", "level": "info", "logger": "node4j.properties.RelationshipManager.Employee[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.577095Z"}
+{"event": "--- 22. @connection.atomic decorator ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.577095Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.581084Z"}
+{"employee": "Alice", "event": "Starting atomic transaction...", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.582084Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.583105Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.588602Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.588602Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.591605Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.592605Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.599212Z"}
+{"event": "Disconnecting from node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:26.599212Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.599212Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.602218Z"}
+{"event": "Disconnection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:26.602218Z"}
+{"event": "Connecting to node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:26.602218Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.603217Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.621910Z"}
+{"event": "Connection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[ad1fd08a-6a54-4940-b2a4-f71a1e6bc8ea].works_at", "timestamp": "2025-07-13T16:24:26.622427Z"}
+{"event": "Transaction finished successfully (commit).", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.622427Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.631937Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.633936Z"}
+{"employee": "Dave", "event": "Starting atomic transaction...", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.633936Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.633936Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.637279Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.637279Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.640286Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.641285Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.646830Z"}
+{"event": "Disconnecting from node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.647849Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.648841Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.652840Z"}
+{"event": "Disconnection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.652840Z"}
+{"event": "Connecting to node.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.652840Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.653842Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.657838Z"}
+{"event": "Connection successful.", "level": "info", "logger": "node4j.properties.RelationshipManager.Person[12eefb0b-03fe-48c2-b138-68217aa1148b].works_at", "timestamp": "2025-07-13T16:24:26.657838Z"}
+{"event": "Simulating error for rollback!", "level": "warning", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.657838Z"}
+{"event": "Transaction rolled back due to an exception.", "exc_info": ["<class 'ValueError'>", "ValueError('Transfer impossible!')", "<traceback object at 0x000001C7C84780C0>"], "level": "warning", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.662755Z"}
+{"event": "Caught expected error for rollback test.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.664287Z"}
+{"event": "--- 23. Advanced Filtering with Q Objects ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.665299Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.665299Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.691992Z"}
+{"event": "match_all found 2 nodes.", "level": "debug", "logger": "node4j.manager.Person", "timestamp": "2025-07-13T16:24:26.692993Z"}
+{"names": "{'Diana', 'Tester'}", "event": "People < 30 or > 90", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.692993Z"}
+{"event": "--- 24. SoftDeleteMixin ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.693992Z"}
+{"event": "Node class 'SecretDocument' is being created by metaclass.", "level": "debug", "logger": "node4j.nodes.SecretDocument", "timestamp": "2025-07-13T16:24:26.693992Z"}
+{"event": "Final labels set.", "level": "debug", "logger": "node4j.nodes.SecretDocument", "timestamp": "2025-07-13T16:24:26.697008Z"}
+{"event": "Node class 'SecretDocument' registered successfully with a NodeManager.", "level": "info", "logger": "node4j.nodes.SecretDocument", "timestamp": "2025-07-13T16:24:26.697991Z"}
+{"event": "Initialized SoftDeleteManager. Queries will be filtered for active objects (is_deleted=False).", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.697991Z"}
+{"event": "Soft-delete manager installed.", "level": "info", "logger": "node4j.mixins.SecretDocument", "timestamp": "2025-07-13T16:24:26.697991Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.697991Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.698990Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.721630Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.723625Z"}
+{"event": "Applying soft-delete filter (is_deleted=False) to the query.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.723625Z"}
+{"event": "Update operation started.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.723625Z"}
+{"event": "Applying soft-delete filter (is_deleted=False) to the query.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.723625Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.723625Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.755752Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.755752Z"}
+{"event": "Found 1 nodes to update.", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.755752Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.757770Z"}
+{"event": "Updating node", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.757770Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.758770Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.766317Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.769844Z"}
+{"event": "Successfully updated 1 nodes.", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.770842Z"}
+{"event": "Node soft-deleted successfully.", "level": "info", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.770842Z"}
+{"event": "Soft-deleted a document.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.770842Z"}
+{"event": "Applying soft-delete filter (is_deleted=False) to the query.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.770842Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.771841Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.801051Z"}
+{"event": "Count operation returned 0.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.801051Z"}
+{"count": 0, "event": "Active document count", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.802048Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.802048Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.820430Z"}
+{"event": "Count operation returned 1.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.820430Z"}
+{"count": 1, "event": "Total document count (including deleted)", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.821429Z"}
+{"event": "Update operation started.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.821429Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.821429Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.845988Z"}
+{"event": "match_all found 1 nodes.", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.847021Z"}
+{"event": "Found 1 nodes to update.", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.847997Z"}
+{"event": "Beginning new transaction.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.849990Z"}
+{"event": "Updating node", "level": "debug", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.849990Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.851496Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.855165Z"}
+{"event": "Transaction committed.", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.860165Z"}
+{"event": "Successfully updated 1 nodes.", "level": "info", "logger": "node4j.manager.SecretDocument", "timestamp": "2025-07-13T16:24:26.860165Z"}
+{"event": "Node restored successfully.", "level": "info", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.861173Z"}
+{"event": "Restored the document.", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.861173Z"}
+{"event": "--- 25. TTLMixin ---", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:26.861173Z"}
+{"event": "Node class 'TemporarySession' is being created by metaclass.", "level": "debug", "logger": "node4j.nodes.TemporarySession", "timestamp": "2025-07-13T16:24:26.862176Z"}
+{"event": "Final labels set.", "level": "debug", "logger": "node4j.nodes.TemporarySession", "timestamp": "2025-07-13T16:24:26.864181Z"}
+{"event": "Node class 'TemporarySession' registered successfully with a NodeManager.", "level": "info", "logger": "node4j.nodes.TemporarySession", "timestamp": "2025-07-13T16:24:26.865174Z"}
+{"event": "Setting up TTL infrastructure...", "level": "info", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.865174Z"}
+{"event": "Creating TTL index if not exists.", "level": "debug", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.865174Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.866174Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.877598Z"}
+{"event": "Checking for existing 'ttl_cleanup_job' periodic task.", "level": "debug", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.877598Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.878597Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.904812Z"}
+{"event": "Periodic TTL cleanup job already exists.", "level": "info", "logger": "node4j.mixins", "timestamp": "2025-07-13T16:24:26.904812Z"}
+{"event": "Create operation started.", "level": "debug", "logger": "node4j.manager.TemporarySession", "timestamp": "2025-07-13T16:24:26.905812Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.905812Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.949386Z"}
+{"event": "Node created successfully.", "level": "info", "logger": "node4j.manager.TemporarySession", "timestamp": "2025-07-13T16:24:26.950385Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.951150Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:26.996914Z"}
+{"event": "Executing Cypher query", "level": "debug", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:27.000692Z"}
+{"event": "Query executed successfully", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:27.078835Z"}
+{"deleted_count": 1, "event": "Ran TTL cleanup query", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:27.078835Z"}
+{"fg": "green", "event": ">>> All tests completed successfully! <<<", "level": "info", "logger": "test_script", "timestamp": "2025-07-13T16:24:27.079835Z"}
+{"event": "Disconnected from Neo4j.", "level": "info", "logger": "node4j.db", "timestamp": "2025-07-13T16:24:27.081835Z"}
