@@ -1,6 +1,7 @@
 # node4j/properties.py (poprawiona i uzupełniona wersja)
 from __future__ import annotations
 import enum
+import logging  # ### ZMIANA ###
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, cast, Type
 from pydantic import BaseModel
@@ -14,6 +15,8 @@ from .edges import Edge
 if TYPE_CHECKING:
     from .nodes import Node
 
+# ### ZMIANA ###: Inicjalizacja loggera dla modułu
+log = logging.getLogger(__name__)
 
 class RelationshipDirection(enum.Enum):
     IN, OUT, UNDIRECTED = "IN", "OUT", "UNDIRECTED"
@@ -25,6 +28,11 @@ class RelationshipManager:
         self._instance = instance
         self._relationship = relationship
         self._cache_name = relationship.private_name
+        # ### ZMIANA ###: Tworzymy logger specyficzny dla relacji na konkretnej instancji
+        # np. 'node4j.properties.RelationshipManager.Person[uid].works_at'
+        self._log = log.getChild(
+            f"RelationshipManager.{self._instance.__class__.__name__}[{self._instance.uid}].{self._relationship.private_name.strip('_')}"
+        )
 
     def __await__(self):
         """Umożliwia `await alice.works_at` dla lazy loadingu."""
@@ -33,16 +41,23 @@ class RelationshipManager:
     async def _fetch(self) -> list[tuple["Node", Edge | dict]]:
         """Logika pobierania danych, przeniesiona z AwaitableRelationship."""
         if hasattr(self._instance, self._cache_name):
+            # ### ZMIANA ###: Logowanie trafienia w cache
+            self._log.debug("Relationship data loaded from cache.")
             return getattr(self._instance, self._cache_name)
-
+        
+        # ### ZMIANA ###: Logowanie pobierania danych z bazy
+        self._log.debug("Cache miss. Fetching relationship data from database.")
         fetched_data = await self._relationship._async_fetch(self._instance)
-
+        
         setattr(self._instance, self._cache_name, fetched_data)
+        self._log.info(f"Fetched {len(fetched_data)} related nodes.")
         return fetched_data
 
     def _clear_cache(self):
         """Czyści cache po modyfikacji relacji."""
         if hasattr(self._instance, self._cache_name):
+            # ### ZMIANA ###: Logowanie czyszczenia cache
+            self._log.debug("Clearing relationship cache due to modification.")
             delattr(self._instance, self._cache_name)
 
     async def connect(self, target_node: "Node", properties: dict | Edge | None = None):
@@ -50,6 +65,15 @@ class RelationshipManager:
         if not self._instance.uid or not target_node.uid:
             raise ValueError("Oba węzły muszą być zapisane w bazie (mieć UID).")
 
+        # ### ZMIANA ###: Logowanie operacji
+        self._log.info(
+            f"Connecting to node.",
+            extra={
+                "target_node_class": target_node.__class__.__name__,
+                "target_node_uid": str(target_node.uid),
+            },
+        )
+        
         props_dict = {}
         if isinstance(properties, Edge):
             props_dict = properties.model_dump(mode="json")
@@ -77,9 +101,20 @@ class RelationshipManager:
             },
         )
         self._clear_cache()
+        self._log.info("Connection successful.")
+
 
     async def disconnect(self, target_node: "Node"):
         """Usuwa relację między bieżącą instancją a węzłem docelowym."""
+        # ### ZMIANA ###: Logowanie operacji
+        self._log.info(
+            f"Disconnecting from node.",
+            extra={
+                "target_node_class": target_node.__class__.__name__,
+                "target_node_uid": str(target_node.uid),
+            },
+        )
+
         from_uid = self._instance.uid
         to_uid = target_node.uid
 
@@ -95,6 +130,8 @@ class RelationshipManager:
             params={"from_uid": str(from_uid), "to_uid": str(to_uid)},
         )
         self._clear_cache()
+        self._log.info("Disconnection successful.")
+
 
 
 # +++ KONIEC NOWEJ KLASY +++
@@ -143,6 +180,10 @@ class RelationshipProperty:
     async def _async_fetch(self, instance: "Node") -> list[tuple["Node", Edge | dict]]:
         target_node_class = node_registry.get(self.target_node_label)
         if not target_node_class:
+            log.error(
+                f"Target model '{self.target_node_label}' for relationship is not registered.",
+                extra={"relationship_type": self.relationship_type}
+            )
             raise TypeError(
                 f"Model '{self.target_node_label}' nie jest zarejestrowany."
             )

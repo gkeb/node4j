@@ -1,21 +1,21 @@
 # node4j/db.py
 from __future__ import annotations
 import os
-import functools  # <-- NOWY IMPORT
-from contextvars import ContextVar  # <-- NOWY IMPORT
+import functools
+from contextvars import ContextVar
+import logging  # ### ZMIANA ###
+import time     # ### ZMIANA ###
 from neo4j import AsyncGraphDatabase, basic_auth, AsyncTransaction
 from contextlib import asynccontextmanager
 
-from .config import settings # <-- NOWY IMPORT
+from .config import settings
 
-# +++ NOWA SEKCJA: CONTEXT VAR +++
-# Tworzymy zmienną kontekstową, która będzie przechowywać aktywną transakcję.
-# Domyślnie jest pusta.
+# ### ZMIANA ###: Inicjalizacja loggera dla tego modułu
+log = logging.getLogger(__name__)
+
 _current_transaction: ContextVar[AsyncTransaction | None] = ContextVar(
     "current_transaction", default=None
 )
-# +++ KONIEC NOWEJ SEKCJI +++
-
 
 class AsyncDatabase:
     """
@@ -25,7 +25,8 @@ class AsyncDatabase:
 
     def __init__(self):
         self.driver = None
-        self.queries = []  # Zachowujemy logowanie zapytań - to przydatne!
+        # Zachowujemy tę listę jako prosty, wewnętrzny mechanizm historii zapytań
+        self.queries = []
 
     async def connect(self):
         """
@@ -33,19 +34,33 @@ class AsyncDatabase:
         """
         if self.driver is not None:
             return
-        # +++ POCZĄTEK ZMIANY +++
-        # Zamiast os.getenv, używamy naszego obiektu konfiguracyjnego.
-        # Kod jest czystszy, a wartości są już zwalidowane.
-        self.driver = AsyncGraphDatabase.driver(
-            settings.uri,
-            auth=basic_auth(
-                settings.user,
-                settings.password,
-            ),
+
+        # ### ZMIANA ###: Logowanie próby połączenia (bez hasła!)
+        log.info(
+            "Attempting to connect to Neo4j database",
+            extra={"db_uri": settings.uri, "db_user": settings.user},
         )
-        # +++ KONIEC ZMIANY +++
-        await self.driver.verify_connectivity()
-        print("Połączono z Neo4j.")
+        
+        try:
+            self.driver = AsyncGraphDatabase.driver(
+                settings.uri,
+                auth=basic_auth(
+                    settings.user,
+                    settings.password,
+                ),
+            )
+            await self.driver.verify_connectivity()
+            # ### ZMIANA ###: Usunięcie print, zastąpienie loggerem
+            log.info("Successfully connected to Neo4j.")
+        except Exception as e:
+            # ### ZMIANA ###: Logowanie błędu połączenia
+            log.exception(
+                "Failed to connect to Neo4j database",
+                extra={"db_uri": settings.uri, "error_type": type(e).__name__},
+            )
+            self.driver = None # Upewniamy się, że driver jest None w razie błędu
+            raise # Rzucamy wyjątek dalej, aby aplikacja mogła zareagować
+
 
     async def close(self):
         """
@@ -54,17 +69,18 @@ class AsyncDatabase:
         if self.driver:
             await self.driver.close()
             self.driver = None
-            print("Rozłączono z Neo4j.")
+            # ### ZMIANA ###: Usunięcie print, zastąpienie loggerem
+            log.info("Disconnected from Neo4j.")
 
-    # +++ POCZĄTEK POPRAWIONEJ METODY +++
     @asynccontextmanager
     async def transaction(self):
         """
         Asynchroniczny menedżer kontekstu do obsługi jawnych transakcji.
         Dodatkowo zarządza zmienną kontekstową dla transakcji atomowych.
         """
-        # Sprawdzamy, czy nie próbujemy zagnieździć transakcji
         if _current_transaction.get() is not None:
+            # ### ZMIANA ###: Logowanie błędu przed rzuceniem wyjątku
+            log.error("Attempted to nest atomic transactions.")
             raise RuntimeError("Nie można zagnieżdżać transakcji atomowych.")
 
         if not self.driver:
@@ -72,42 +88,35 @@ class AsyncDatabase:
 
         async with self.driver.session() as session:
             tx = await session.begin_transaction()
-            # Ustawiamy token, aby śledzić, że jesteśmy w transakcji
             token = _current_transaction.set(tx)
+            # ### ZMIANA ###: Logowanie rozpoczęcia transakcji
+            log.debug("Beginning new transaction.")
             try:
                 yield tx
                 if not tx.closed():
                     await tx.commit()
+                    # ### ZMIANA ###: Logowanie zatwierdzenia transakcji
+                    log.debug("Transaction committed.")
             except Exception:
                 if not tx.closed():
                     await tx.rollback()
+                    # ### ZMIANA ###: Logowanie wycofania transakcji
+                    log.warning("Transaction rolled back due to an exception.", exc_info=True)
                 raise
             finally:
-                # Zawsze resetujemy token na końcu
                 _current_transaction.reset(token)
 
-    # +++ NOWA METODA: DEKORATOR ATOMIC +++
     def atomic(self):
         """
         Dekorator do opakowywania funkcji w transakcję atomową.
-        Użycie:
-            @connection.atomic()
-            async def my_function():
-                # ... operacje na bazie ...
         """
-
         def decorator(func):
             @functools.wraps(func)
             async def wrapper(*args, **kwargs):
-                # Po prostu używamy naszego menedżera kontekstu
                 async with self.transaction():
                     return await func(*args, **kwargs)
-
             return wrapper
-
         return decorator
-
-    # +++ KONIEC NOWEJ METODY +++
 
     async def run(
         self,
@@ -123,22 +132,56 @@ class AsyncDatabase:
         if not self.driver:
             await self.connect()
 
+        # Zachowujemy tę listę dla wewnętrznych potrzeb lub prostego debugowania
         self.queries.append((query, params))
 
-        # --- ZMIENIONA LOGIKA ---
-        # 1. Sprawdź, czy `tx` zostało przekazane jawnie.
-        # 2. Jeśli nie, sprawdź zmienną kontekstową.
         active_tx = tx or _current_transaction.get()
-
-        if active_tx:
-            # Jesteśmy w jawnej transakcji, używamy przekazanego obiektu `tx`
-            response = await active_tx.run(query, params)
-            return await response.data()
-        else:
-            # Tryb auto-commit, sterownik sam zarządza transakcją
-            async with self.driver.session() as session:
-                response = await session.run(query, params)
-                return await response.data()
+        in_explicit_tx = active_tx is not None
+        
+        # ### ZMIANA ###: Kompleksowe logowanie wykonania zapytania
+        log.debug(
+            "Executing Cypher query",
+            extra={
+                "cypher_query": query,
+                "cypher_params": params,
+                "in_transaction": in_explicit_tx,
+            },
+        )
+        start_time = time.perf_counter()
+        
+        try:
+            if in_explicit_tx:
+                response = await active_tx.run(query, params)
+                data = await response.data()
+            else:
+                async with self.driver.session() as session:
+                    response = await session.run(query, params)
+                    data = await response.data()
+            
+            duration_ms = (time.perf_counter() - start_time) * 1000
+            log.info(
+                "Query executed successfully",
+                extra={
+                    # Powtórzenie zapytania w logu INFO może być przydatne do korelacji
+                    "cypher_query": query,
+                    "duration_ms": round(duration_ms, 2),
+                    "record_count": len(data),
+                },
+            )
+            return data
+        except Exception as e:
+            duration_ms = (time.perf_counter() - start_time) * 1000
+            log.error(
+                "Query execution failed",
+                exc_info=True, # Automatycznie dodaje traceback
+                extra={
+                    "cypher_query": query,
+                    "cypher_params": params,
+                    "duration_ms": round(duration_ms, 2),
+                    "error_type": type(e).__name__,
+                },
+            )
+            raise
 
 
 # Tworzymy globalną instancję singletona

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Type, Any, TYPE_CHECKING, Optional
 import uuid
 import neo4j  # +++ NOWY IMPORT +++
+import logging  # ### ZMIANA ###
 
 
 from .db import connection, _current_transaction
@@ -14,6 +15,9 @@ if TYPE_CHECKING:
     from neo4j import AsyncTransaction
     from .nodes import Node
     from .properties import RelationshipProperty
+
+# ### ZMIANA ###: Inicjalizacja loggera
+log = logging.getLogger(__name__)
 
 LABEL_TYPE_MARKER = ":"
 
@@ -45,9 +49,16 @@ def _convert_neo4j_temporals(obj: Any) -> Any:
 class NodeManager:
     def __init__(self, node_model: Type["Node"]):
         self.model = node_model
+        # ### ZMIANA ###: Dodajemy kontekst loggera specyficzny dla modelu
+        self.log = log.getChild(self.model.__name__)
+
 
     def _hydrate_node(self, record: dict) -> "Node":
         if "node" not in record or "internal_id" not in record:
+            self.log.error(
+                "Invalid record structure for hydration",
+                extra={"record_keys": list(record.keys())}
+            )
             raise ValueError(
                 "Rekord z bazy danych ma nieprawidłową strukturę do hydratacji."
             )
@@ -78,16 +89,19 @@ class NodeManager:
             queries.append(query)
 
         if not queries:
-            print(f"Brak definicji schematu (indeksów/ograniczeń) dla modelu {label}.")
+            self.log.info(f"No schema (indexes/constraints) defined for model.")
             return
 
-        print(f"--- Stosowanie schematu dla modelu: {label} ---")
+        self.log.info(f"Applying schema for model...")
         for query in queries:
-            print(f"  > Wykonywanie: {query}")
+            self.log.debug("Executing schema query", extra={"schema_query": query})
             await connection.run(query, tx=tx)
-        print(f"--- Schemat dla {label} zastosowany pomyślnie. ---")
+        self.log.info(f"Schema applied successfully.")
 
     async def create(self, **kwargs: Any) -> "Node":
+        # ### ZMIANA ###: Logowanie operacji
+        self.log.debug("Create operation started.", extra={"initial_data": kwargs})        
+        
         node_instance = self.model.model_validate(kwargs)
 
         # --- Wywołanie hooka pre_save ---
@@ -106,7 +120,8 @@ class NodeManager:
         )
         result = await connection.run(query, params)
         if not result:
-            raise RuntimeError("Nie udało się utworzyć węzła w bazie danych.")
+            self.log.error("Node creation failed in database, no result returned.")
+            raise RuntimeError("Node creation failed in database, no result returned.")
 
         # Nawadniamy instancję z bazy, żeby mieć _internal_id
         hydrated_instance = self._hydrate_node(result[0])
@@ -116,6 +131,12 @@ class NodeManager:
 
         # --- Wywołanie hooka post_save ---
         await hydrated_instance.post_save(is_creating=True)
+
+        # ### ZMIANA ###: Logowanie sukcesu
+        self.log.info(
+            "Node created successfully.",
+            extra={"node_uid": str(hydrated_instance.uid)},
+        )
 
         return hydrated_instance
 
@@ -135,10 +156,9 @@ class NodeManager:
         query = f"MATCH ({node_alias}{labels}) {where_clause} {return_clause} LIMIT 1"
         result = await connection.run(query, params)
         if not result:
+            # ### ZMIANA ###: Logowanie, gdy nic nie znaleziono
+            self.log.debug("match_one did not find any matching node.")
             return None
-
-        # Usunięto DEBUG dla czystości kodu
-        # print("DEBUG wynik z bazy:", result[0]["node"])
 
         return self._hydrate_prefetched(result[0]["node"])
 
@@ -167,25 +187,40 @@ class NodeManager:
         )
         result_set = await connection.run(query, params)
 
+        # ### ZMIANA ###: Logowanie liczby znalezionych obiektów
+        self.log.debug(f"match_all found {len(result_set)} nodes.")
+
         return [self._hydrate_prefetched(record["node"]) for record in result_set]
 
     async def update(self, filters: dict | Q, data: dict) -> int:
         if not filters:
             raise ValueError("Metoda update wymaga podania filtrów...")
         if not data:
+            self.log.warning("Update called with empty data, no action taken.")
             return 0
+
+        # ### ZMIANA ###: Logowanie operacji
+        self.log.debug(
+            "Update operation started.", extra={"filters": filters, "update_data": data}
+        )
 
         nodes_to_update = await self.match_all(filters=filters)
         if not nodes_to_update:
+            self.log.info("Update operation found no nodes to update.")
             return 0
 
-        # +++ POCZĄTEK POPRAWKI +++
+        self.log.info(f"Found {len(nodes_to_update)} nodes to update.")
+
         active_tx = _current_transaction.get()
         if active_tx:
-            return await self._perform_update(nodes_to_update, data, active_tx)
+            updated_count = await self._perform_update(nodes_to_update, data, active_tx)
         else:
             async with connection.transaction() as tx:
-                return await self._perform_update(nodes_to_update, data, tx)
+                updated_count = await self._perform_update(nodes_to_update, data, tx)
+        
+        # ### ZMIANA ###: Logowanie wyniku
+        self.log.info(f"Successfully updated {updated_count} nodes.")
+        return updated_count
 
     async def _perform_update(
         self, nodes: list["Node"], data: dict, tx: "AsyncTransaction"
@@ -193,6 +228,7 @@ class NodeManager:
         """Wewnętrzna metoda wykonująca logikę aktualizacji w ramach danej transakcji."""
         updated_count = 0
         for node_instance in nodes:
+            self.log.debug("Updating node", extra={"node_uid": str(node_instance.uid)})
             for key, value in data.items():
                 setattr(node_instance, key, value)
 
@@ -217,25 +253,29 @@ class NodeManager:
         if not filters:
             raise ValueError("Metoda delete wymaga podania filtrów...")
 
+        self.log.debug("Delete operation started.", extra={"filters": filters})
+
         nodes_to_delete = await self.match_all(filters=filters)
         if not nodes_to_delete:
+            self.log.info("Delete operation found no nodes to delete.")
             return 0
+            
+        self.log.info(f"Found {len(nodes_to_delete)} nodes to delete.")
 
-        # +++ POCZĄTEK POPRAWKI +++
-        # Sprawdzamy, czy już jesteśmy w transakcji
         active_tx = _current_transaction.get()
         if active_tx:
-            # Jeśli tak, po prostu wykonujemy operacje w tej transakcji
-            return await self._perform_delete(nodes_to_delete, active_tx)
+            deleted_count = await self._perform_delete(nodes_to_delete, active_tx)
         else:
-            # Jeśli nie, otwieramy nową transakcję
             async with connection.transaction() as tx:
-                return await self._perform_delete(nodes_to_delete, tx)
+                deleted_count = await self._perform_delete(nodes_to_delete, tx)
+        
+        self.log.info(f"Successfully deleted {deleted_count} nodes.")
+        return deleted_count
 
     async def _perform_delete(self, nodes: list["Node"], tx: "AsyncTransaction") -> int:
-        """Wewnętrzna metoda wykonująca logikę usuwania w ramach danej transakcji."""
         deleted_count = 0
         for node_instance in nodes:
+            self.log.debug("Deleting node", extra={"node_uid": str(node_instance.uid)})
             await node_instance.pre_delete()
             query = (
                 "MATCH (node) WHERE elementId(node) = $element_id DETACH DELETE node"
@@ -246,47 +286,45 @@ class NodeManager:
             await node_instance.post_delete()
             deleted_count += 1
         return deleted_count
-        # +++ KONIEC POPRAWKI +++
 
     async def get_or_create(
         self, filters: dict, defaults: dict | None = None
     ) -> tuple["Node", bool]:
+        self.log.debug("get_or_create operation started.", extra={"filters": filters, "defaults": defaults})
+        
         found_node = await self.match_one(filters)
         if found_node:
+            self.log.info("get_or_create found an existing node.", extra={"node_uid": str(found_node.uid)})
             return found_node, False
 
+        self.log.info("get_or_create did not find a node, creating a new one.")
         create_data = filters.copy()
         if defaults:
             create_data.update(defaults)
 
-        # Używamy self.create, które już ma w sobie logikę haków
-        new_node = await self.create(**create_data)
+        new_node = await self.create(**create_data) # Logowanie jest już w .create()
         return new_node, True
 
     async def update_or_create(
         self, filters: dict, defaults: dict
     ) -> tuple["Node", bool]:
-        """
-        Wyszukuje węzeł na podstawie `filters`. Jeśli istnieje, aktualizuje go danymi
-        z `defaults`. Jeśli nie, tworzy nowy węzeł z połączonych danych.
-        Ta metoda w pełni wspiera haki cyklu życia (pre/post save).
-        """
+        self.log.debug("update_or_create operation started.", extra={"filters": filters, "defaults": defaults})
+        
         found_node = await self.match_one(filters)
 
         if found_node:
-            # Aktualizacja - używamy metody update, która wspiera haki
-            # Uwaga: update operuje na filtrach, musimy więc zidentyfikować węzeł jednoznacznie
+            self.log.info("update_or_create found an existing node, updating it.", extra={"node_uid": str(found_node.uid)})
             await self.update(filters={"uid": str(found_node.uid)}, data=defaults)
-            # Musimy ponownie załadować obiekt, bo update nie zwraca instancji
             updated_node = await self.match_one(filters={"uid": str(found_node.uid)})
             return updated_node, False
         else:
-            # Tworzenie - używamy metody create, która wspiera haki
+            self.log.info("update_or_create did not find a node, creating a new one.")
             create_data = {**filters, **defaults}
             new_node = await self.create(**create_data)
             return new_node, True
 
     async def count(self, filters: dict | Q | None = None) -> int:
+        # Logowanie jest w connection.run
         filters = filters or {}
         node_alias = "node"
         labels = LABEL_TYPE_MARKER + LABEL_TYPE_MARKER.join(self.model.labels())
@@ -297,7 +335,10 @@ class NodeManager:
             f"RETURN count({node_alias}) as count"
         )
         result = await connection.run(query, params)
-        return result[0]["count"] if result else 0
+        count = result[0]["count"] if result else 0
+        self.log.debug(f"Count operation returned {count}.")
+        return count
+
 
     async def aggregate(self, filters: dict | None = None, **aggregations: str) -> dict:
         if not aggregations:
@@ -320,8 +361,12 @@ class NodeManager:
 
         query = f"MATCH ({node_alias}{labels}) {where_clause} {return_statement}"
 
+        self.log.debug("Aggregate operation started.", extra={"aggregations": aggregations})
         result = await connection.run(query, params)
-        return result[0] if result else {}
+        data = result[0] if result else {}
+        self.log.debug("Aggregate operation finished.", extra={"result": data})
+        return data
+
 
     async def bulk_create(self, data: list[dict]) -> list["Node"]:
         """
@@ -334,6 +379,9 @@ class NodeManager:
         if not data:
             return []
 
+        self.log.info(f"Starting bulk_create for {len(data)} nodes.")
+
+        
         # Krok 1: Walidacja i wywołanie haków pre_save
         instances_to_create: list["Node"] = []
         props_list: list[dict] = []
@@ -360,7 +408,9 @@ class NodeManager:
 
         result_set = await connection.run(query, {"props_list": props_list})
         if not result_set:
+            self.log.warning("bulk_create did not return any created nodes from DB.")
             return []
+
 
         # Krok 3: Hydratacja i wywołanie haków post_save
         created_nodes: list["Node"] = []
@@ -369,6 +419,7 @@ class NodeManager:
             await hydrated_node.post_save(is_creating=True)
             created_nodes.append(hydrated_node)
 
+        self.log.info(f"Successfully finished bulk_create, created {len(created_nodes)} nodes.")
         return created_nodes
 
     async def bulk_update(self, data: list[dict], match_on: str = "uid") -> int:
@@ -381,7 +432,9 @@ class NodeManager:
         :param match_on: Klucz używany do znalezienia węzła do aktualizacji.
         :return: Liczba zaktualizowanych węzłów.
         """
+        self.log.info(f"Starting bulk_update for {len(data)} nodes, matching on '{match_on}'.")
         if not data:
+            self.log.warning("bulk_update called with empty data, no action taken.")
             return 0
 
         # Krok 1: Pobranie obiektów i wywołanie haków pre_save
@@ -399,11 +452,12 @@ class NodeManager:
             instance = node_map.get(match_value)
 
             if not instance:
-                # Opcjonalnie: można rzucić błąd lub po prostu pominąć
-                print(
-                    f"Ostrzeżenie: Nie znaleziono węzła dla {match_on}={match_value} podczas bulk_update."
+                self.log.warning(
+                    f"Node not found for bulk_update.",
+                    extra={"match_on": match_on, "match_value": match_value}
                 )
                 continue
+
 
             # Aktualizacja pól na instancji i wywołanie pre_save
             update_payload = {k: v for k, v in item_data.items() if k != match_on}
@@ -420,6 +474,7 @@ class NodeManager:
             )
 
         if not props_list:
+            self.log.info("No valid nodes to update after filtering in bulk_update.")
             return 0
 
         # Krok 2: Wykonanie zapytania UNWIND
@@ -434,6 +489,7 @@ class NodeManager:
         """
 
         result = await connection.run(query, {"props_list": props_list})
+        updated_count = result[0]["updated_count"] if result else 0
 
         # Krok 3: Wywołanie haków post_save
         for item_data in data:
@@ -442,7 +498,9 @@ class NodeManager:
             if instance:
                 await instance.post_save(is_creating=False)
 
-        return result[0]["updated_count"] if result else 0
+        self.log.info(f"Successfully finished bulk_update, updated {updated_count} nodes.")
+        return updated_count
+
 
     async def connect(
         self,
@@ -451,6 +509,15 @@ class NodeManager:
         rel_type: str,
         properties: dict | None = None,
     ):
+        # Logowanie jest w connection.run
+        self.log.debug(
+            f"Connecting nodes.",
+            extra={
+                "from_uid": str(from_node_uid),
+                "to_uid": str(to_node_uid),
+                "rel_type": rel_type,
+            }
+        )
         query = """
         MATCH (a), (b)
         WHERE a.uid = $from_uid AND b.uid = $to_uid
@@ -468,6 +535,15 @@ class NodeManager:
     async def disconnect(
         self, from_node_uid: uuid.UUID, to_node_uid: uuid.UUID, rel_type: str
     ):
+        # Logowanie jest w connection.run
+        self.log.debug(
+            f"Disconnecting nodes.",
+            extra={
+                "from_uid": str(from_node_uid),
+                "to_uid": str(to_node_uid),
+                "rel_type": rel_type,
+            }
+        )
         query = """
         MATCH (a)-[r:`{rel_type}`]->(b)
         WHERE a.uid = $from_uid AND b.uid = $to_uid
@@ -485,6 +561,16 @@ class NodeManager:
     ):
         if not properties:
             return
+
+        self.log.debug(
+            f"Updating relationship.",
+            extra={
+                "from_uid": str(from_node_uid),
+                "to_uid": str(to_node_uid),
+                "rel_type": rel_type,
+                "properties": properties,
+            }
+        )
 
         query = """
         MATCH (a)-[r:`{rel_type}`]->(b)
