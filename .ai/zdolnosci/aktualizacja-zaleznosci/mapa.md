@@ -39,3 +39,10 @@ skill poznaj zaleznosci (brak mapy obszaru), potem skill spec aktualizacja-zalez
 ## Plasterki
 
 ## Stan sesji
+
+2026-10-11 — grill (bez ticketów)
+- Zrobione: grill (decyzje w mapie), [badanie sterownika 6.x](../../badania/2026-10-11-sterownik-neo4j-6.md), [mapa obszaru zależności](../../obszary/zaleznosci.md); wcześniej w tej sesji poprawka TTL (`b6f3fe7`) i pierwsze testy pytest w `tests/`
+- W połowie: nic
+- Nieoczywiste: testy pytest potrzebują bazy testowej z APOC na porcie 7688 (komenda w AGENTS.md → Uruchamianie); na porcie 7687 działa prywatna baza użytkownika `my-knowledge-graph-db` — nie używać jej w testach. Obraz `neo4j:2025.05.1` jest lokalnie, więc bazę testową da się postawić bez sieci. Połączenie z github.com bywało niedostępne — push ponawiać.
+- Niezacommitowane: nie
+- Pierwszy ruch w następnej sesji: skill pomysl aktualizacja-zaleznosci druga-opinia w innym modelu niż claude-opus-5-5 (np. Codex), potem skill spec aktualizacja-zaleznosci
