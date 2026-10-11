@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill buduj aktualizacja-zaleznosci → ticket 01
+skill buduj aktualizacja-zaleznosci → ticket 02
 
 ## Otwarte pytania
 
@@ -49,12 +49,3 @@ skill buduj aktualizacja-zaleznosci → ticket 01
 - [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05
 - [07 — Macierz serwerów i Pythona](tickety/07-macierz-serwerow-i-pythona.md) — po 06
 - [08 — Sterownik `neo4j` 6.x](tickety/08-sterownik-neo4j-6.md) — po 07
-
-## Stan sesji
-
-2026-10-11 — grill (bez ticketów)
-- Zrobione: grill i dwie opinie (Codex / GPT-6 oraz Codex / GPT-6 Astra; decyzje zapisane wyżej), [badanie sterownika 6.x](../../badania/2026-10-11-sterownik-neo4j-6.md), [mapa obszaru zależności](../../obszary/zaleznosci.md); wcześniej w tej sesji poprawka TTL (`b6f3fe7`) i pierwsze testy pytest w `tests/`
-- W połowie: nic
-- Nieoczywiste: testy pytest potrzebują bazy testowej z APOC na porcie 7688 (komenda w AGENTS.md → Uruchamianie); na porcie 7687 działa prywatna baza użytkownika `my-knowledge-graph-db` — nie używać jej w testach. Obraz `neo4j:2025.05.1` jest lokalnie, więc bazę testową da się postawić bez sieci. Połączenie z github.com bywało niedostępne — push ponawiać.
-- Niezacommitowane: nie
-- Pierwszy ruch w następnej sesji: skill buduj aktualizacja-zaleznosci → ticket 01

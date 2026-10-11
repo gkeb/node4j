@@ -10,7 +10,13 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
 
 - Instalacja: `uv sync`
 - Lint: `uv run ruff check .`
-- Baza testowa (jednorazowa, z APOC): `docker run -d --rm --name node4j-test -p 7688:7687 -e NEO4J_AUTH=neo4j/test-password-123 -e 'NEO4J_PLUGINS=["apoc"]' neo4j:2025.05.1`; zamknięcie: `docker stop node4j-test`
+- Baza testowa (jednorazowa, z APOC; PowerShell): ustaw listę pluginów jako zmienną, żeby zachować JSON przy przekazaniu argumentów do Dockera:
+  ```powershell
+  $env:NEO4J_PLUGINS = '["apoc"]'
+  docker run -d --rm --name node4j-test -p 7688:7687 -e NEO4J_AUTH=neo4j/test-password-123 -e NEO4J_PLUGINS neo4j:2025.05.1
+  Remove-Item Env:NEO4J_PLUGINS
+  ```
+  Zamknięcie: `docker stop node4j-test`
 - Testy: `uv run pytest` — łączą się tylko z bazą testową (`NODE4J_TEST_URI`, domyślnie `bolt://127.0.0.1:7688`; `tests/conftest.py`), bez bazy są pomijane
 - Skrypt demonstracyjny: `uv run python test.py` — używa `NODE4J_*` i **czyści całą bazę**
 

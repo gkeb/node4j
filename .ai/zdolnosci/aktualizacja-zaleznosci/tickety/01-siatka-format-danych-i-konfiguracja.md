@@ -1,10 +1,10 @@
 ---
 nr: "01"
 tytul: "Siatka: format danych i konfiguracja"
-status: do-zrobienia
+status: zrobione
 blokowany-przez: []
 scenariusze: [N2, N3]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -16,12 +16,12 @@ Na obecnym stosie (sterownik 5.28, serwer 2025.05) istnieją zielone testy chara
 
 ## Kryteria akceptacji
 
-- [ ] N2: test — węzeł zapisany przez API ma w bazie etykiety klasy i przodków, `uid` jako tekst i daty jako tekst ISO w dotychczasowej postaci (także data „naiwna” z przykładowego modelu)
-- [ ] N2: test — węzeł wstawiony surowym zapytaniem w obecnym formacie jest czytany przez API z poprawnymi typami pól
-- [ ] N2: test — `apply_schema` i infrastruktura TTL tworzą indeksy i constrainty o dotychczasowych nazwach
-- [ ] N3: test — ustawienia ze zmiennych `NODE4J_*`, z pliku `.env`, wartości domyślne i pierwszeństwo zmiennych środowiska przed `.env` (bez połączenia z bazą, `.env` w katalogu tymczasowym)
-- [ ] testy noszą numer niezmiennika w nazwie i są zielone na bazie testowej
-- [ ] walidacja (ruff) bez błędów spoza punktu odniesienia
+- [x] N2: test — węzeł zapisany przez API ma w bazie etykiety klasy i przodków, `uid` jako tekst i daty jako tekst ISO w dotychczasowej postaci (także data „naiwna” z przykładowego modelu)
+- [x] N2: test — węzeł wstawiony surowym zapytaniem w obecnym formacie jest czytany przez API z poprawnymi typami pól
+- [x] N2: test — `apply_schema` i infrastruktura TTL tworzą indeksy i constrainty o dotychczasowych nazwach
+- [x] N3: test — ustawienia ze zmiennych `NODE4J_*`, z pliku `.env`, wartości domyślne i pierwszeństwo zmiennych środowiska przed `.env` (bez połączenia z bazą, `.env` w katalogu tymczasowym)
+- [x] testy noszą numer niezmiennika w nazwie i są zielone na bazie testowej
+- [x] walidacja (ruff) bez błędów spoza punktu odniesienia
 
 ## Poza zakresem
 
