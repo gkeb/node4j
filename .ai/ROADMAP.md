@@ -10,11 +10,19 @@
 
 ## Teraz
 
+- [`aktualizacja-zaleznosci`](zdolnosci/aktualizacja-zaleznosci/mapa.md) — aktualne biblioteki i serwer Neo4j, zachowanie bez zmian — `grill`
+
 ## Dalej
+
+- `readme-aktualne` — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `pomysl`
 
 ## Mgła
 
 <!-- Duże albo niejasne. Pod każdą linią 1–3 decyzje do rozstrzygnięcia (nie zadania). -->
+
+- `natywne-daty` — daty i `ttl` zapisywane w Neo4j jako typy temporalne zamiast tekstu ISO (filtry `Q` po datach, indeksy) — `pomysl`
+  - migracja istniejących danych: automatyczna, skrypt czy odczyt obu formatów?
+  - czy `uid` też zmienia typ?
 
 - `import-csv-apoc` — import węzłów i relacji z CSV przez APOC (`connect_from_csv` z README) — `pomysl`
   - czy rozszerzać `ApocManager`, czy usunąć obietnicę z README?
