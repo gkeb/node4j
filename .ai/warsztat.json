@@ -1,0 +1,150 @@
+{
+  "wersja": 1,
+  "tracker": "pliki",
+  "git": {
+    "galezie": "glowna",
+    "glowna": "main",
+    "push": "pytaj",
+    "scalanie": "merge"
+  },
+  "bezpieczenstwo": {
+    "skanSekretow": null,
+    "chronione": [
+      ".env",
+      ".env.local",
+      ".env.*.local",
+      ".env.production",
+      ".env.staging",
+      "*.pem",
+      "*.key",
+      "*.p12",
+      "*.pfx",
+      "id_rsa*",
+      "id_ed25519*",
+      "secrets/**",
+      "credentials*.json",
+      "service-account*.json"
+    ]
+  },
+  "sprzatanie": {
+    "smieci": [
+      "htmlcov/",
+      ".coverage",
+      "tmp/",
+      ".tmp/",
+      "test_run.log"
+    ]
+  },
+  "profile": [
+    "przekrojowe"
+  ],
+  "walidacja": [
+    "uv run ruff check ."
+  ],
+  "mutacje": null,
+  "odniesienie": {
+    "data": "2026-10-11",
+    "znane": [
+      "ruff E402 node4j/__init__.py x1",
+      "ruff E501 node4j/__init__.py x1",
+      "ruff I001 node4j/config.py x1",
+      "ruff W291 node4j/config.py x4",
+      "ruff W292 node4j/config.py x1",
+      "ruff W293 node4j/config.py x1",
+      "ruff E501 node4j/db.py x1",
+      "ruff F401 node4j/db.py x1",
+      "ruff I001 node4j/db.py x1",
+      "ruff W292 node4j/db.py x1",
+      "ruff W293 node4j/db.py x4",
+      "ruff E501 node4j/ext/apoc.py x6",
+      "ruff F401 node4j/ext/apoc.py x1",
+      "ruff F541 node4j/ext/apoc.py x3",
+      "ruff I001 node4j/ext/apoc.py x1",
+      "ruff E501 node4j/ext/gds.py x5",
+      "ruff I001 node4j/ext/gds.py x1",
+      "ruff W292 node4j/ext/gds.py x1",
+      "ruff E501 node4j/manager.py x16",
+      "ruff F541 node4j/manager.py x7",
+      "ruff I001 node4j/manager.py x2",
+      "ruff W291 node4j/manager.py x1",
+      "ruff W293 node4j/manager.py x9",
+      "ruff E501 node4j/managers.py x2",
+      "ruff I001 node4j/managers.py x1",
+      "ruff W292 node4j/managers.py x1",
+      "ruff W293 node4j/managers.py x3",
+      "ruff E501 node4j/mixins.py x1",
+      "ruff F401 node4j/mixins.py x1",
+      "ruff I001 node4j/mixins.py x1",
+      "ruff W291 node4j/mixins.py x1",
+      "ruff W292 node4j/mixins.py x1",
+      "ruff W293 node4j/mixins.py x7",
+      "ruff E501 node4j/models.py x2",
+      "ruff F401 node4j/models.py x1",
+      "ruff I001 node4j/models.py x1",
+      "ruff W291 node4j/models.py x1",
+      "ruff W292 node4j/models.py x1",
+      "ruff E501 node4j/nodes.py x2",
+      "ruff F541 node4j/nodes.py x2",
+      "ruff F821 node4j/nodes.py x1",
+      "ruff I001 node4j/nodes.py x1",
+      "ruff W292 node4j/nodes.py x1",
+      "ruff W293 node4j/nodes.py x4",
+      "ruff E501 node4j/properties.py x4",
+      "ruff F401 node4j/properties.py x4",
+      "ruff F541 node4j/properties.py x2",
+      "ruff I001 node4j/properties.py x1",
+      "ruff W293 node4j/properties.py x3",
+      "ruff F821 node4j/query.py x1",
+      "ruff I001 node4j/query.py x1",
+      "ruff E501 node4j/registry.py x1",
+      "ruff I001 node4j/registry.py x1",
+      "ruff E501 test.py x31",
+      "ruff E722 test.py x1",
+      "ruff F401 test.py x3",
+      "ruff F541 test.py x2",
+      "ruff F841 test.py x1",
+      "ruff I001 test.py x1",
+      "ruff W291 test.py x1",
+      "ruff W292 test.py x1",
+      "ruff W293 test.py x13"
+    ]
+  },
+  "weryfikacja": {
+    "wymagana": true,
+    "innyModel": true,
+    "drugaOpinia": "zalecana",
+    "odbior": true
+  },
+  "wydanie": {
+    "wersjonowanie": null,
+    "changelog": null,
+    "githubRelease": false,
+    "komendy": [],
+    "sprawdzenie": []
+  },
+  "pielegnacja": [],
+  "przeglad": {
+    "bezpieczenstwo": "auto"
+  },
+  "hooki": {
+    "formatowanie": true,
+    "kontrola": true,
+    "zakazane": []
+  },
+  "sciezki": {
+    "decyzje": ".ai/decyzje"
+  },
+  "modele": {
+    "claude": {
+      "przeglad": null,
+      "badanie": null
+    },
+    "codex": {
+      "przeglad": null,
+      "badanie": null
+    }
+  },
+  "github": {
+    "repo": "gkeb/node4j"
+  }
+}

@@ -1,0 +1,23 @@
+#!/bin/sh
+# warsztat: skan sekretów przed każdym commitem — także commitem człowieka.
+# Włączenie w projekcie (każdy klon i komputer osobno): git config core.hooksPath .githooks
+# Fałszywy alarm: wpis w .gitleaksignore (fingerprint z raportu), nie --no-verify.
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "warsztat: gitleaks nie jest zainstalowany — skan sekretów pominięty (skill start podpowie instalację)." >&2
+  exit 0
+fi
+
+if gitleaks git --help >/dev/null 2>&1; then
+  gitleaks git --pre-commit --staged --redact --no-banner
+else
+  gitleaks protect --staged --redact --no-banner
+fi
+status=$?
+
+if [ "$status" -ne 0 ]; then
+  echo "" >&2
+  echo "warsztat: w zmianach do commita jest coś, co wygląda na sekret — commit wstrzymany." >&2
+  echo "Usuń sekret z pliku (git restore --staged <plik>). Jeśli był prawdziwy i gdzieś wyszedł — unieważnij go u dostawcy." >&2
+  exit 1
+fi

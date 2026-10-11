@@ -7,7 +7,28 @@ dist/
 wheels/
 *.egg-info
 .env
-. log
+*.log
 
 # Virtual environments
 .venv
+
+# warsztat: sekrety — nie trafiają do repozytorium
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets/
+credentials*.json
+service-account*.json
+# warsztat: zrzuty ekranu z budowy (rodzaj wyglad)
+.ai/zrzuty/
+# warsztat: śmieci po pracy (sprzatanie.smieci)
+htmlcov/
+.coverage
+tmp/
+.tmp/
+test_run.log

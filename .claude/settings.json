@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Edit(**/.env)",
+      "Read(**/.env.local)",
+      "Edit(**/.env.local)",
+      "Read(**/.env.*.local)",
+      "Edit(**/.env.*.local)",
+      "Read(**/.env.production)",
+      "Edit(**/.env.production)",
+      "Read(**/.env.staging)",
+      "Edit(**/.env.staging)",
+      "Read(**/*.pem)",
+      "Edit(**/*.pem)",
+      "Read(**/*.key)",
+      "Edit(**/*.key)",
+      "Read(**/*.p12)",
+      "Edit(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Edit(**/*.pfx)",
+      "Read(**/id_rsa*)",
+      "Edit(**/id_rsa*)",
+      "Read(**/id_ed25519*)",
+      "Edit(**/id_ed25519*)",
+      "Read(**/secrets/**)",
+      "Edit(**/secrets/**)",
+      "Read(**/credentials*.json)",
+      "Edit(**/credentials*.json)",
+      "Read(**/service-account*.json)",
+      "Edit(**/service-account*.json)"
+    ]
+  }
+}
