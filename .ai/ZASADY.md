@@ -17,6 +17,15 @@
 - Wyjątki: —
 -->
 
+### Z01. Publiczne API biblioteki jest asynchroniczne
+
+- Siła: twarda
+- Egzekwowanie: przegląd
+- Status: zastana
+- Dlaczego: README → „Fully asynchronous API”; `node4j/db.py` używa wyłącznie `AsyncGraphDatabase`
+- Wyjątki: —
+
+
 ## Wzorce
 
 <!-- Wzorce, których używamy (i gdzie), oraz te, których świadomie unikamy. -->
@@ -24,6 +33,31 @@
 ## Kod
 
 <!-- Tylko stanowiska, gdzie domyślne podejście jest niejednoznaczne: wyjątki czy wyniki w domenie, obsługa błędów, logowanie, niemutowalność, nazewnictwo, wielkość modułów. -->
+
+### Z02. Wartości trafiają do Cypher wyłącznie jako parametry, a nazwy (pola, etykiety, typy relacji) w backtickach
+
+- Siła: twarda
+- Egzekwowanie: przegląd
+- Status: zastana
+- Dlaczego: `node4j/query.py` → `Q._compile_clause`, `node4j/properties.py` → `RelationshipManager.connect`, `node4j/manager.py` → `_orderby_statement`
+- Wyjątki: `node4j/manager.py` → `create`, `bulk_create`, `bulk_update` i `ext/apoc.py` → `create_from_json` — etykiety i klucze `SET` bez backticków (nazwy pochodzą z klas i pól modelu); `aggregate` i `ext/gds.py` → `Algo` wstawiają do zapytania ciąg podany przez programistę.
+
+### Z03. Biblioteka loguje przez `logging.getLogger(__name__)` i nie konfiguruje handlerów
+
+- Siła: twarda
+- Egzekwowanie: przegląd
+- Status: zastana
+- Dlaczego: `node4j/__init__.py` (NullHandler, komentarz o bibliotece); commit `1bb03e3` zastąpił `print` loggerem
+- Wyjątki: —
+
+### Z04. Styl kodu według ruff: reguły E, F, W, I, linia 88 znaków, podwójne cudzysłowy
+
+- Siła: preferencja
+- Egzekwowanie: automat — `uv run ruff check .` (z punktem odniesienia w `warsztat.json` → `odniesienie`)
+- Status: zastana
+- Dlaczego: `pyproject.toml` → `[tool.ruff]`
+- Wyjątki: znane błędy z punktu odniesienia 2026-10-11
+
 
 ## Testy
 

@@ -14,7 +14,15 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
 
 ### Mapa kodu
 
-<!-- Jedna linia na obszar: katalog — za co odpowiada — link do .ai/obszary/<slug>.md, jeśli jest. -->
+- `node4j/nodes.py` — `Node` i metaklasa `NodeBase`: relacje, `Meta`, etykiety, rejestracja i menedżer `.q`
+- `node4j/manager.py` — `NodeManager` (CRUD, bulk, agregacje, schemat) i `ReturnQueryBuilder` (prefetch)
+- `node4j/properties.py` — `RelationshipProperty` (deskryptor) i `RelationshipManager` (lazy load, `connect`/`disconnect`)
+- `node4j/query.py` — filtry `Q` → WHERE z parametrami
+- `node4j/db.py` — globalne `connection`: sterownik, `run`, transakcje (`ContextVar`, `atomic`)
+- `node4j/mixins.py`, `node4j/managers.py` — `SoftDeleteMixin` + `SoftDeleteManager`, `TTLMixin`
+- `node4j/ext/` — opakowania APOC i GDS (wymagają wtyczek na serwerze)
+- `node4j/config.py` — ustawienia `NODE4J_*` (pydantic-settings, `.env`)
+- `node4j/models.py` — przykładowe modele (Person, Company, AuditLog…) używane przez `test.py`
 
 ### Zasady
 
@@ -22,7 +30,12 @@ Architektura, wzorce i zasady kodu: `.ai/ZASADY.md`. Przeczytaj przed zmianą st
 
 ### Pułapki
 
-<!-- Rzeczy, na których agent albo człowiek już się przewrócił. -->
+- Właściwości zapisują się przez `model_dump(mode="json")` — daty i `uid` trafiają do Neo4j jako tekst, nie typy temporalne (`node4j/manager.py` → `create`, `_perform_update`).
+- Nieznany sufiks w filtrze (`age__gtt`) po cichu staje się równością (`node4j/query.py` → `Q._compile_clause`).
+- Import `node4j.models` rejestruje przykładowe modele globalnie; rejestr jest kluczowany nazwą klasy — dwie klasy o tej samej nazwie się nadpisują.
+- `connection.queries` rośnie bez końca (`node4j/db.py` → `AsyncDatabase.run`).
+- Logi DEBUG z `node4j.db` zawierają parametry zapytań — mogą zawierać dane osobowe.
+- `test.py` czyści całą bazę (`MATCH (n) DETACH DELETE n`) — uruchamiaj tylko na bazie testowej.
 
 <!-- warsztat:start v0.18.0 — blok zarządzany przez plugin warsztatu. Nie edytuj wewnątrz: własne reguły dopisz poza blokiem. Skill start aktualizuje go do nowej wersji pluginu. -->
 ## Jak pracujemy

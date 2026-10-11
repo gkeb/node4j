@@ -16,6 +16,11 @@
 
 <!-- Duże albo niejasne. Pod każdą linią 1–3 decyzje do rozstrzygnięcia (nie zadania). -->
 
+- `import-csv-apoc` — import węzłów i relacji z CSV przez APOC (`connect_from_csv` z README) — `pomysl`
+  - czy rozszerzać `ApocManager`, czy usunąć obietnicę z README?
+  - klucz dopasowania węzłów: `uid` czy dowolna właściwość?
+
+
 ## Zrobione
 
 ## Porzucone

@@ -6,8 +6,22 @@
 
 ## Pojęcia
 
-<!-- **Faktura** — dokument rozliczeniowy wystawiony klientowi po realizacji zamówienia. _Zawsze:_ wystawiona faktura się nie zmienia; korekta to nowa faktura. _Nie mylić z:_ Zamówieniem. -->
+- **Węzeł (model węzła)** — klasa Pydantic dziedzicząca po `Node`, odwzorowana na węzły Neo4j. _Zawsze:_ ma pole `uid` (UUID generowany po stronie klienta). Źródło: `node4j/nodes.py` → `Node`.
+- **Etykieta** — etykieta Neo4j węzła. _Zawsze:_ zbiór = nazwa klasy + etykiety wszystkich przodków (bez `Node`), posortowany; zapytanie przez model rodzica znajduje też węzły podklas. Źródło: `node4j/nodes.py` → `NodeBase.__new__`; ADR 0002.
+- **Rejestr modeli** — `node_registry`: nazwa klasy → klasa modelu, wypełniany przez metaklasę. Relacje wskazują cel po nazwie i rozwiązują go w rejestrze dopiero przy zapytaniu. _Zawsze:_ klucz to nazwa klasy, nie moduł. Źródło: `node4j/registry.py`; ADR 0002.
+- **Menedżer (`.q`)** — `NodeManager` przypięty do modelu; wszystkie operacje na bazie dla tego modelu (CRUD, bulk, `count`, `aggregate`, `apply_schema`). Źródło: `node4j/manager.py`.
+- **Relacja** — atrybut modelu typu `RelationshipProperty`: typ relacji, etykieta celu, kierunek (`IN`, `OUT`, `UNDIRECTED`), opcjonalny model relacji. Na instancji zwraca `RelationshipManager` (`await` = lazy load, `connect`, `disconnect`). Źródło: `node4j/properties.py`.
+- **Model relacji (Edge)** — klasa Pydantic opisująca właściwości relacji, np. `WorkAt`. _Nie mylić z:_ Relacją — Edge to tylko dane na krawędzi. Źródło: `node4j/edges.py`.
+- **Filtr Q** — drzewo warunków `pole__operator=wartość` łączone `&`, `|`, `~`, tłumaczone na WHERE z parametrami. Brak sufiksu albo nieznany sufiks = równość. Źródło: `node4j/query.py`.
+- **Prefetch** — wczytanie relacji (także zagnieżdżonych) w tym samym zapytaniu co węzeł; wynik trafia do cache instancji, z którego korzysta lazy load. Źródło: `node4j/manager.py` → `ReturnQueryBuilder`.
+- **Hak cyklu życia** — `pre_save`, `post_save`, `pre_delete`, `post_delete` na instancji, nadpisywane przez użytkownika; wywoływane przez `create`, `update`, `delete`, `bulk_create`, `bulk_update`. Źródło: `node4j/nodes.py`, `node4j/manager.py`.
+- **`uid` a `_internal_id`** — `uid` to trwała tożsamość węzła nadana przez bibliotekę; `_internal_id` to `elementId` z Neo4j, ustawiany przy odczycie i używany wewnątrz operacji. Źródło: ADR 0003.
+- **Miękkie usunięcie** — oznaczenie węzła `is_deleted=True` z `deleted_at` zamiast usunięcia; po `setup_soft_delete_manager()` menedżer `.q` ukrywa takie węzły, a `.all_objects` widzi wszystkie. Źródło: `node4j/mixins.py` → `SoftDeleteMixin`, `node4j/managers.py`.
+- **TTL** — czas wygaśnięcia węzła (`ttl`), po którym okresowe zadanie APOC ma go usunąć. Źródło: `node4j/mixins.py` → `TTLMixin` (zob. rozjazd w `zrodla.md`).
+- **Transakcja atomowa** — blok `connection.transaction()` albo funkcja z `@connection.atomic()`; zapytania w tym samym kontekście asynchronicznym idą przez tę transakcję. _Zawsze:_ transakcje się nie zagnieżdżają (`RuntimeError`). Źródło: `node4j/db.py`.
 
 ## Czym to nie jest
 
-<!-- Zdania w stylu: „Faktura nie jest Zamówieniem — zamówienie może istnieć bez faktury”. -->
+- Węzeł nie jest rekordem z `elementId` — `_internal_id` nie jest tożsamością i nie trafia do zapisu.
+- Model relacji (Edge) nie jest węzłem — nie ma menedżera ani etykiet i nie trafia do rejestru.
+- Mixin (`TTLMixin`, `SoftDeleteMixin`) nie jest „czystą” domieszką — dziedziczy po `Node`, więc sam jest modelem z etykietą i wpisem w rejestrze.
