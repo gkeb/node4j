@@ -24,6 +24,7 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
 - `node4j/mixins.py`, `node4j/managers.py` — `SoftDeleteMixin` + `SoftDeleteManager`, `TTLMixin`
 - `node4j/ext/` — opakowania APOC i GDS (wymagają wtyczek na serwerze)
 - `node4j/config.py` — ustawienia `NODE4J_*` (pydantic-settings, `.env`)
+- zależności (`pyproject.toml`, `uv.lock`) — wersje i punkty styku z bibliotekami — [.ai/obszary/zaleznosci.md](.ai/obszary/zaleznosci.md)
 - `node4j/models.py` — przykładowe modele (Person, Company, AuditLog…) używane przez `test.py`
 
 ### Zasady
@@ -37,6 +38,7 @@ Architektura, wzorce i zasady kodu: `.ai/ZASADY.md`. Przeczytaj przed zmianą st
 - Import `node4j.models` rejestruje przykładowe modele globalnie; rejestr jest kluczowany nazwą klasy — dwie klasy o tej samej nazwie się nadpisują.
 - `connection.queries` rośnie bez końca (`node4j/db.py` → `AsyncDatabase.run`).
 - Logi DEBUG z `node4j.db` zawierają parametry zapytań — mogą zawierać dane osobowe.
+- `NodeBase` dziedziczy po wewnętrznej metaklasie pydantic (`type(BaseModel)`) — po podbiciu `pydantic` najpierw uruchom testy (`node4j/nodes.py`).
 - `test.py` czyści całą bazę (`MATCH (n) DETACH DELETE n`) — uruchamiaj tylko na bazie testowej.
 
 <!-- warsztat:start v0.18.0 — blok zarządzany przez plugin warsztatu. Nie edytuj wewnątrz: własne reguły dopisz poza blokiem. Skill start aktualizuje go do nowej wersji pluginu. -->
