@@ -10,11 +10,39 @@ from .nodes import Node
 # ### ZMIANA ###: Inicjalizacja loggera dla modułu
 log = logging.getLogger(__name__)
 
+# Zapytanie wykonywane okresowo przez zadanie APOC 'ttl_cleanup_job'.
+# Etykieta pochodzi od nazwy klasy mixinu, a `ttl` jest zapisany jako tekst ISO
+# (model_dump(mode="json")), więc przed porównaniem zamieniamy go na datetime.
+# Natywny datetime też jest obsługiwany. Tekst spoza wzorca (także bez strefy
+# czasowej) jest pomijany i nie wygasa, bo jeden błąd datetime() przerwałby cały
+# przebieg czyszczenia. Wzorzec pilnuje zakresów pól, ale nie długości miesiąca:
+# np. '2026-02-30T00:00:00Z' nadal przerwie przebieg.
+# Data i czas ISO ze strefą, jak z pydantic: 2026-10-11T18:00:00.123456Z
+_ISO_DATETIME_PATTERN = (
+    r"\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])"
+    r"T([01]\\d|2[0-3]):[0-5]\\d(:[0-5]\\d(\\.\\d+)?)?"
+    r"(Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)"
+)
+TTL_CLEANUP_QUERY = f"""
+        MATCH (n:TTLMixin)
+        WHERE n.ttl IS NOT NULL
+        WITH n, CASE
+            WHEN valueType(n.ttl) STARTS WITH 'ZONED DATETIME' THEN n.ttl
+            WHEN valueType(n.ttl) STARTS WITH 'STRING'
+                AND n.ttl =~ '{_ISO_DATETIME_PATTERN}'
+                THEN datetime(n.ttl)
+        END AS expires_at
+        WHERE expires_at < datetime({{timezone: 'UTC'}})
+        WITH n LIMIT 1000
+        DETACH DELETE n
+        RETURN count(n)
+        """
+
 
 class TTLMixin(Node):
     """
     Model mixin, który dodaje funkcjonalność automatycznego wygasania (TTL).
-    Węzły dziedziczące po tym modelu będą miały etykietę :TTL.
+    Węzły dziedziczące po tym modelu będą miały etykietę :TTLMixin.
     """
 
     ttl: datetime.datetime | None = None
@@ -30,15 +58,8 @@ class TTLMixin(Node):
 
         log.debug("Creating TTL index if not exists.")
         await connection.run(
-            "CREATE INDEX ttl_index IF NOT EXISTS FOR (n:TTL) ON (n.ttl)"
+            "CREATE INDEX ttl_index IF NOT EXISTS FOR (n:TTLMixin) ON (n.ttl)"
         )
-
-        cleanup_query = """
-        MATCH (n:TTL) WHERE n.ttl IS NOT NULL AND n.ttl < datetime({timezone: 'UTC'})
-        WITH n LIMIT 1000
-        DETACH DELETE n
-        RETURN count(n)
-        """
 
         install_query = """
         CALL apoc.periodic.repeat(
@@ -54,12 +75,13 @@ class TTLMixin(Node):
             job["name"] == "ttl_cleanup_job" for job in existing_jobs_result
         )
 
-        if not job_exists:
-            log.info("Periodic TTL cleanup job not found. Installing...")
-            await connection.run(install_query, {"cleanup_query": cleanup_query})
-            log.info("Successfully installed periodic TTL cleanup job.")
-        else:
-            log.info("Periodic TTL cleanup job already exists.")
+        # Istniejące zadanie może mieć zapytanie z wcześniejszej wersji biblioteki,
+        # więc zawsze instalujemy je od nowa z bieżącym zapytaniem.
+        if job_exists:
+            log.info("Periodic TTL cleanup job exists. Reinstalling...")
+            await connection.run("CALL apoc.periodic.cancel('ttl_cleanup_job')")
+        await connection.run(install_query, {"cleanup_query": TTL_CLEANUP_QUERY})
+        log.info("Successfully installed periodic TTL cleanup job.")
 
     def set_expiry(self, lifespan: datetime.timedelta):
         """

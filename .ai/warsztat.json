@@ -92,7 +92,7 @@
       "ruff I001 node4j/query.py x1",
       "ruff E501 node4j/registry.py x1",
       "ruff I001 node4j/registry.py x1",
-      "ruff E501 test.py x4",
+      "ruff E501 test.py x3",
       "ruff E722 test.py x1",
       "ruff F541 test.py x2",
       "ruff F841 test.py x1"

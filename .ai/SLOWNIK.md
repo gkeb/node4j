@@ -17,7 +17,7 @@
 - **Hak cyklu życia** — `pre_save`, `post_save`, `pre_delete`, `post_delete` na instancji, nadpisywane przez użytkownika; wywoływane przez `create`, `update`, `delete`, `bulk_create`, `bulk_update`. Źródło: `node4j/nodes.py`, `node4j/manager.py`.
 - **`uid` a `_internal_id`** — `uid` to trwała tożsamość węzła nadana przez bibliotekę; `_internal_id` to `elementId` z Neo4j, ustawiany przy odczycie i używany wewnątrz operacji. Źródło: ADR 0003.
 - **Miękkie usunięcie** — oznaczenie węzła `is_deleted=True` z `deleted_at` zamiast usunięcia; po `setup_soft_delete_manager()` menedżer `.q` ukrywa takie węzły, a `.all_objects` widzi wszystkie. Źródło: `node4j/mixins.py` → `SoftDeleteMixin`, `node4j/managers.py`.
-- **TTL** — czas wygaśnięcia węzła (`ttl`), po którym okresowe zadanie APOC ma go usunąć. Źródło: `node4j/mixins.py` → `TTLMixin` (zob. rozjazd w `zrodla.md`).
+- **TTL** — czas wygaśnięcia węzła (`ttl`), po którym okresowe zadanie APOC ma go usunąć. Źródło: `node4j/mixins.py` → `TTLMixin`, `TTL_CLEANUP_QUERY`; test `tests/test_ttl.py`.
 - **Transakcja atomowa** — blok `connection.transaction()` albo funkcja z `@connection.atomic()`; zapytania w tym samym kontekście asynchronicznym idą przez tę transakcję. _Zawsze:_ transakcje się nie zagnieżdżają (`RuntimeError`). Źródło: `node4j/db.py`.
 
 ## Czym to nie jest

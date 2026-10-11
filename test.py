@@ -1,6 +1,5 @@
 # main.py
 import asyncio
-import datetime
 import logging
 import sys
 from datetime import timedelta
@@ -9,7 +8,7 @@ import neo4j  # <-- KLUCZOWA POPRAWKA
 import structlog
 
 from node4j.db import connection
-from node4j.mixins import SoftDeleteMixin, TTLMixin
+from node4j.mixins import TTL_CLEANUP_QUERY, SoftDeleteMixin, TTLMixin
 from node4j.models import AuditLog, Company, Employee, Person, Post, Tag
 from node4j.nodes import Node
 from node4j.query import Q
@@ -390,16 +389,11 @@ async def main():
 
         await TTLMixin.setup_ttl_infrastructure()
         session_to_expire = await TemporarySession.q.create(session_id="123")
-        past_datetime = datetime.datetime.now(datetime.timezone.utc) + timedelta(
-            seconds=-5
-        )
-        await connection.run(
-            "MATCH (n:TemporarySession {uid: $uid}) SET n.ttl = $ttl_value",
-            {"uid": str(session_to_expire.uid), "ttl_value": past_datetime},
-        )
-        cleanup_query = "MATCH (n:TemporarySession) WHERE n.ttl IS NOT NULL AND n.ttl < datetime() DETACH DELETE n RETURN count(n) as c"
-        result = await connection.run(cleanup_query)
-        log.info("Ran TTL cleanup query", deleted_count=result[0]["c"])
+        await session_to_expire.save_with_expiry(lifespan=timedelta(seconds=-5))
+        await connection.run(TTL_CLEANUP_QUERY)
+        remaining = await TemporarySession.q.count()
+        log.info("Ran TTL cleanup query", remaining_sessions=remaining)
+        assert remaining == 0
 
         log.info(">>> All tests completed successfully! <<<", fg="green")
 

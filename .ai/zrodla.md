@@ -26,6 +26,6 @@ Brak zastanych ADR-ów w repo. Katalog `.ai/decyzje/`, format z szablonu warszta
 - [ ] `README.md` § Installation: `pip install pydantic neo4j-driver python-dotenv` — kod: zależności `neo4j`, `pydantic-settings`, `structlog` (`pyproject.toml`) — do ustalenia
 - [ ] `README.md` odznaka „python 3.10+” — kod: `requires-python = ">=3.12"`, `.python-version` 3.12 — do ustalenia
 - [ ] `README.md` § Bulk Relationship Creation from CSV: `Person.apoc.connect_from_csv(...)` i „import z JSON i CSV” — kod: `ApocManager` ma tylko `create_from_json` (`node4j/ext/apoc.py`) — do ustalenia
-- [ ] `README.md` § Automatic Data Expiry (TTL): węzły usuwane automatycznie — kod: zadanie czyści `MATCH (n:TTL)`, a węzły dostają etykiety `TTLMixin` + nazwę klasy (`node4j/nodes.py` → `NodeBase`), `ttl` zapisuje się jako tekst ISO (`model_dump(mode="json")`), więc `n.ttl < datetime()` nie zachodzi; `test.py` krok 25 omija mechanizm — sprawdzone bez bazy 2026-10-11 — bug (wniosek)
+- [x] `README.md` § Automatic Data Expiry (TTL): węzły usuwane automatycznie — kod czyścił `MATCH (n:TTL)` i porównywał tekst ISO z `datetime()` — bug, naprawiony 2026-10-11 (`fix: TTL usuwa wygasłe węzły`, test `tests/test_ttl.py`); README zgodne
 - [ ] tag `v0.2.3` (2025-07-13, `1bb03e3`) — `pyproject.toml`: `version = "0.2.2"` — do ustalenia
 

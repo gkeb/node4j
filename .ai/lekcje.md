@@ -5,3 +5,5 @@
 Ostatnie retro: —
 
 <!-- - [obszar | zdolność | projekt] problem — założyliśmy X, okazało się Y → teraz Z (link do śladu). Wzorzec: plik. Wystąpienia: RRRR-MM-DD kto-wykrył; RRRR-MM-DD kto-wykrył -->
+
+- [mixins] TTL nie usuwał wygasłych węzłów — zapytanie zakładało etykietę `:TTL` i natywny `datetime` w `ttl`, a węzeł ma etykietę klasy mixinu (`TTLMixin`, ADR 0002) i daty zapisane jako tekst ISO (`model_dump(mode="json")`) → zapytania Cypher na właściwościach modeli dopasowujemy po etykiecie klasy i porównujemy daty przez `datetime(...)`; zachowanie przypina test przez publiczny interfejs (`tests/test_ttl.py`), a nie zapytanie pisane w teście ręcznie. Wystąpienia: 2026-10-11 test
