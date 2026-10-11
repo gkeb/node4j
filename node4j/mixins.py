@@ -1,10 +1,11 @@
 # NOWY PLIK: node4j/mixins.py
 from __future__ import annotations
+
 import datetime
 import logging  # ### ZMIANA ###
-from .nodes import Node
+
 from .db import connection
-from .query import Q
+from .nodes import Node
 
 # ### ZMIANA ###: Inicjalizacja loggera dla modułu
 log = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ class TTLMixin(Node):
         """
         # ### ZMIANA ###: Zastąpienie print loggerem
         log.info("Setting up TTL infrastructure...")
-        
+
         log.debug("Creating TTL index if not exists.")
         await connection.run(
             "CREATE INDEX ttl_index IF NOT EXISTS FOR (n:TTL) ON (n.ttl)"
@@ -38,7 +39,7 @@ class TTLMixin(Node):
         DETACH DELETE n
         RETURN count(n)
         """
-        
+
         install_query = """
         CALL apoc.periodic.repeat(
             'ttl_cleanup_job',
@@ -46,10 +47,12 @@ class TTLMixin(Node):
             3600 // Powtarzaj co 3600 sekund (1 godzina)
         )
         """
-        
+
         log.debug("Checking for existing 'ttl_cleanup_job' periodic task.")
         existing_jobs_result = await connection.run("CALL apoc.periodic.list()")
-        job_exists = any(job['name'] == 'ttl_cleanup_job' for job in existing_jobs_result)
+        job_exists = any(
+            job["name"] == "ttl_cleanup_job" for job in existing_jobs_result
+        )
 
         if not job_exists:
             log.info("Periodic TTL cleanup job not found. Installing...")
@@ -66,8 +69,8 @@ class TTLMixin(Node):
         self.ttl = datetime.datetime.now(datetime.timezone.utc) + lifespan
         # ### ZMIANA ###: Logowanie ustawienia daty wygaśnięcia
         log.debug(
-            "Set expiry for node.", 
-            extra={"node_uid": str(self.uid), "expires_at": self.ttl.isoformat()}
+            "Set expiry for node.",
+            extra={"node_uid": str(self.uid), "expires_at": self.ttl.isoformat()},
         )
 
     async def save_with_expiry(self, lifespan: datetime.timedelta):
@@ -81,6 +84,7 @@ class SoftDeleteMixin(Node):
     """
     Model mixin, który implementuje logikę miękkiego usuwania.
     """
+
     is_deleted: bool = False
     deleted_at: datetime.datetime | None = None
 
@@ -96,7 +100,10 @@ class SoftDeleteMixin(Node):
         # ### ZMIANA ###: Zastąpienie print loggerem
         log.info(
             "Node soft-deleted successfully.",
-            extra={"node_uid": str(self.uid), "deleted_at": self.deleted_at.isoformat()}
+            extra={
+                "node_uid": str(self.uid),
+                "deleted_at": self.deleted_at.isoformat(),
+            },
         )
 
     async def restore(self):
@@ -121,14 +128,14 @@ class SoftDeleteMixin(Node):
         - `cls.q`: domyślny menedżer, który filtruje usunięte obiekty.
         - `cls.all_objects`: menedżer, który widzi wszystkie obiekty (w tym usunięte).
         """
-        if hasattr(cls, 'all_objects'):
+        if hasattr(cls, "all_objects"):
             return
-            
+
         from .managers import SoftDeleteManager
-        
+
         cls.all_objects = cls.q
         cls.q = SoftDeleteManager(cls)
-        
+
         # ### ZMIANA ###: Zastąpienie print loggerem
         # Używamy loggera specyficznego dla klasy, na której wywoływana jest metoda
         class_log = logging.getLogger(f"{__name__}.{cls.__name__}")
@@ -136,9 +143,10 @@ class SoftDeleteMixin(Node):
             "Soft-delete manager installed.",
             extra={
                 "default_manager": "q (filters deleted objects)",
-                "all_objects_manager": "all_objects (shows all objects)"
-            }
+                "all_objects_manager": "all_objects (shows all objects)",
+            },
         )
-        
+
+
 # ### ZMIANA ###: Usunięcie zduplikowanego kodu SoftDeleteManager.
 # Zakładamy, że znajduje się on w `node4j/managers.py`.

@@ -72,12 +72,6 @@
       "ruff I001 node4j/managers.py x1",
       "ruff W292 node4j/managers.py x1",
       "ruff W293 node4j/managers.py x3",
-      "ruff E501 node4j/mixins.py x1",
-      "ruff F401 node4j/mixins.py x1",
-      "ruff I001 node4j/mixins.py x1",
-      "ruff W291 node4j/mixins.py x1",
-      "ruff W292 node4j/mixins.py x1",
-      "ruff W293 node4j/mixins.py x7",
       "ruff E501 node4j/models.py x2",
       "ruff F401 node4j/models.py x1",
       "ruff I001 node4j/models.py x1",
@@ -98,15 +92,10 @@
       "ruff I001 node4j/query.py x1",
       "ruff E501 node4j/registry.py x1",
       "ruff I001 node4j/registry.py x1",
-      "ruff E501 test.py x31",
+      "ruff E501 test.py x4",
       "ruff E722 test.py x1",
-      "ruff F401 test.py x3",
       "ruff F541 test.py x2",
-      "ruff F841 test.py x1",
-      "ruff I001 test.py x1",
-      "ruff W291 test.py x1",
-      "ruff W292 test.py x1",
-      "ruff W293 test.py x13"
+      "ruff F841 test.py x1"
     ]
   },
   "weryfikacja": {
