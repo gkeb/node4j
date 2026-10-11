@@ -8,7 +8,7 @@
     "scalanie": "merge"
   },
   "bezpieczenstwo": {
-    "skanSekretow": null,
+    "skanSekretow": "gitleaks git --pre-commit --staged --redact --no-banner",
     "chronione": [
       ".env",
       ".env.local",
