@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill poznaj zaleznosci (brak mapy obszaru), potem skill spec aktualizacja-zaleznosci
+skill pomysl aktualizacja-zaleznosci druga-opinia (inny model niż claude-opus-5-5), potem skill spec aktualizacja-zaleznosci
 
 ## Otwarte pytania
 
