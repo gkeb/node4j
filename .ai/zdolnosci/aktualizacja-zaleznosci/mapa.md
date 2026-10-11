@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill pokroj aktualizacja-zaleznosci
+skill buduj aktualizacja-zaleznosci → ticket 01
 
 ## Otwarte pytania
 
@@ -41,6 +41,15 @@ skill pokroj aktualizacja-zaleznosci
 
 ## Plasterki
 
+- [01 — Siatka: format danych i konfiguracja](tickety/01-siatka-format-danych-i-konfiguracja.md)
+- [02 — Siatka: menedżer `.q` i filtry `Q`](tickety/02-siatka-menedzer-i-filtry.md)
+- [03 — Siatka: relacje, haki, transakcje, mixiny, rozszerzenia](tickety/03-siatka-relacje-haki-transakcje-mixiny.md)
+- [04 — CI na starym stosie](tickety/04-ci-na-starym-stosie.md) — po 01, 02, 03
+- [05 — Porządek zależności runtime/dev](tickety/05-porzadek-zaleznosci.md) — po 04
+- [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05
+- [07 — Macierz serwerów i Pythona](tickety/07-macierz-serwerow-i-pythona.md) — po 06
+- [08 — Sterownik `neo4j` 6.x](tickety/08-sterownik-neo4j-6.md) — po 07
+
 ## Stan sesji
 
 2026-10-11 — grill (bez ticketów)
@@ -48,4 +57,4 @@ skill pokroj aktualizacja-zaleznosci
 - W połowie: nic
 - Nieoczywiste: testy pytest potrzebują bazy testowej z APOC na porcie 7688 (komenda w AGENTS.md → Uruchamianie); na porcie 7687 działa prywatna baza użytkownika `my-knowledge-graph-db` — nie używać jej w testach. Obraz `neo4j:2025.05.1` jest lokalnie, więc bazę testową da się postawić bez sieci. Połączenie z github.com bywało niedostępne — push ponawiać.
 - Niezacommitowane: nie
-- Pierwszy ruch w następnej sesji: skill pokroj aktualizacja-zaleznosci
+- Pierwszy ruch w następnej sesji: skill buduj aktualizacja-zaleznosci → ticket 01
