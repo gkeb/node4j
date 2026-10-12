@@ -9,7 +9,7 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
 ### Uruchamianie
 
 - Instalacja: `uv sync`
-- Lint: `uv run ruff check .`
+- Lint: `uv run python scripts/check_ruff_baseline.py` — ruff względem znanych błędów z `.ai/warsztat.json` → `odniesienie.znane`; kończy się błędem przy nowym błędzie i przy liczniku wyższym niż stan kodu (wtedy zmniejsz licznik)
 - Baza testowa (jednorazowa, z APOC; PowerShell): wybierz obraz Neo4j 2026.09 albo 5.26 LTS. Ustaw listę pluginów jako zmienną, żeby zachować JSON przy przekazaniu argumentów do Dockera:
   ```powershell
   $neo4jImage = 'neo4j:2026.09.0' # Neo4j 2026.09
@@ -20,6 +20,7 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
   ```
   Zamknięcie: `docker stop node4j-test`
 - Testy: `uv run pytest` — łączą się tylko z bazą testową (`NODE4J_TEST_URI`, domyślnie `bolt://127.0.0.1:7688`; `tests/conftest.py`), bez bazy są pomijane. `NODE4J_REQUIRE_TEST_DB=1` (jak w CI) zmienia brak bazy lub pominięcie testu integracyjnego w błąd
+- W sandboxie agenta: cache uv w workspace (`UV_CACHE_DIR=.tmp/uv-cache`), pytest z `--basetemp=<katalog tymczasowy agenta>` i `-p no:cacheprovider` — inaczej `PermissionError` przy cache i `tmp_path` (wzorzec warsztatu `sandbox-agenta-odcina-cache-narzedzi`)
 - Skrypt demonstracyjny: `uv run python test.py` — używa `NODE4J_*` i **czyści całą bazę**
 
 ### Mapa kodu

@@ -40,6 +40,7 @@
 - Egzekwowanie: przegląd
 - Status: zastana
 - Dlaczego: `node4j/query.py` → `Q._compile_clause`, `node4j/properties.py` → `RelationshipManager.connect`, `node4j/manager.py` → `_orderby_statement`
+- Zakres: także ręczne zapytania w testach i argumenty wywołań procedur (`CALL apoc.…($param)`) — tam łamaliśmy ją dwa razy (retro 2026-10-12)
 - Wyjątki: `node4j/manager.py` → `create`, `bulk_create`, `bulk_update` i `ext/apoc.py` → `create_from_json` — etykiety i klucze `SET` bez backticków (nazwy pochodzą z klas i pól modelu); `aggregate` i `ext/gds.py` → `Algo` wstawiają do zapytania ciąg podany przez programistę.
 
 ### Z03. Biblioteka loguje przez `logging.getLogger(__name__)` i nie konfiguruje handlerów
@@ -53,7 +54,7 @@
 ### Z04. Styl kodu według ruff: reguły E, F, W, I, linia 88 znaków, podwójne cudzysłowy
 
 - Siła: preferencja
-- Egzekwowanie: automat — `uv run ruff check .`; w CI `scripts/check_ruff_baseline.py` względem `warsztat.json` → `odniesienie.znane` (`.github/workflows/ci.yml`)
+- Egzekwowanie: automat — `uv run python scripts/check_ruff_baseline.py` (`walidacja` i CI) względem `warsztat.json` → `odniesienie.znane`; liczniki wyższe niż stan kodu też są błędem
 - Status: zastana
 - Dlaczego: `pyproject.toml` → `[tool.ruff]`
 - Wyjątki: znane błędy z punktu odniesienia 2026-10-11 (113 po `aktualizacja-zaleznosci`, 2026-10-12)
@@ -62,6 +63,14 @@
 ## Testy
 
 <!-- Strategia, poziomy, co mockujemy, czego nie testujemy. -->
+
+### Z05. Test integracyjny sprząta po unikalnym, syntetycznym `scope`, nie po warunku zależnym od testowanego zachowania
+
+- Siła: twarda
+- Egzekwowanie: przegląd
+- Status: obowiązuje
+- Dlaczego: sprzątanie po oczekiwanej etykiecie zostawiało dane, gdy test wykrywał jej brak (przegląd, 2026-10-12, dwa wystąpienia); wzór: `tests/test_n1_manager_and_filters.py` → fikstura `n1_scope`
+- Wyjątki: —
 
 ## Niefunkcjonalne
 

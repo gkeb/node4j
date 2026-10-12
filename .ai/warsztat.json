@@ -39,7 +39,7 @@
     "przekrojowe"
   ],
   "walidacja": [
-    "uv run ruff check ."
+    "uv run python scripts/check_ruff_baseline.py"
   ],
   "mutacje": null,
   "odniesienie": {
