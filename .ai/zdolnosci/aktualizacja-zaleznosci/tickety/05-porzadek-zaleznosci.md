@@ -27,3 +27,6 @@ Metadane pakietu mają w zależnościach runtime tylko `neo4j`, `pydantic`, `pyd
 
 ## Notatki
 
+- Lokalnie: N1–N3 — 58 testów zaliczonych; testy konfiguracji N3 — 4 zaliczone; Ruff bez nowych błędów (119 błędów zastanych).
+- CI niesprawdzone — commit `d014c0c` nie został wypchnięty.
+

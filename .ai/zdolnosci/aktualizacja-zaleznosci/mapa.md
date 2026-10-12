@@ -11,9 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill buduj aktualizacja-zaleznosci → ticket 05
+Po autoryzacji push: wypchnąć commit `d014c0c` i sprawdzić CI ticketu 05.
 
 ## Stan sesji
+
+Ticket 05: porządek zależności runtime/dev zatwierdzony lokalnie. N1–N3 i kontrola Ruff przeszły lokalnie; CI niesprawdzone do czasu push.
 
 ## Otwarte pytania
 
