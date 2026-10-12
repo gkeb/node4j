@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-Po autoryzacji push: wypchnąć gałąź `main` i sprawdzić CI ticketu 05.
+skill `buduj aktualizacja-zaleznosci` → ticket 09
 
 ## Stan sesji
 
-Ticket 05: porządek zależności runtime/dev zatwierdzony lokalnie. N1–N3 i kontrola Ruff przeszły lokalnie; CI niesprawdzone do czasu push.
+Ticket 05: zrobione. N1–N3, TTL, Ruff i kontrola instalacji przeszły lokalnie i w [CI GitHub Actions](https://github.com/gkeb/node4j/actions/runs/38272595987).
 
 ## Otwarte pytania
 

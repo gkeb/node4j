@@ -1,10 +1,10 @@
 ---
 nr: "05"
 tytul: "Porządek zależności runtime/dev"
-status: w-toku
+status: zrobione
 blokowany-przez: ["04"]
 scenariusze: [N1, N2, N3]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -16,10 +16,10 @@ Metadane pakietu mają w zależnościach runtime tylko `neo4j`, `pydantic`, `pyd
 
 ## Kryteria akceptacji
 
-- [ ] N1, N2, N3: testy zielone (lokalnie i w CI)
-- [ ] kontrola instalacji w CI zielona — zainstalowana dystrybucja importuje API bez zależności deweloperskich
-- [ ] `.env` nadal działa (N3) — `python-dotenv` przychodzi przez `pydantic-settings`
-- [ ] plik blokady zaktualizowany bez podbijania wersji
+- [x] N1, N2, N3: testy zielone (lokalnie i w CI)
+- [x] kontrola instalacji w CI zielona — zainstalowana dystrybucja importuje API bez zależności deweloperskich
+- [x] `.env` nadal działa (N3) — `python-dotenv` przychodzi przez `pydantic-settings`
+- [x] plik blokady zaktualizowany bez podbijania wersji
 
 ## Poza zakresem
 
@@ -28,5 +28,5 @@ Metadane pakietu mają w zależnościach runtime tylko `neo4j`, `pydantic`, `pyd
 ## Notatki
 
 - Lokalnie: N1–N3 — 58 testów zaliczonych; testy konfiguracji N3 — 4 zaliczone; Ruff bez nowych błędów (119 błędów zastanych).
-- CI niesprawdzone — commit `d014c0c` nie został wypchnięty.
+- CI GitHub Actions: N1–N3 i TTL, Ruff oraz instalacja dystrybucji poza checkoutem przeszły — [run 2](https://github.com/gkeb/node4j/actions/runs/38272595987).
 
