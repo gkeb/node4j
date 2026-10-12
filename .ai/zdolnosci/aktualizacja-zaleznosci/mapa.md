@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 07
+skill `buduj aktualizacja-zaleznosci` → ticket 08
 
 ## Stan sesji
 
-Ticket 07: w toku — macierz testów CI Python 3.12/3.15 × Neo4j 2026.09/5.26 LTS; walidacja i CI oczekują na wynik.
+Ticket 07: zrobiony - CI zielone dla commitu 945b680 (run https://github.com/gkeb/node4j/actions/runs/38287412097); cztery kombinacje macierzy i job najnowszego Pydantic przeszły.
 
 ## Otwarte pytania
 

@@ -1,10 +1,10 @@
 ---
 nr: "07"
 tytul: "Macierz serwerów i Pythona"
-status: w-toku
+status: zrobione
 blokowany-przez: ["06"]
 scenariusze: [N1, N2, N3]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -16,9 +16,9 @@ CI uruchamia siatkę na serwerach 2026.09 i 5.26 LTS × Python 3.12 i najnowszy,
 
 ## Kryteria akceptacji
 
-- [ ] N1, N2, N3: testy zielone na każdej z czterech kombinacji
-- [ ] AGENTS.md → Uruchamianie: jak uruchomić bazę testową dla każdego serwera z macierzy
-- [ ] żaden wymagany test nie jest pominięty w żadnej kombinacji
+- [x] N1, N2, N3: testy zielone na każdej z czterech kombinacji
+- [x] AGENTS.md → Uruchamianie: jak uruchomić bazę testową dla każdego serwera z macierzy
+- [x] żaden wymagany test nie jest pominięty w żadnej kombinacji
 
 ## Poza zakresem
 
@@ -27,3 +27,5 @@ CI uruchamia siatkę na serwerach 2026.09 i 5.26 LTS × Python 3.12 i najnowszy,
 ## Notatki
 
 Macierz używa Pythonów 3.12 i 3.15 (3.15.0 jest najnowszym stabilnym wydaniem na 2026-10-12) oraz obrazów `neo4j:2026.09.0` i `neo4j:5.26`. Obrazy trzeba pobrać lokalnie, jeśli testy mają być uruchamiane na obu serwerach.
+
+CI zielone dla commitu 945b680 (run https://github.com/gkeb/node4j/actions/runs/38287412097); wszystkie cztery kombinacje i job najnowszego Pydantic zakończyły się sukcesem.
