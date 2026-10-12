@@ -421,7 +421,8 @@ async def test_N1_apoc_trigger_install_preserves_current_database_error(db):
             cypher="MATCH (n) RETURN n",
             selector={"phase": "after"},
         )
-    except ClientError:
+    except ClientError as error:
+        assert error.code == "Neo.ClientError.Procedure.ProcedureCallFailed"
         return
 
     await apoc.Triggers.remove(name)
@@ -429,15 +430,17 @@ async def test_N1_apoc_trigger_install_preserves_current_database_error(db):
 
 
 async def test_N1_apoc_trigger_list_preserves_current_database_error(db):
-    with pytest.raises(ClientError):
+    with pytest.raises(ClientError) as error:
         await apoc.Triggers.list()
+    assert error.value.code == "Neo.ClientError.Procedure.ProcedureCallFailed"
 
 
 async def test_N1_apoc_trigger_remove_preserves_current_database_error(db):
     name = f"n1-trigger-{uuid.uuid4().hex}"
 
-    with pytest.raises(ClientError):
+    with pytest.raises(ClientError) as error:
         await apoc.Triggers.remove(name)
+    assert error.value.code == "Neo.ClientError.Statement.SyntaxError"
 
 
 async def test_N1_gds_imports_and_builds_graph_query_without_plugin(monkeypatch):

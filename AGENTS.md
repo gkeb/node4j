@@ -17,7 +17,7 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
   Remove-Item Env:NEO4J_PLUGINS
   ```
   Zamknięcie: `docker stop node4j-test`
-- Testy: `uv run pytest` — łączą się tylko z bazą testową (`NODE4J_TEST_URI`, domyślnie `bolt://127.0.0.1:7688`; `tests/conftest.py`), bez bazy są pomijane
+- Testy: `uv run pytest` — łączą się tylko z bazą testową (`NODE4J_TEST_URI`, domyślnie `bolt://127.0.0.1:7688`; `tests/conftest.py`), bez bazy są pomijane. `NODE4J_REQUIRE_TEST_DB=1` (jak w CI) zmienia brak bazy lub pominięcie testu integracyjnego w błąd
 - Skrypt demonstracyjny: `uv run python test.py` — używa `NODE4J_*` i **czyści całą bazę**
 
 ### Mapa kodu

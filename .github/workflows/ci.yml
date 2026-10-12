@@ -68,4 +68,28 @@ jobs:
           uv pip sync --require-hashes --python "$RUNNER_TEMP/install-env/bin/python" "$RUNNER_TEMP/runtime-requirements.txt"
           uv pip install --no-deps --python "$RUNNER_TEMP/install-env/bin/python" "$RUNNER_TEMP"/dist/*.whl
           cd "$RUNNER_TEMP"
-          "$RUNNER_TEMP/install-env/bin/python" -c 'import sys; from pathlib import Path; import node4j; from node4j.db import connection; from node4j.nodes import Node; from node4j.query import Q; assert Path(node4j.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())'
+          "$RUNNER_TEMP/install-env/bin/python" - <<'PY'
+          from importlib import import_module
+          import sys
+          from pathlib import Path
+
+          public_modules = (
+              "node4j",
+              "node4j.db",
+              "node4j.nodes",
+              "node4j.query",
+              "node4j.mixins",
+              "node4j.managers",
+              "node4j.properties",
+              "node4j.edges",
+              "node4j.ext.apoc",
+              "node4j.ext.gds",
+          )
+          for module in public_modules:
+              import_module(module)
+
+          package = import_module("node4j")
+          assert Path(package.__file__).resolve().is_relative_to(
+              Path(sys.prefix).resolve()
+          )
+          PY

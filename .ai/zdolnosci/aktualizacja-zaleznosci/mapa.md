@@ -15,7 +15,7 @@ skill `buduj aktualizacja-zaleznosci` → ticket 10, potem 06
 
 ## Stan sesji
 
-Ticket 09: w toku — uzupełnienie testów charakteryzujących po R1.
+Ticket 10: w toku — domknięcie siatki po R2.
 
 ## Otwarte pytania
 
