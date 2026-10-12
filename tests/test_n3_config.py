@@ -61,3 +61,31 @@ def test_N3_environment_variables_take_precedence_over_dotenv(tmp_path, monkeypa
     assert settings.uri == "bolt://environment.example:7687"
     assert settings.user == "environment-user"
     assert settings.password == "environment-value"
+
+
+def test_N3_default_settings_read_cwd_dotenv_and_environment_overrides(
+    tmp_path, monkeypatch
+):
+    (tmp_path / ".env").write_text(
+        "NODE4J_URI=bolt://dotenv.example:7687\n"
+        "NODE4J_USER=dotenv-user\n"
+        "NODE4J_PASSWORD=dotenv-value\n",
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("NODE4J_URI", raising=False)
+    monkeypatch.delenv("NODE4J_USER", raising=False)
+    monkeypatch.delenv("NODE4J_PASSWORD", raising=False)
+
+    from_dotenv = Settings()
+
+    assert from_dotenv.uri == "bolt://dotenv.example:7687"
+    assert from_dotenv.user == "dotenv-user"
+    assert from_dotenv.password == "dotenv-value"
+
+    monkeypatch.setenv("NODE4J_URI", "bolt://environment.example:7687")
+    with_environment = Settings()
+
+    assert with_environment.uri == "bolt://environment.example:7687"
+    assert with_environment.user == "dotenv-user"
+    assert with_environment.password == "dotenv-value"

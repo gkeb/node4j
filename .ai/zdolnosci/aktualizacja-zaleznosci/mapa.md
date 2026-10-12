@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 09
+skill `buduj aktualizacja-zaleznosci` → ticket 06
 
 ## Stan sesji
 
-Ticket 05: zrobione. N1–N3, TTL, Ruff i kontrola instalacji przeszły lokalnie i w [CI GitHub Actions](https://github.com/gkeb/node4j/actions/runs/38272595987).
+Ticket 09: w toku — uzupełnienie testów charakteryzujących po R1.
 
 ## Otwarte pytania
 

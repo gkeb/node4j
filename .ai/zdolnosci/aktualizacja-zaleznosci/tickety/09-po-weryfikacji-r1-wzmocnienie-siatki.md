@@ -1,10 +1,10 @@
 ---
 nr: "09"
 tytul: "Po weryfikacji R1: wzmocnienie siatki"
-status: do-zrobienia
+status: zrobione
 blokowany-przez: []
 scenariusze: [N1, N3]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -16,13 +16,13 @@ Na obecnym stosie testy charakteryzujące wykrywają zmianę zachowania tam, gdz
 
 ## Kryteria akceptacji
 
-- [ ] N1: test `Periodic.iterate` ma obserwowalny efekt w bazie (zapytanie wewnętrzne zmienia własne, syntetyczne węzły) i sprawdza ten efekt, a nie wartość zwracaną wrappera (R1.1)
-- [ ] N3: test — `Settings()` bez argumentów czyta `.env` z bieżącego katalogu roboczego (katalog tymczasowy, `monkeypatch.chdir`), a zmienne środowiska nadal mają pierwszeństwo (R1.2)
-- [ ] N1: triggery APOC przypięte na bazie testowej zamiast mocka `connection.run` — test utrwala dzisiejszy rzeczywisty wynik `install`, `list` i `remove` na obecnym połączeniu, także jeśli jest nim błąd (R1.3)
-- [ ] N1: test — `match_all(prefetch=…)` ładuje relacje bez dodatkowego zapytania, w postaci listy i słownika (R1.5)
-- [ ] problem triggerów APOC (wymagana baza `system`) przeniesiony z `.ai/lekcje.md` do `.ai/proby.md` jako `nierozwiazane` (R1.4)
-- [ ] testy noszą numer niezmiennika w nazwie i są zielone na bazie testowej; żaden nie jest pominięty
-- [ ] walidacja (ruff) bez błędów spoza punktu odniesienia
+- [x] N1: test `Periodic.iterate` ma obserwowalny efekt w bazie (zapytanie wewnętrzne zmienia własne, syntetyczne węzły) i sprawdza ten efekt, a nie wartość zwracaną wrappera (R1.1)
+- [x] N3: test — `Settings()` bez argumentów czyta `.env` z bieżącego katalogu roboczego (katalog tymczasowy, `monkeypatch.chdir`), a zmienne środowiska nadal mają pierwszeństwo (R1.2)
+- [x] N1: triggery APOC przypięte na bazie testowej zamiast mocka `connection.run` — test utrwala dzisiejszy rzeczywisty wynik `install`, `list` i `remove` na obecnym połączeniu, także jeśli jest nim błąd (R1.3)
+- [x] N1: test — `match_all(prefetch=…)` ładuje relacje bez dodatkowego zapytania, w postaci listy i słownika (R1.5)
+- [x] problem triggerów APOC (wymagana baza `system`) przeniesiony z `.ai/lekcje.md` do `.ai/proby.md` jako `nierozwiazane` (R1.4)
+- [x] testy noszą numer niezmiennika w nazwie i są zielone na bazie testowej; żaden nie jest pominięty
+- [x] walidacja (ruff) bez błędów spoza punktu odniesienia
 
 ## Poza zakresem
 

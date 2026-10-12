@@ -1,9 +1,10 @@
 import uuid
 from collections import Counter
 from typing import ClassVar
-from unittest.mock import AsyncMock, call
+from unittest.mock import AsyncMock
 
 import pytest
+from neo4j.exceptions import ClientError
 
 from node4j.db import connection
 from node4j.edges import Edge
@@ -95,6 +96,8 @@ N1SoftDeleteNode.setup_soft_delete_manager()
 class N1ApocNode(Node):
     scope: str
     name: str
+    iterate_marker: bool
+    iterate_changed: bool
 
 
 @pytest.fixture
@@ -231,6 +234,31 @@ async def test_N1_relationship_prefetches_nested_relations(n1_scope):
     assert publishers[0][0].name == "publisher"
 
 
+@pytest.mark.parametrize(
+    "prefetch",
+    [pytest.param(["books"], id="list"), pytest.param({"books": {}}, id="dict")],
+)
+async def test_N1_match_all_prefetch_loads_relations_without_lazy_query(
+    n1_scope, prefetch
+):
+    author = await N1PrefetchAuthor.q.create(scope=n1_scope, name="author")
+    book = await N1PrefetchBook.q.create(scope=n1_scope, name="book")
+    await author.books.connect(book)
+
+    query_count_before_match = len(connection.queries)
+    authors = await N1PrefetchAuthor.q.match_all(
+        filters={"uid": str(author.uid)}, prefetch=prefetch
+    )
+
+    assert len(authors) == 1
+    assert len(connection.queries) == query_count_before_match + 1
+    query_count_after_match = len(connection.queries)
+    books = await authors[0].books
+
+    assert [related.name for related, _properties in books] == ["book"]
+    assert len(connection.queries) == query_count_after_match
+
+
 async def test_N1_hooks_fire_for_create_update_and_delete(n1_scope, n1_hook_events):
     node = await N1HookNode.q.create(scope=n1_scope, name="created")
     uid = str(node.uid)
@@ -351,48 +379,65 @@ async def test_N1_apoc_version_is_available(db):
     assert version
 
 
-async def test_N1_apoc_periodic_iterate_executes(db):
-    result = await apoc.Periodic.iterate(
-        "MATCH (n:`N1ApocNode`) RETURN n",
-        "WITH n RETURN n",
+async def test_N1_apoc_periodic_iterate_changes_matching_nodes(n1_scope):
+    processed = await N1ApocNode.q.create(
+        scope=n1_scope,
+        name="processed",
+        iterate_marker=True,
+        iterate_changed=False,
+    )
+    skipped = await N1ApocNode.q.create(
+        scope=n1_scope,
+        name="skipped",
+        iterate_marker=False,
+        iterate_changed=False,
+    )
+    label = f"N1Iterate_{n1_scope}"
+    await connection.run(
+        f"MATCH (n:`N1ApocNode`) WHERE n.`uid` IN $uids SET n:`{label}`",
+        {"uids": [str(processed.uid), str(skipped.uid)]},
+    )
+
+    await apoc.Periodic.iterate(
+        f"MATCH (n:`N1ApocNode`:`{label}`) WHERE n.`iterate_marker` RETURN n",
+        "SET n.`iterate_changed` = NOT n.`iterate_changed`",
         batch_size=1,
     )
 
-    assert result is None
+    processed_after = await N1ApocNode.q.match_one(filters={"uid": str(processed.uid)})
+    skipped_after = await N1ApocNode.q.match_one(filters={"uid": str(skipped.uid)})
+
+    assert processed_after is not None
+    assert processed_after.iterate_changed is True
+    assert skipped_after is not None
+    assert skipped_after.iterate_changed is False
 
 
-async def test_N1_apoc_triggers_build_install_list_and_remove_calls(monkeypatch):
+async def test_N1_apoc_trigger_install_preserves_current_database_error(db):
     name = f"n1-trigger-{uuid.uuid4().hex}"
-    listed_triggers = [{"name": name}]
-    removed_trigger = {"name": name}
-    run = AsyncMock(side_effect=[None, listed_triggers, [removed_trigger]])
-    monkeypatch.setattr(connection, "run", run)
+    try:
+        await apoc.Triggers.install(
+            name=name,
+            cypher="MATCH (n) RETURN n",
+            selector={"phase": "after"},
+        )
+    except ClientError:
+        return
 
-    await apoc.Triggers.install(
-        name=name,
-        cypher="MATCH (n) RETURN n",
-        selector={"phase": "after"},
-    )
-    triggers = await apoc.Triggers.list()
-    removed = await apoc.Triggers.remove(name)
+    await apoc.Triggers.remove(name)
+    pytest.fail("APOC trigger installation unexpectedly succeeded")
 
-    assert triggers == listed_triggers
-    assert removed == removed_trigger
-    install_call, list_call, remove_call = run.await_args_list
-    install_query, install_params = install_call.args
-    assert install_query.startswith("CALL apoc.trigger.install(")
-    assert all(
-        parameter in install_query
-        for parameter in ("$name", "$cypher", "$selector", "$config")
-    )
-    assert install_params == {
-        "name": name,
-        "cypher": "MATCH (n) RETURN n",
-        "selector": {"phase": "after"},
-        "config": {},
-    }
-    assert list_call == call("CALL apoc.trigger.list()")
-    assert remove_call == call("CALL apoc.trigger.drop($name)", {"name": name})
+
+async def test_N1_apoc_trigger_list_preserves_current_database_error(db):
+    with pytest.raises(ClientError):
+        await apoc.Triggers.list()
+
+
+async def test_N1_apoc_trigger_remove_preserves_current_database_error(db):
+    name = f"n1-trigger-{uuid.uuid4().hex}"
+
+    with pytest.raises(ClientError):
+        await apoc.Triggers.remove(name)
 
 
 async def test_N1_gds_imports_and_builds_graph_query_without_plugin(monkeypatch):
