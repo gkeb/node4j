@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 06
+skill `buduj aktualizacja-zaleznosci` → ticket 07
 
 ## Stan sesji
 
-Ticket 06: w toku — drobne podbicia i granice wersji; walidacja lokalna przechodzi, CI niesprawdzone (commit nie został wypchnięty).
+Ticket 06: zrobiony — CI success dla commitu `b702527` (run [38284717944](https://github.com/gkeb/node4j/actions/runs/38284717944)).
 
 ## Otwarte pytania
 
