@@ -23,7 +23,7 @@ Brak zastanych ADR-ów w repo. Katalog `.ai/decyzje/`, format z szablonu warszta
 - [ ] `docs/api.md` § Limity: 100 zapytań/min — kod: 60 (`…`) — dokument nieaktualny | bug | do ustalenia
 -->
 
-- [ ] `README.md` § Installation: `pip install pydantic neo4j-driver python-dotenv` — kod: zależności `neo4j`, `pydantic-settings`, `structlog` (`pyproject.toml`) — do ustalenia
+- [ ] `README.md` § Installation: `pip install pydantic neo4j-driver python-dotenv` — kod: zależności runtime `neo4j`, `pydantic`, `pydantic-settings` (`pyproject.toml`, od 2026-10-12) — do ustalenia w zdolności `readme-aktualne`
 - [ ] `README.md` odznaka „python 3.10+” — kod: `requires-python = ">=3.12"`, `.python-version` 3.12 — do ustalenia
 - [ ] `README.md` § Bulk Relationship Creation from CSV: `Person.apoc.connect_from_csv(...)` i „import z JSON i CSV” — kod: `ApocManager` ma tylko `create_from_json` (`node4j/ext/apoc.py`) — do ustalenia
 - [x] `README.md` § Automatic Data Expiry (TTL): węzły usuwane automatycznie — kod czyścił `MATCH (n:TTL)` i porównywał tekst ISO z `datetime()` — bug, naprawiony 2026-10-11 (`fix: TTL usuwa wygasłe węzły`, test `tests/test_ttl.py`); README zgodne

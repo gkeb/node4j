@@ -8,10 +8,10 @@ Profile: przekrojowe
 - P-01 Użytkownicy i użycie — otwarte
 - P-02 Język — otwarte (stan: komunikaty wyjątków i komentarze po polsku, logi po angielsku, README w EN i PL)
 - P-03 Środowisko i wersje — `.python-version` (3.12), `pyproject.toml` → `requires-python >=3.12`, uv + `uv.lock` w repo
-- P-04 Układ repozytorium — otwarte (stan: pakiet `node4j/`, brak katalogu testów)
+- P-04 Układ repozytorium — otwarte (stan: pakiet `node4j/`, testy w `tests/`, CI w `.github/workflows/`)
 - P-05 Strategia testów — pytest na jednorazowym kontenerze Neo4j (`tests/conftest.py`, AGENTS.md → Uruchamianie), testy charakteryzujące API i formatu danych — [aktualizacja-zaleznosci](zdolnosci/aktualizacja-zaleznosci/mapa.md) → Decyzje
 - P-06 Walidacja — `warsztat.json` → `walidacja` (ruff), Z04
-- P-07 CI — GitHub Actions: [workflow](../.github/workflows/ci.yml), obecnie Neo4j 2025.05.1 / Python 3.12; pełna macierz serwer × Python w ticketach 06–07 — [aktualizacja-zaleznosci](zdolnosci/aktualizacja-zaleznosci/mapa.md) → Decyzje
+- P-07 CI — GitHub Actions: [workflow](../.github/workflows/ci.yml) — macierz Python 3.12/3.15 × Neo4j 2026.09.0/5.26 LTS z APOC, przebieg na najnowszym Pydantic 2.x, ruff względem `odniesienie.znane`, kontrola instalacji paczki — [aktualizacja-zaleznosci](zdolnosci/aktualizacja-zaleznosci/mapa.md) → Decyzje
 - P-08 Konfiguracja i sekrety — `node4j/config.py` (pydantic-settings, prefiks `NODE4J_`, `.env`); brak `.env.example` — otwarte
 - P-09 Bezpieczeństwo — Z02 (parametry w Cypher); audyt zależności — otwarte
 - P-10 Dane osobowe — otwarte (logi DEBUG zawierają parametry zapytań, `node4j/db.py`)
