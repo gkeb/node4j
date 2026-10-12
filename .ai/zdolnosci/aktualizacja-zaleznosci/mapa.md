@@ -15,7 +15,7 @@ skill `buduj aktualizacja-zaleznosci` → ticket 08
 
 ## Stan sesji
 
-Ticket 08: w toku — sterownik 6.4.0 i walidacja lokalna gotowe (testy jednostkowe, Ruff, build i import dystrybucji); pełna macierz testów oraz `test.py` czekają na CI po pushu.
+Ticket 08: w toku — sterownik 6.4.0 i walidacja lokalna gotowe (testy jednostkowe, Ruff, build i import dystrybucji); run CI 38291335280 wykazał brak mapowania poświadczeń dla `test.py`, poprawka jest przygotowana, ponowny CI oczekuje na push.
 
 ## Otwarte pytania
 

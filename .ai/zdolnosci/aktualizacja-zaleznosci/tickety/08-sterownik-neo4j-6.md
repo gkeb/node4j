@@ -39,3 +39,5 @@ Testy `tests/test_driver_config.py` sprawdzają wyłączenie ponowień, sprząta
 - Dystrybucja zbudowana lokalnie, zainstalowana poza checkoutem w czystym środowisku zawierającym tylko zależności runtime; import publicznych modułów zakończył się powodzeniem.
 - Ruff: brak nowych błędów względem punktu odniesienia; pozostało 113 znanych błędów.
 - `test.py` na testowej bazie: oczekuje na CI; lokalnie nie ma dostępnej bazy testowej.
+
+Pierwszy [run CI 38291335280](https://github.com/gkeb/node4j/actions/runs/38291335280) potwierdził pytest w macierzy, ale `test.py` dostał domyślne hasło i zakończył się `AuthError`: job udostępniał `NODE4J_TEST_*`, podczas gdy konfiguracja biblioteki czyta `NODE4J_*` (pytest mapował nazwy w `conftest.py`). Krok demonstracyjny mapuje teraz zmienne jawnie; oczekuje na ponowny CI.

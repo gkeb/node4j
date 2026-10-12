@@ -53,6 +53,10 @@ jobs:
         run: uv run --locked pytest -W error::ResourceWarning
 
       - name: Run demonstration script
+        env:
+          NODE4J_URI: ${{ env.NODE4J_TEST_URI }}
+          NODE4J_USER: ${{ env.NODE4J_TEST_USER }}
+          NODE4J_PASSWORD: ${{ env.NODE4J_TEST_PASSWORD }}
         run: uv run --locked python -W error::ResourceWarning test.py
 
       - name: Check Ruff against the known baseline
