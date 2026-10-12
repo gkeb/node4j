@@ -11,7 +11,9 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill buduj aktualizacja-zaleznosci → ticket 03
+skill buduj aktualizacja-zaleznosci → ticket 04
+
+## Stan sesji
 
 ## Otwarte pytania
 
