@@ -11,11 +11,9 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-Po zgodzie na push: wypchnąć `main` i sprawdzić CI ticketu 04 (N1–N3, TTL, Ruff, build i import). Po zielonym przebiegu uzupełnić ticket 04 i przejść do ticketu 05.
+skill buduj aktualizacja-zaleznosci → ticket 05
 
 ## Stan sesji
-
-Ticket 04 jest lokalnie zbudowany i zcommitowany; czeka na push i pierwszy wynik workflow.
 
 ## Otwarte pytania
 
