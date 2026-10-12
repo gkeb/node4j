@@ -2,7 +2,7 @@
 nr: "06"
 tytul: "Drobne podbicia i granice wersji"
 status: do-zrobienia
-blokowany-przez: ["05"]
+blokowany-przez: ["05", "09"]
 scenariusze: [N1, N2, N3]
 budowal: null
 github: null

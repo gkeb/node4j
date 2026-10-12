@@ -28,6 +28,10 @@
   - czy rozszerzać `ApocManager`, czy usunąć obietnicę z README?
   - klucz dopasowania węzłów: `uid` czy dowolna właściwość?
 
+- `porzadek-lint` — wyzerowanie znanych błędów ruff z punktu odniesienia (119 na 2026-10-12: głównie długie linie, białe znaki, importy, f-stringi; dwa F821 w adnotacjach `nodes.py` i `query.py`) i usunięcie `odniesienie.znane` z `warsztat.json` — po `aktualizacja-zaleznosci`, żeby nie mieszać diffów — `pomysl`
+  - jeden commit `ruff --fix` + ręczne poprawki, czy plik po pliku?
+  - czy przy okazji formatować `ruff format` (zmienia prawie każdy plik)?
+
 
 ## Zrobione
 

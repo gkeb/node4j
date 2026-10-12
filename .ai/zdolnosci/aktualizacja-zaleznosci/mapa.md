@@ -48,6 +48,7 @@ skill buduj aktualizacja-zaleznosci → ticket 04
 - [03 — Siatka: relacje, haki, transakcje, mixiny, rozszerzenia](tickety/03-siatka-relacje-haki-transakcje-mixiny.md)
 - [04 — CI na starym stosie](tickety/04-ci-na-starym-stosie.md) — po 01, 02, 03
 - [05 — Porządek zależności runtime/dev](tickety/05-porzadek-zaleznosci.md) — po 04
-- [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05
+- [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05 i 09
 - [07 — Macierz serwerów i Pythona](tickety/07-macierz-serwerow-i-pythona.md) — po 06
 - [08 — Sterownik `neo4j` 6.x](tickety/08-sterownik-neo4j-6.md) — po 07
+- [09 — Po weryfikacji R1: wzmocnienie siatki](tickety/09-po-weryfikacji-r1-wzmocnienie-siatki.md) — przed 06; uwagi R1.1–R1.5
