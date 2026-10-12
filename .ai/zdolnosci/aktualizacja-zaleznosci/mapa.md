@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `weryfikuj aktualizacja-zaleznosci` — wszystkie tickety są zrobione; zdolność czeka na weryfikację krzyżową
+skill `zamknij aktualizacja-zaleznosci` — weryfikacja R3 przeszła ([weryfikacja.md](weryfikacja.md)); uwagi drobne bez ticketu (decyzja użytkownika 2026-10-12): najpierw `poznaj zaleznosci` (R3.3 — mapa obszaru i P-07 w profilu), potem w `zamknij` status (R3.1) i liczniki `db.py` w `odniesienie.znane` (R3.2) jako drobna poprawka
 
 ## Stan sesji
 

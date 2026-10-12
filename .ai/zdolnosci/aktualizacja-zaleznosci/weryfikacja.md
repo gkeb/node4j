@@ -2,6 +2,29 @@
 
 > Rundy weryfikacji krzyżowej: domyślnie inny model niż budujący sprawdza dowiezienie względem specu i planu. Jeśli ustawienie dopuszcza ten sam model, oznacz rundę jako nieniezależną. Najnowsza runda na górze. Format: „Weryfikacja krzyżowa” w `kontrakt/praca.md` w katalogu pluginu warsztatu.
 
+## Runda R3 — 2026-10-12 — przeszła
+
+- Zakres: cała zdolność (tickety 01–10; nowe od R2: 06, 07, 08, 10) — commity bfdeb3d..4e84cab, w tej rundzie szczegółowo b702527..4e84cab. Status w `ROADMAP.md` nadal `budowa`, choć 10/10 ticketów zrobione (R3.1) — runda prowadzona mimo to, bo nic poza statusem nie jest otwarte
+- Weryfikator: Claude Code / claude-opus-5-5 — niezależna
+- Budujący: Codex / GPT-6 (pole `budowal` we wszystkich ticketach 01–10; commity kodu bez stopki Claude)
+- Walidacja: zielona — `uv run ruff check .` + `scripts/check_ruff_baseline.py`: bez nowych, 113 zastanych. `uv run pytest -W error::ResourceWarning` z `NODE4J_REQUIRE_TEST_DB=1` na jednorazowej bazie `neo4j:2026.09.0` z APOC: 69 passed, 0 skipped; `test.py` na tej bazie: „All tests completed successfully!”
+- CI: 4e84cab (głowa, pełny hash `4e84cab…`) — success ([run 38292868940](https://github.com/gkeb/node4j/actions/runs/38292868940)): Python 3.12/3.15 × Neo4j 2026.09.0/5.26 oraz Latest Pydantic 2.x — wszystkie kroki zielone (pytest, `test.py`, ruff, build, instalacja poza checkoutem z importem 10 modułów)
+- Kryteria: 06 — 3/3, 07 — 3/3, 08 — 5/5, 10 — 6/6 spełnione; 01–05 i 09 potwierdzone w R1–R2
+- Niezmienniki i kryterium końca (refaktor):
+  - N1 — `tests/test_n1_manager_and_filters.py`, `tests/test_n1_relations_hooks_mixins_ext.py`, `tests/test_ttl.py`, `tests/test_driver_config.py` (bez ponowień auto-commit, sprzątanie sterownika po błędzie i anulowaniu, `DriverError` na zamkniętym sterowniku, zachowany `ConnectionAcquisitionTimeoutError`); `connect()` przed zmianą też zostawiał `driver = None` przy błędzie (wczesny `return`, gdy driver istnieje), więc zmiana w `node4j/db.py` dodaje tylko zamknięcie sterownika
+  - N2 — `tests/test_n2_data_format.py` (zapis, odczyt starego formatu, nazwy indeksów, constraintów i `ttl_index`)
+  - N3 — `tests/test_n3_config.py`
+  - Kryterium końca: lock `neo4j 6.4.0`, `pydantic 2.14.1`, `pydantic-settings 2.15.0`, `pytest 9.1.1`, `pytest-asyncio 1.4.0`, `ruff 0.17.0`, `structlog 26.1.0` (zgodne z Notatkami 06 i badaniem); `pyproject.toml` — trzy zależności runtime z granicami `<7`, `<3`, `<3`; pozostałe punkty — CI wyżej
+- Poza zakresem i decyzje z mapy: nie złamane (bez podbicia wersji node4j, README, `utcnow()` i GDS bez zmian; `disable_auto_commit_retries=True` w `node4j/db.py:53`)
+- ZASADY Z01–Z03: bez naruszeń w diffie kodu produkcyjnego (`node4j/db.py`: tylko async, bez nowego Cypher, `log = logging.getLogger(__name__)`)
+- Testy mutacyjne: nie skonfigurowane (`mutacje: null`)
+
+### Uwagi
+
+- R3.1 [drobna] `.ai/ROADMAP.md:13` — zdolność ma status `budowa`, choć ostatni ticket jest zrobiony; według przebiegu w kontrakcie powinna przejść w `weryfikacja` przed tą rundą — kontrakt/praca.md → Przebieg — otwarta
+- R3.2 [drobna] `.ai/warsztat.json` → `odniesienie.znane` — punkt odniesienia ma 119 błędów, w kodzie zostało 113 (formatowanie `node4j/db.py` usunęło 6); limit z punktu odniesienia pozwala dziś dodać do 6 nowych błędów tego samego kodu w `db.py` bez wykrycia. Zdolność `porzadek-lint` w Mgle i tak go wyzeruje — Kryterium końca („Ruff bez błędów spoza punktu odniesienia”) — otwarta
+- R3.3 [drobna] `.ai/profil.md:14` (P-07: „obecnie Neo4j 2025.05.1 / Python 3.12”) i `.ai/obszary/zaleznosci.md:29` („Wszystkie poza `ruff` są w `[project] dependencies`”) opisują stan sprzed zdolności; hook zgłasza zmienione źródła mapy obszaru — do odświeżenia przez `poznaj zaleznosci` i edycję profilu — Stan docelowy („P-05 i P-07 w profilu rozstrzygnięte”) — otwarta
+
 ## Runda R2 — 2026-10-12 — nie przeszła
 
 - Zakres: tickety 04, 05, 09, zdolność nadal w `budowa` — commity 3101889..bfe9d5f
