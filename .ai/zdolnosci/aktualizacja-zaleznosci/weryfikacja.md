@@ -12,13 +12,14 @@
 - Kryteria: 04 — 5/5, 05 — 4/4, 09 — 7/7 spełnione; zastrzeżenia w R2.2–R2.3
 - Niezmienniki: N1 — nowe testy `match_all` z prefetch, `Periodic.iterate` z efektem, triggery na prawdziwej bazie; N3 — `test_N3_default_settings_read_cwd_dotenv_and_environment_overrides`; N2 bez zmian
 - Testy mutacyjne: nie skonfigurowane (`mutacje: null`)
+- Domknięcie uwag R2.2–R2.4: ticket 10, commit `c5f11a9fa886f5f48946ee35e0edb432172f55d5`; CI success ([run](https://github.com/gkeb/node4j/actions/runs/38281973210))
 
 ### Uwagi
 
 - R2.1 [blokująca] commit bfe9d5f (ticket 09) — brak przebiegu CI, bo commit nie jest wypchnięty (`main` ahead 1). Lokalnie zielony; do zamknięcia wystarczy push i zielony przebieg dla pełnego hasha, bez ticketu — DoD ticketu, „Wynik rundy” — naprawiona: push 6ae56e0 (ten sam kod co bfe9d5f + tylko `.ai/`), CI success ([run](https://github.com/gkeb/node4j/actions/runs/38279662319))
-- R2.2 [warto] `.github/workflows/ci.yml:71` — kontrola instalacji importuje tylko `node4j`, `node4j.db`, `node4j.nodes`, `node4j.query`; spec wymaga importu publicznego API, a N1 obejmuje też `node4j.mixins`, `node4j.managers`, `node4j.properties`, `node4j.edges`, `node4j.ext.apoc`, `node4j.ext.gds`. Dziś żaden moduł pakietu nie importuje zależności deweloperskich (`grep structlog|pytest|dotenv node4j/` — pusto), więc to luka na przyszłość, nie błąd — ticket 04, Stan docelowy specu — otwarta (ticket 10)
-- R2.3 [drobna] `tests/test_n1_relations_hooks_mixins_ext.py` (testy `test_N1_apoc_trigger_*`) — przypinają dowolny `ClientError`, bez kodu błędu; zmiana przyczyny (np. procedura usunięta z APOC zamiast „wymaga bazy `system`”) przejdzie niezauważona. Przypięcie `e.code` uściśliłoby siatkę przed ticketem 08 (zmienione klasy wyjątków w sterowniku 6) — N1 — otwarta (ticket 10)
-- R2.4 [drobna] `.ai/zdolnosci/aktualizacja-zaleznosci/mapa.md` → Stan sesji — nadal „Ticket 09: w toku”, choć ticket ma status `zrobione`; `AGENTS.md` → Uruchamianie nie wspomina `NODE4J_REQUIRE_TEST_DB` (tryb CI, w którym brak bazy jest błędem) — otwarta (ticket 10)
+- R2.2 [warto] `.github/workflows/ci.yml:71` — kontrola instalacji importuje tylko `node4j`, `node4j.db`, `node4j.nodes`, `node4j.query`; spec wymaga importu publicznego API, a N1 obejmuje też `node4j.mixins`, `node4j.managers`, `node4j.properties`, `node4j.edges`, `node4j.ext.apoc`, `node4j.ext.gds`. Dziś żaden moduł pakietu nie importuje zależności deweloperskich (`grep structlog|pytest|dotenv node4j/` — pusto), więc to luka na przyszłość, nie błąd — ticket 04, Stan docelowy specu — naprawiona (ticket 10)
+- R2.3 [drobna] `tests/test_n1_relations_hooks_mixins_ext.py` (testy `test_N1_apoc_trigger_*`) — przypinają dowolny `ClientError`, bez kodu błędu; zmiana przyczyny (np. procedura usunięta z APOC zamiast „wymaga bazy `system`”) przejdzie niezauważona. Przypięcie `e.code` uściśliłoby siatkę przed ticketem 08 (zmienione klasy wyjątków w sterowniku 6) — N1 — naprawiona (ticket 10)
+- R2.4 [drobna] `.ai/zdolnosci/aktualizacja-zaleznosci/mapa.md` → Stan sesji — nadal „Ticket 09: w toku”, choć ticket ma status `zrobione`; `AGENTS.md` → Uruchamianie nie wspomina `NODE4J_REQUIRE_TEST_DB` (tryb CI, w którym brak bazy jest błędem) — naprawiona (ticket 10)
 - R1.1–R1.5 — potwierdzone jako naprawione w tickecie 09 (statusy poniżej)
 
 ## Runda R1 — 2026-10-12 — przeszła

@@ -1,7 +1,7 @@
 ---
 nr: "10"
 tytul: "Po weryfikacji R2: domknięcie siatki"
-status: w-toku
+status: zrobione
 blokowany-przez: []
 scenariusze: [N1]
 budowal: "Codex / GPT-6"
@@ -20,7 +20,7 @@ Kontrola instalacji w CI importuje całe publiczne API z zainstalowanej dystrybu
 - [x] N1: testy `test_N1_apoc_trigger_*` przypinają kod błędu (`ClientError.code`) zwracany dziś przez serwer, a nie dowolny `ClientError` (R2.3)
 - [x] `AGENTS.md` → Uruchamianie opisuje `NODE4J_REQUIRE_TEST_DB=1` (brak bazy albo pominięty test integracyjny = błąd, jak w CI) (R2.4)
 - [x] `mapa.md` → Stan sesji odpowiada stanowi ticketów (R2.4)
-- [ ] testy zielone na bazie testowej z `NODE4J_REQUIRE_TEST_DB=1`; CI zielone dla commitu ticketu
+- [x] testy zielone na bazie testowej z `NODE4J_REQUIRE_TEST_DB=1`; CI zielone dla commitu ticketu
 - [x] walidacja (ruff) bez błędów spoza punktu odniesienia
 
 ## Poza zakresem
@@ -30,3 +30,5 @@ Kontrola instalacji w CI importuje całe publiczne API z zainstalowanej dystrybu
 ## Notatki
 
 Uwagi R2.2–R2.4 z [weryfikacja.md](../weryfikacja.md). Przed 06: R2.3 ma uściślić siatkę, zanim zmienią się wersje.
+
+Walidacja lokalna: 63 testy passed, 0 skipped; Ruff bez nowych błędów względem punktu odniesienia. CI: [run 38281973210](https://github.com/gkeb/node4j/actions/runs/38281973210) — success dla commitu `c5f11a9fa886f5f48946ee35e0edb432172f55d5`.

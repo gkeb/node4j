@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 10, potem 06
+skill `buduj aktualizacja-zaleznosci` → ticket 06
 
 ## Stan sesji
 
-Ticket 10: w toku — domknięcie siatki po R2.
+Ticket 10: zrobiony — CI success dla commitu `c5f11a9` (run 38281973210).
 
 ## Otwarte pytania
 
