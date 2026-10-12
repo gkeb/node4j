@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-Po autoryzacji push: wypchnąć commit `d014c0c` i sprawdzić CI ticketu 05.
+Po autoryzacji push: wypchnąć gałąź `main` i sprawdzić CI ticketu 05.
 
 ## Stan sesji
 
