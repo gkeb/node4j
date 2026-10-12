@@ -11,7 +11,7 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 06
+skill `buduj aktualizacja-zaleznosci` → ticket 10, potem 06
 
 ## Stan sesji
 
@@ -50,7 +50,8 @@ Ticket 09: w toku — uzupełnienie testów charakteryzujących po R1.
 - [03 — Siatka: relacje, haki, transakcje, mixiny, rozszerzenia](tickety/03-siatka-relacje-haki-transakcje-mixiny.md)
 - [04 — CI na starym stosie](tickety/04-ci-na-starym-stosie.md) — po 01, 02, 03
 - [05 — Porządek zależności runtime/dev](tickety/05-porzadek-zaleznosci.md) — po 04
-- [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05 i 09
+- [06 — Drobne podbicia i granice wersji](tickety/06-drobne-podbicia-i-granice.md) — po 05, 09 i 10
 - [07 — Macierz serwerów i Pythona](tickety/07-macierz-serwerow-i-pythona.md) — po 06
 - [08 — Sterownik `neo4j` 6.x](tickety/08-sterownik-neo4j-6.md) — po 07
 - [09 — Po weryfikacji R1: wzmocnienie siatki](tickety/09-po-weryfikacji-r1-wzmocnienie-siatki.md) — przed 06; uwagi R1.1–R1.5
+- [10 — Po weryfikacji R2: domknięcie siatki](tickety/10-po-weryfikacji-r2-domkniecie-siatki.md) — przed 06; uwagi R2.2–R2.4
