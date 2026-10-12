@@ -50,7 +50,10 @@ jobs:
         run: uv sync --locked
 
       - name: Test N1–N3 and TTL
-        run: uv run --locked pytest
+        run: uv run --locked pytest -W error::ResourceWarning
+
+      - name: Run demonstration script
+        run: uv run --locked python -W error::ResourceWarning test.py
 
       - name: Check Ruff against the known baseline
         shell: bash
@@ -139,4 +142,4 @@ jobs:
         run: uv pip install --python .venv/bin/python --upgrade 'pydantic>=2,<3'
 
       - name: Test N1–N3 and TTL
-        run: uv run --no-sync pytest
+        run: uv run --no-sync pytest -W error::ResourceWarning

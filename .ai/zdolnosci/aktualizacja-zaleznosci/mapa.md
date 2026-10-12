@@ -15,7 +15,7 @@ skill `buduj aktualizacja-zaleznosci` → ticket 08
 
 ## Stan sesji
 
-Ticket 07: zrobiony - CI zielone dla commitu 945b680 (run https://github.com/gkeb/node4j/actions/runs/38287412097); cztery kombinacje macierzy i job najnowszego Pydantic przeszły.
+Ticket 08: w toku — sterownik 6.4.0 i walidacja lokalna gotowe (testy jednostkowe, Ruff, build i import dystrybucji); pełna macierz testów oraz `test.py` czekają na CI po pushu.
 
 ## Otwarte pytania
 

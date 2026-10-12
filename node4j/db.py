@@ -4,7 +4,7 @@ import os
 import functools
 from contextvars import ContextVar
 import logging  # ### ZMIANA ###
-import time     # ### ZMIANA ###
+import time  # ### ZMIANA ###
 from neo4j import AsyncGraphDatabase, basic_auth, AsyncTransaction
 from contextlib import asynccontextmanager
 
@@ -16,6 +16,7 @@ log = logging.getLogger(__name__)
 _current_transaction: ContextVar[AsyncTransaction | None] = ContextVar(
     "current_transaction", default=None
 )
+
 
 class AsyncDatabase:
     """
@@ -40,27 +41,35 @@ class AsyncDatabase:
             "Attempting to connect to Neo4j database",
             extra={"db_uri": settings.uri, "db_user": settings.user},
         )
-        
+
+        driver = None
         try:
-            self.driver = AsyncGraphDatabase.driver(
+            driver = AsyncGraphDatabase.driver(
                 settings.uri,
                 auth=basic_auth(
                     settings.user,
                     settings.password,
                 ),
+                disable_auto_commit_retries=True,
             )
-            await self.driver.verify_connectivity()
+            await driver.verify_connectivity()
             # ### ZMIANA ###: Usunięcie print, zastąpienie loggerem
             log.info("Successfully connected to Neo4j.")
-        except Exception as e:
+            self.driver = driver
+        except BaseException as e:
             # ### ZMIANA ###: Logowanie błędu połączenia
             log.exception(
                 "Failed to connect to Neo4j database",
                 extra={"db_uri": settings.uri, "error_type": type(e).__name__},
             )
-            self.driver = None # Upewniamy się, że driver jest None w razie błędu
-            raise # Rzucamy wyjątek dalej, aby aplikacja mogła zareagować
-
+            if driver is not None:
+                try:
+                    await driver.close()
+                except Exception:
+                    log.exception(
+                        "Failed to close Neo4j driver after connection error."
+                    )
+            raise  # Rzucamy wyjątek dalej, aby aplikacja mogła zareagować
 
     async def close(self):
         """
@@ -101,7 +110,9 @@ class AsyncDatabase:
                 if not tx.closed():
                     await tx.rollback()
                     # ### ZMIANA ###: Logowanie wycofania transakcji
-                    log.warning("Transaction rolled back due to an exception.", exc_info=True)
+                    log.warning(
+                        "Transaction rolled back due to an exception.", exc_info=True
+                    )
                 raise
             finally:
                 _current_transaction.reset(token)
@@ -110,12 +121,15 @@ class AsyncDatabase:
         """
         Dekorator do opakowywania funkcji w transakcję atomową.
         """
+
         def decorator(func):
             @functools.wraps(func)
             async def wrapper(*args, **kwargs):
                 async with self.transaction():
                     return await func(*args, **kwargs)
+
             return wrapper
+
         return decorator
 
     async def run(
@@ -137,7 +151,7 @@ class AsyncDatabase:
 
         active_tx = tx or _current_transaction.get()
         in_explicit_tx = active_tx is not None
-        
+
         # ### ZMIANA ###: Kompleksowe logowanie wykonania zapytania
         log.debug(
             "Executing Cypher query",
@@ -148,7 +162,7 @@ class AsyncDatabase:
             },
         )
         start_time = time.perf_counter()
-        
+
         try:
             if in_explicit_tx:
                 response = await active_tx.run(query, params)
@@ -157,7 +171,7 @@ class AsyncDatabase:
                 async with self.driver.session() as session:
                     response = await session.run(query, params)
                     data = await response.data()
-            
+
             duration_ms = (time.perf_counter() - start_time) * 1000
             log.info(
                 "Query executed successfully",
@@ -173,7 +187,7 @@ class AsyncDatabase:
             duration_ms = (time.perf_counter() - start_time) * 1000
             log.error(
                 "Query execution failed",
-                exc_info=True, # Automatycznie dodaje traceback
+                exc_info=True,  # Automatycznie dodaje traceback
                 extra={
                     "cypher_query": query,
                     "cypher_params": params,
