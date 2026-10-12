@@ -53,10 +53,10 @@
 ### Z04. Styl kodu według ruff: reguły E, F, W, I, linia 88 znaków, podwójne cudzysłowy
 
 - Siła: preferencja
-- Egzekwowanie: automat — `uv run ruff check .` (z punktem odniesienia w `warsztat.json` → `odniesienie`)
+- Egzekwowanie: automat — `uv run ruff check .`; w CI `scripts/check_ruff_baseline.py` względem `warsztat.json` → `odniesienie.znane` (`.github/workflows/ci.yml`)
 - Status: zastana
 - Dlaczego: `pyproject.toml` → `[tool.ruff]`
-- Wyjątki: znane błędy z punktu odniesienia 2026-10-11
+- Wyjątki: znane błędy z punktu odniesienia 2026-10-11 (113 po `aktualizacja-zaleznosci`, 2026-10-12)
 
 
 ## Testy

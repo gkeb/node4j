@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `zamknij aktualizacja-zaleznosci` — weryfikacja R3 przeszła ([weryfikacja.md](weryfikacja.md)); uwagi drobne bez ticketu (decyzja użytkownika 2026-10-12): najpierw `poznaj zaleznosci` (R3.3 — mapa obszaru i P-07 w profilu), potem w `zamknij` status (R3.1) i liczniki `db.py` w `odniesienie.znane` (R3.2) jako drobna poprawka
+— zamknięte 2026-10-12
 
 ## Stan sesji
 
-Ticket 08: zrobiony — commit z poprawką `fafbb87`, zielony CI [38291741317](https://github.com/gkeb/node4j/actions/runs/38291741317) (cztery kombinacje macierzy, najnowszy Pydantic i skrypt demo); weryfikacja krzyżowa zdolności jest następnym krokiem.
+Zdolność zamknięta 2026-10-12: tickety 01–10 zrobione, weryfikacja R3 przeszła ([weryfikacja.md](weryfikacja.md)), odbiór przeszedł ([odbior.md](odbior.md)).
 
 ## Otwarte pytania
 
@@ -41,6 +41,7 @@ Ticket 08: zrobiony — commit z poprawką `fafbb87`, zielony CI [38291741317](h
 - 2026-10-11 — Kroki: (1) testy charakteryzujące na starym stosie → (2) porządek zależności runtime/dev bez podbijania → (3) drobne podbicia (pydantic, pydantic-settings, structlog, pytest, pytest-asyncio, ruff) → (4) serwery testowe 2026.09 i 5.26 LTS ze starym sterownikiem → (5) sterownik `neo4j` 6.x — po każdym kroku zielone testy; jedyna zmiana wersji głównej osobno i na końcu, żeby problemy serwera i sterownika się nie mieszały
 - 2026-10-11 — CI w tej zdolności: GitHub Actions z macierzą serwer (2026.09, 5.26 LTS) × Python (3.12, najnowszy), Neo4j jako service container, plus ruff; workflow powstaje zaraz po testach charakteryzujących (krok 1), macierz serwerów dochodzi w kroku 4 — cztery kombinacje ręcznie przy każdej zmianie to za dużo; rozstrzyga P-07. Do sprawdzenia przy budowie: widoczność repo (minuty Actions)
 - 2026-10-11 — CI kończy się błędem, gdy wymagana baza Neo4j jest niedostępna albo wymagany test integracyjny zostaje pominięty — zielony wynik ma potwierdzać rzeczywiste wykonanie N1–N3 na całej macierzy (druga opinia: Codex / GPT-6 Astra)
+- 2026-10-12 — Odbiór na świeżym projekcie poza repo i bazie 2026.09 zamiast „prawdziwego środowiska” — biblioteka nie ma jeszcze aplikacji, danych ani użycia produkcyjnego ([odbior.md](odbior.md))
 - 2026-10-11 — Kryterium końca: zależności w najnowszych wersjach z dnia budowy (zaktualizowany `uv.lock`); testy charakteryzujące i TTL zielone w CI na całej macierzy; ruff bez błędów spoza `odniesienie.znane`; `test.py` przechodzi na nowym stosie na bazie testowej; N1–N3 bez zmian. Poza zakresem: podbicie wersji node4j i wydanie (skill `wydaj`), README (`readme-aktualne`), nowe możliwości
 
 ## Plasterki

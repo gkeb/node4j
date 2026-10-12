@@ -21,9 +21,9 @@
 
 ### Uwagi
 
-- R3.1 [drobna] `.ai/ROADMAP.md:13` — zdolność ma status `budowa`, choć ostatni ticket jest zrobiony; według przebiegu w kontrakcie powinna przejść w `weryfikacja` przed tą rundą — kontrakt/praca.md → Przebieg — otwarta
-- R3.2 [drobna] `.ai/warsztat.json` → `odniesienie.znane` — punkt odniesienia ma 119 błędów, w kodzie zostało 113 (formatowanie `node4j/db.py` usunęło 6); limit z punktu odniesienia pozwala dziś dodać do 6 nowych błędów tego samego kodu w `db.py` bez wykrycia. Zdolność `porzadek-lint` w Mgle i tak go wyzeruje — Kryterium końca („Ruff bez błędów spoza punktu odniesienia”) — otwarta
-- R3.3 [drobna] `.ai/profil.md:14` (P-07: „obecnie Neo4j 2025.05.1 / Python 3.12”) i `.ai/obszary/zaleznosci.md:29` („Wszystkie poza `ruff` są w `[project] dependencies`”) opisują stan sprzed zdolności; hook zgłasza zmienione źródła mapy obszaru — do odświeżenia przez `poznaj zaleznosci` i edycję profilu — Stan docelowy („P-05 i P-07 w profilu rozstrzygnięte”) — otwarta
+- R3.1 [drobna] `.ai/ROADMAP.md:13` — zdolność ma status `budowa`, choć ostatni ticket jest zrobiony; według przebiegu w kontrakcie powinna przejść w `weryfikacja` przed tą rundą — kontrakt/praca.md → Przebieg — naprawiona (zamknięcie, `ROADMAP.md` → Zrobione)
+- R3.2 [drobna] `.ai/warsztat.json` → `odniesienie.znane` — punkt odniesienia ma 119 błędów, w kodzie zostało 113 (formatowanie `node4j/db.py` usunęło 6); limit z punktu odniesienia pozwala dziś dodać do 6 nowych błędów tego samego kodu w `db.py` bez wykrycia. Zdolność `porzadek-lint` w Mgle i tak go wyzeruje — Kryterium końca („Ruff bez błędów spoza punktu odniesienia”) — naprawiona (zamknięcie: usunięte 3 wpisy `db.py`, 113 = stan kodu)
+- R3.3 [drobna] `.ai/profil.md:14` (P-07: „obecnie Neo4j 2025.05.1 / Python 3.12”) i `.ai/obszary/zaleznosci.md:29` („Wszystkie poza `ruff` są w `[project] dependencies`”) opisują stan sprzed zdolności; hook zgłasza zmienione źródła mapy obszaru — do odświeżenia przez `poznaj zaleznosci` i edycję profilu — Stan docelowy („P-05 i P-07 w profilu rozstrzygnięte”) — naprawiona (`735054e`)
 
 ## Runda R2 — 2026-10-12 — nie przeszła
 

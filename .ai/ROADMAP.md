@@ -10,11 +10,9 @@
 
 ## Teraz
 
-- [`aktualizacja-zaleznosci`](zdolnosci/aktualizacja-zaleznosci/mapa.md) — aktualne biblioteki i serwer Neo4j, zachowanie bez zmian — `budowa`
+- `readme-aktualne` — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `grill`
 
 ## Dalej
-
-- `readme-aktualne` — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `pomysl`
 
 ## Mgła
 
@@ -28,11 +26,13 @@
   - czy rozszerzać `ApocManager`, czy usunąć obietnicę z README?
   - klucz dopasowania węzłów: `uid` czy dowolna właściwość?
 
-- `porzadek-lint` — wyzerowanie znanych błędów ruff z punktu odniesienia (119 na 2026-10-12: głównie długie linie, białe znaki, importy, f-stringi; dwa F821 w adnotacjach `nodes.py` i `query.py`) i usunięcie `odniesienie.znane` z `warsztat.json` — po `aktualizacja-zaleznosci`, żeby nie mieszać diffów — `pomysl`
+- `porzadek-lint` — wyzerowanie znanych błędów ruff z punktu odniesienia (113 po `aktualizacja-zaleznosci`, 2026-10-12: głównie długie linie, białe znaki, importy, f-stringi; dwa F821 w adnotacjach `nodes.py` i `query.py`) i usunięcie `odniesienie.znane` z `warsztat.json` — po `aktualizacja-zaleznosci`, żeby nie mieszać diffów — `pomysl`
   - jeden commit `ruff --fix` + ręczne poprawki, czy plik po pliku?
   - czy przy okazji formatować `ruff format` (zmienia prawie każdy plik)?
 
 
 ## Zrobione
+
+- [`aktualizacja-zaleznosci`](zdolnosci/aktualizacja-zaleznosci/mapa.md) — aktualne biblioteki i serwer Neo4j, zachowanie bez zmian — gotowe 2026-10 — weryfikacja R3, odbiór 2026-10-12
 
 ## Porzucone
