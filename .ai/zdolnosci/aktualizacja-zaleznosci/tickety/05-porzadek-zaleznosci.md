@@ -1,7 +1,7 @@
 ---
 nr: "05"
 tytul: "Porządek zależności runtime/dev"
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["04"]
 scenariusze: [N1, N2, N3]
 budowal: null
