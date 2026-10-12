@@ -1,7 +1,7 @@
 ---
 nr: "04"
 tytul: "CI na starym stosie"
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["01", "02", "03"]
 scenariusze: [N1, N2, N3]
 budowal: null
@@ -20,7 +20,7 @@ GitHub Actions uruchamia przy każdym pushu siatkę N1–N3 i TTL na serwerze 20
 - [ ] CI kończy się błędem, gdy baza jest niedostępna albo wymagany test integracyjny zostaje pominięty (lokalnie bez bazy testy nadal się pomijają)
 - [ ] ruff w CI przechodzi, gdy nie ma błędów spoza `odniesienie.znane`, i nie przechodzi przy nowym błędzie
 - [ ] CI buduje dystrybucję, instaluje ją w czystym środowisku poza katalogiem źródeł i importuje publiczne API
-- [ ] widoczność repo i dostępność minut Actions sprawdzone i zapisane w Notatkach
+- [x] widoczność repo i dostępność minut Actions sprawdzone i zapisane w Notatkach
 
 ## Poza zakresem
 
@@ -28,4 +28,6 @@ GitHub Actions uruchamia przy każdym pushu siatkę N1–N3 i TTL na serwerze 20
 
 ## Notatki
 
-Neo4j z APOC jako service container. P-07 w `.ai/profil.md` → link do workflow po zrobieniu.
+Neo4j z APOC jako service container. P-07 w `.ai/profil.md` → link do workflow.
+
+Repozytorium `gkeb/node4j` jest publiczne (GitHub API, 2026-10-12); standardowe GitHub-hosted runners są bezpłatne i nielimitowane dla repozytoriów publicznych ([dokumentacja GitHub Actions](https://docs.github.com/en/actions/concepts/billing-and-usage)). Wynik pierwszego przebiegu workflow będzie sprawdzony po pushu.

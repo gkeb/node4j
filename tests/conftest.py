@@ -21,8 +21,38 @@ async def db():
     try:
         await connection.connect()
     except ServiceUnavailable as e:
+        if os.environ.get("NODE4J_REQUIRE_TEST_DB") == "1":
+            pytest.fail(
+                f"Wymagana baza testowa Neo4j jest niedostępna "
+                f"({os.environ['NODE4J_URI']}): {e}",
+                pytrace=False,
+            )
         pytest.skip(f"Brak bazy testowej Neo4j ({os.environ['NODE4J_URI']}): {e}")
     try:
         yield connection
     finally:
         await connection.close()
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    """Wymagaj wykonania testów integracyjnych w CI."""
+    if os.environ.get("NODE4J_REQUIRE_TEST_DB") != "1":
+        return
+
+    reporter = session.config.pluginmanager.get_plugin("terminalreporter")
+    if reporter is None:
+        session.exitstatus = pytest.ExitCode.INTERNAL_ERROR
+        return
+
+    integration_tests = {
+        item.nodeid for item in session.items if "db" in item.fixturenames
+    }
+    skipped_tests = {report.nodeid for report in reporter.stats.get("skipped", ())}
+    skipped_integration_tests = sorted(integration_tests & skipped_tests)
+    if not skipped_integration_tests:
+        return
+
+    reporter.write_sep("=", "Wymagane testy integracyjne nie mogą być pomijane")
+    for nodeid in skipped_integration_tests:
+        reporter.write_line(nodeid)
+    session.exitstatus = pytest.ExitCode.TESTS_FAILED
