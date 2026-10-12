@@ -15,7 +15,7 @@ skill `buduj aktualizacja-zaleznosci` → ticket 06
 
 ## Stan sesji
 
-Ticket 10: zrobiony — CI success dla commitu `c5f11a9` (run 38281973210).
+Ticket 06: w toku — drobne podbicia i granice wersji; walidacja lokalna przechodzi, CI niesprawdzone (commit nie został wypchnięty).
 
 ## Otwarte pytania
 

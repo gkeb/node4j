@@ -93,3 +93,45 @@ jobs:
               Path(sys.prefix).resolve()
           )
           PY
+
+  latest-pydantic:
+    name: Latest Pydantic 2.x / Neo4j 2025.05.1
+    runs-on: ubuntu-latest
+    services:
+      neo4j:
+        image: neo4j:2025.05.1
+        env:
+          NEO4J_AUTH: neo4j/test-password-123
+          NEO4J_PLUGINS: '["apoc"]'
+        ports:
+          - 7687:7687
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p test-password-123 'RETURN 1'"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 15
+    env:
+      NODE4J_TEST_URI: bolt://127.0.0.1:7687
+      NODE4J_TEST_USER: neo4j
+      NODE4J_TEST_PASSWORD: test-password-123
+      NODE4J_REQUIRE_TEST_DB: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version-file: .python-version
+
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          version: 0.12.20
+          enable-cache: false
+
+      - name: Install locked dependencies
+        run: uv sync --locked
+
+      - name: Upgrade to the latest Pydantic 2.x
+        run: uv pip install --python .venv/bin/python --upgrade 'pydantic>=2,<3'
+
+      - name: Test N1–N3 and TTL
+        run: uv run --no-sync pytest
