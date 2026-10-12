@@ -11,11 +11,11 @@ Biblioteka nie była rozwijana od ponad roku: zależności są przestarzałe (st
 
 ## Następny krok
 
-skill `buduj aktualizacja-zaleznosci` → ticket 08
+skill `weryfikuj aktualizacja-zaleznosci` — wszystkie tickety są zrobione; zdolność czeka na weryfikację krzyżową
 
 ## Stan sesji
 
-Ticket 08: w toku — sterownik 6.4.0 i walidacja lokalna gotowe (testy jednostkowe, Ruff, build i import dystrybucji); run CI 38291335280 wykazał brak mapowania poświadczeń dla `test.py`, poprawka jest przygotowana, ponowny CI oczekuje na push.
+Ticket 08: zrobiony — commit z poprawką `fafbb87`, zielony CI [38291741317](https://github.com/gkeb/node4j/actions/runs/38291741317) (cztery kombinacje macierzy, najnowszy Pydantic i skrypt demo); weryfikacja krzyżowa zdolności jest następnym krokiem.
 
 ## Otwarte pytania
 
