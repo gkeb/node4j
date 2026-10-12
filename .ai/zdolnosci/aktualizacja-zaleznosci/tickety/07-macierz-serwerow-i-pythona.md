@@ -1,7 +1,7 @@
 ---
 nr: "07"
 tytul: "Macierz serwerów i Pythona"
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["06"]
 scenariusze: [N1, N2, N3]
 budowal: null
@@ -26,4 +26,4 @@ CI uruchamia siatkę na serwerach 2026.09 i 5.26 LTS × Python 3.12 i najnowszy,
 
 ## Notatki
 
-Obrazy 5.26 LTS i 2026.09 trzeba pobrać (lokalnie jest tylko 2025.05.1).
+Macierz używa Pythonów 3.12 i 3.15 (3.15.0 jest najnowszym stabilnym wydaniem na 2026-10-12) oraz obrazów `neo4j:2026.09.0` i `neo4j:5.26`. Obrazy trzeba pobrać lokalnie, jeśli testy mają być uruchamiane na obu serwerach.

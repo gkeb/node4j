@@ -15,7 +15,7 @@ skill `buduj aktualizacja-zaleznosci` → ticket 07
 
 ## Stan sesji
 
-Ticket 06: zrobiony — CI success dla commitu `b702527` (run [38284717944](https://github.com/gkeb/node4j/actions/runs/38284717944)).
+Ticket 07: w toku — macierz testów CI Python 3.12/3.15 × Neo4j 2026.09/5.26 LTS; walidacja i CI oczekują na wynik.
 
 ## Otwarte pytania
 

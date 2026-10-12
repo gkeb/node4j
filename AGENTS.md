@@ -10,10 +10,12 @@ Nowoczesny, asynchroniczny OGM dla Neo4j zbudowany na Pydantic i oficjalnym ster
 
 - Instalacja: `uv sync`
 - Lint: `uv run ruff check .`
-- Baza testowa (jednorazowa, z APOC; PowerShell): ustaw listę pluginów jako zmienną, żeby zachować JSON przy przekazaniu argumentów do Dockera:
+- Baza testowa (jednorazowa, z APOC; PowerShell): wybierz obraz Neo4j 2026.09 albo 5.26 LTS. Ustaw listę pluginów jako zmienną, żeby zachować JSON przy przekazaniu argumentów do Dockera:
   ```powershell
+  $neo4jImage = 'neo4j:2026.09.0' # Neo4j 2026.09
+  # Dla LTS użyj zamiast tego: $neo4jImage = 'neo4j:5.26'
   $env:NEO4J_PLUGINS = '["apoc"]'
-  docker run -d --rm --name node4j-test -p 7688:7687 -e NEO4J_AUTH=neo4j/test-password-123 -e NEO4J_PLUGINS neo4j:2025.05.1
+  docker run -d --rm --name node4j-test -p 127.0.0.1:7688:7687 -e NEO4J_AUTH=neo4j/test-password-123 -e NEO4J_PLUGINS $neo4jImage
   Remove-Item Env:NEO4J_PLUGINS
   ```
   Zamknięcie: `docker stop node4j-test`
