@@ -5,8 +5,8 @@
 
 Profile: przekrojowe
 
-- P-01 Użytkownicy i użycie — otwarte
-- P-02 Język — otwarte (stan: komunikaty wyjątków i komentarze po polsku, logi po angielsku, README w EN i PL)
+- P-01 Użytkownicy i użycie — programista Pythona (async, podstawy Neo4j) używający biblioteki we własnej aplikacji — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
+- P-02 Język — otwarte (stan: komunikaty wyjątków i komentarze po polsku, logi po angielsku, README w EN i PL); dokumentacja użytkownika w pełni EN i PL — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
 - P-03 Środowisko i wersje — `.python-version` (3.12), `pyproject.toml` → `requires-python >=3.12`, uv + `uv.lock` w repo
 - P-04 Układ repozytorium — otwarte (stan: pakiet `node4j/`, testy w `tests/`, CI w `.github/workflows/`)
 - P-05 Strategia testów — pytest na jednorazowym kontenerze Neo4j (`tests/conftest.py`, AGENTS.md → Uruchamianie), testy charakteryzujące API i formatu danych — [aktualizacja-zaleznosci](zdolnosci/aktualizacja-zaleznosci/mapa.md) → Decyzje
@@ -21,10 +21,10 @@ Profile: przekrojowe
 - P-14 Dostępność — pominięte: biblioteka bez interfejsu użytkownika
 - P-15 Wersjonowanie — otwarte (stan: tagi `v0.2.0`–`v0.2.3`, (wniosek) semver)
 - P-16 Historia zmian — otwarte (brak `CHANGELOG.md`)
-- P-17 Dystrybucja i wdrożenie — otwarte ((wniosek) pakiet nie jest publikowany)
+- P-17 Dystrybucja i wdrożenie — później: dziś instalacja z gita, planowana publikacja w indeksie pakietów (uv/pip) — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
 - P-18 Wycofanie — otwarte
 - P-19 Pielęgnacja — otwarte
-- P-20 Dokumentacja użytkownika — `README.md`, `README_PL.md`
+- P-20 Dokumentacja użytkownika — `README.md`, `README_PL.md`; docelowo README + `docs/` w EN i PL z wykonywanymi przykładami — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
 - P-21 Licencja i prawa — `LICENSE` (MIT)
 - P-22 Dane trwałe — pominięte: biblioteka nie przechowuje własnych danych; schemat bazy tworzy `apply_schema` z `Meta`
 - P-23 Git i GitHub — `warsztat.json` → `git`, `tracker`, `github`

@@ -70,7 +70,7 @@
 - Egzekwowanie: przegląd
 - Status: obowiązuje
 - Dlaczego: sprzątanie po oczekiwanej etykiecie zostawiało dane, gdy test wykrywał jej brak (przegląd, 2026-10-12, dwa wystąpienia); wzór: `tests/test_n1_manager_and_filters.py` → fikstura `n1_scope`
-- Wyjątki: —
+- Wyjątki: test przykładów z dokumentacji użytkownika (przykłady to kod czytelnika i nie niosą `scope`) sprząta po różnicy stanu. Przed stroną zapisuje istniejące węzły, indeksy, ograniczenia i projekcje GDS, a po niej, także po błędzie, usuwa wszystko spoza tego zbioru i anuluje zadanie TTL. Warunek: testy nie biegną równolegle na tej samej bazie — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md), 2026-10-13
 
 ## Niefunkcjonalne
 

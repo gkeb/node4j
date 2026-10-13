@@ -19,6 +19,8 @@
 - **Miękkie usunięcie** — oznaczenie węzła `is_deleted=True` z `deleted_at` zamiast usunięcia; po `setup_soft_delete_manager()` menedżer `.q` ukrywa takie węzły, a `.all_objects` widzi wszystkie. Źródło: `node4j/mixins.py` → `SoftDeleteMixin`, `node4j/managers.py`.
 - **TTL** — czas wygaśnięcia węzła (`ttl`), po którym okresowe zadanie APOC ma go usunąć. Źródło: `node4j/mixins.py` → `TTLMixin`, `TTL_CLEANUP_QUERY`; test `tests/test_ttl.py`.
 - **Transakcja atomowa** — blok `connection.transaction()` albo funkcja z `@connection.atomic()`; zapytania w tym samym kontekście asynchronicznym idą przez tę transakcję. _Zawsze:_ transakcje się nie zagnieżdżają (`RuntimeError`). Źródło: `node4j/db.py`.
+- **Dokumentacja użytkownika** — `README.md` i strony w `docs/`, w wersji angielskiej (wiodącej) i polskiej, dla programisty używającego biblioteki. _Zawsze:_ wersje EN i PL mają ten sam zestaw stron, nagłówków i identyczne bloki kodu; każdy blok Pythona w wersji EN jest uruchamiany przez test albo ma jawny znacznik pominięcia. Źródło: [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje.
+- **Znane ograniczenie** — opisane w dokumentacji zachowanie, które może zaskoczyć użytkownika albo nie działa (np. triggery APOC, daty jako tekst). _Nie mylić z:_ funkcją planowaną — dokumentacja nie zapowiada funkcji bez kodu.
 
 ## Czym to nie jest
 

@@ -27,5 +27,11 @@ Brak zastanych ADR-ów w repo. Katalog `.ai/decyzje/`, format z szablonu warszta
 - [ ] `README.md` odznaka „python 3.10+” — kod: `requires-python = ">=3.12"`, `.python-version` 3.12 — do ustalenia
 - [ ] `README.md` § Bulk Relationship Creation from CSV: `Person.apoc.connect_from_csv(...)` i „import z JSON i CSV” — kod: `ApocManager` ma tylko `create_from_json` (`node4j/ext/apoc.py`) — do ustalenia
 - [x] `README.md` § Automatic Data Expiry (TTL): węzły usuwane automatycznie — kod czyścił `MATCH (n:TTL)` i porównywał tekst ISO z `datetime()` — bug, naprawiony 2026-10-11 (`fix: TTL usuwa wygasłe węzły`, test `tests/test_ttl.py`); README zgodne
+- [ ] `README.md` § Quick Start: `load_dotenv()` i `from dotenv import load_dotenv` — kod: `.env` czyta `pydantic-settings` (`node4j/config.py`), `python-dotenv` jest tylko zależnością dev — do ustalenia w `readme-aktualne` (2026-10-12)
+- [ ] `README.md` § Defining Models: `datetime.datetime.utcnow()` — przestarzałe od Pythona 3.12, a projekt wymaga 3.12 — do ustalenia w `readme-aktualne` (2026-10-12)
+- [ ] `README.md` § Key Features: „Management of database triggers” — kod: `apoc.Trigger.*` istnieje, ale na serwerze rzuca `ClientError` (`proby.md` 2026-10-12) — do ustalenia w `readme-aktualne` (2026-10-12)
+- [ ] `README.md` § Requirements: `docker-compose` z `neo4j:5-enterprise`, `NEO4JLABS_PLUGINS` i `version: '3.8'` — projekt testuje na `neo4j:2026.09.0` i `5.26` z `NEO4J_PLUGINS` (AGENTS.md → Uruchamianie, CI) — do ustalenia w `readme-aktualne` (2026-10-12)
+- [ ] `README.md`: komentarze i komunikaty w przykładach po polsku w wersji angielskiej — do ustalenia w `readme-aktualne` (2026-10-12)
+- [ ] `README.md` § Bulk JSON Import: „Wymaga absolutnej ścieżki do pliku” (`file:///path/to/...`) — APOC: plik leży na serwerze, `file:///` jest rozwiązywane względem katalogu import, a import z plików jest domyślnie wyłączony ([badanie](badania/2026-10-13-apoc-load-json-sciezki.md)) — do ustalenia w `readme-aktualne` (2026-10-13)
 - [ ] tag `v0.2.3` (2025-07-13, `1bb03e3`) — `pyproject.toml`: `version = "0.2.2"` — do ustalenia
 

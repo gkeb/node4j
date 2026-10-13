@@ -10,7 +10,7 @@
 
 ## Teraz
 
-- `readme-aktualne` — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `grill`
+- [`readme-aktualne`](zdolnosci/readme-aktualne/mapa.md) — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `spec`
 
 ## Dalej
 
@@ -23,7 +23,7 @@
   - czy `uid` też zmienia typ?
 
 - `import-csv-apoc` — import węzłów i relacji z CSV przez APOC (`connect_from_csv` z README) — `pomysl`
-  - czy rozszerzać `ApocManager`, czy usunąć obietnicę z README?
+  - czy rozszerzać `ApocManager`? (obietnica znika z dokumentacji — `readme-aktualne`, 2026-10-12)
   - klucz dopasowania węzłów: `uid` czy dowolna właściwość?
 
 - `porzadek-lint` — wyzerowanie znanych błędów ruff z punktu odniesienia (113 po `aktualizacja-zaleznosci`, 2026-10-12: głównie długie linie, białe znaki, importy, f-stringi; dwa F821 w adnotacjach `nodes.py` i `query.py`) i usunięcie `odniesienie.znane` z `warsztat.json` — po `aktualizacja-zaleznosci`, żeby nie mieszać diffów — `pomysl`

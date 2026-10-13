@@ -5,3 +5,19 @@
 - Warunki: testowy Neo4j 2025.05.1, potem 2026.09.0 i 5.26 ze sterownikiem 6.4 (CI, 2026-10-12 — ten sam wynik, kody błędów przypięte testami); wywołania przez globalne `connection` do domyślnej bazy `neo4j`.
 - Wynik: `install`, `list` i `remove` rzucają `neo4j.exceptions.ClientError` na rzeczywistym połączeniu; przypięte testami w `tests/test_n1_relations_hooks_mixins_ext.py`.
 - Wróć, gdy: osobna naprawa albo zdolność ustali kierowanie operacji triggerów do bazy `system`.
+
+## 2026-10-12 — Dokumentacja jako generowana strona (MkDocs + GitHub Pages) [readme-aktualne]
+
+- Status: odlozone
+- Hasła: dokumentacja, MkDocs, GitHub Pages, docs
+- Warunki: przepisanie README; pakiet niepublikowany (P-17 otwarte).
+- Wynik: wybrano README + `docs/*.md` czytane na GitHubie — bez nowej zależności, budowania w CI i hostingu.
+- Wróć, gdy: pakiet trafi na PyPI albo `docs/` przestanie się dać przeglądać na GitHubie (nawigacja, wyszukiwanie).
+
+## 2026-10-13 — Przykłady w osobnych skryptach `.py` zamiast bloków Markdown [readme-aktualne]
+
+- Status: odlozone
+- Hasła: dokumentacja, przykłady, pytest, executable docs
+- Warunki: rozważono osobne skrypty linkowane z dokumentacji wobec wykonywania bloków Pythona wyjętych z Markdown.
+- Wynik: pozostają bloki Markdown, aby test uruchamiał kod widoczny i kopiowany przez czytelnika; osobne skrypty tworzyłyby drugie źródło przykładów.
+- Wróć, gdy: ekstrakcja z Markdown będzie wymagać tak złożonej obsługi kontekstu lub znaczników pominięcia, że nie da się wiarygodnie wykonywać przykładów.
