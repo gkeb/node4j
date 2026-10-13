@@ -11,12 +11,12 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill pokroj readme-aktualne
+skill buduj readme-aktualne → ticket 01
 
 ## Otwarte pytania
 
 - [x] [badanie] Czy nazwa `node4j` jest wolna w PyPI (pod planowaną publikację) — na 2026-10-12 tak (404 w JSON i Simple API na PyPI i TestPyPI). Nie jest jednak rezerwowana do pierwszego uploadu, a listy nazw zabronionych i reguły „too similar” nie da się sprawdzić bez próbnego uploadu (np. na TestPyPI przy wydaniu) — [badanie](../../badania/2026-10-12-nazwa-node4j-pypi.md); nie blokuje spec
-- [ ] [grill] Lista stron w `docs/` i kolejność czytania — spec zaproponuje na podstawie pokrycia API; nie blokuje spec
+- [x] [grill] Lista stron w `docs/` i kolejność czytania — ustalone przy krojeniu 2026-10-13: README → modele i schemat → zapytania i filtry → relacje → operacje masowe i agregacje → transakcje → mixiny → konfiguracja i logowanie → APOC → GDS → znane ograniczenia (tickety 01–08)
 - [x] [badanie] Jakie URL-e/ścieżki `apoc.load.json` obsługuje i gdzie plik musi być dostępny — po stronie aplikacji czy serwera Neo4j? — plik czyta i zapisuje **serwer**. Import i eksport plików są domyślnie wyłączone (`apoc.import.file.enabled`, `apoc.export.file.enabled` = `false`, ustawiane w `apoc.conf` albo w Dockerze przez `NEO4J_apoc_*`). `file:///x.json` jest rozwiązywane względem katalogu import serwera, a ścieżka absolutna spoza niego nie działa. HTTP(S) działa bez tych ustawień. `apoc.export.json.all` pisze do katalogu import. Obecny CI dostałby błąd „not enabled” — [badanie](../../badania/2026-10-13-apoc-load-json-sciezki.md); źródło: druga opinia Codex / GPT-6
 - [ ] [prototyp] Jak plik wejściowy dla przykładu `create_from_json` trafia do katalogu import serwera? Założenie „`Export.to_json` zapisze, `create_from_json` wczyta” jest niepewne: `apoc.export.json.all` eksportuje całą bazę (także dane innych testów) jako rekordy węzłów i relacji z zagnieżdżoną mapą `properties`, a `create_from_json` robi `SET n = row`, co dla zagnieżdżonych map może się nie udać. Do sprawdzenia: eksport z `json_path` (np. `$.properties`) albo fikstura, która zapisuje płaski plik przez procedurę eksportu zapytania — nie blokuje spec (to sposób budowy testu, nie zachowanie dokumentacji); do sprawdzenia przy budowie na bazie testowej
 - [x] [badanie] Jakie wersje Neo4j i GDS można opisać jako zgodne, skoro CI uruchamia tylko APOC? — według dokumentacji GDS: Neo4j 5.26 ↔ GDS 2.13, Neo4j 2026.09 ↔ GDS 2026.09; plugin `graph-data-science` (Community darmowe, do 4 rdzeni). Wywołania z `node4j/ext/gds.py` pasują do sygnatur w obu wersjach. Niesprawdzone uruchomieniem — CI nie stawia GDS — [badanie](../../badania/2026-10-13-gds-zgodnosc.md); nie blokuje spec; źródło: druga opinia Codex / GPT-6
@@ -39,5 +39,14 @@ skill pokroj readme-aktualne
 - 2026-10-12 — Zgodność EN ↔ PL: wiodąca jest wersja angielska; lustrzane pliki (`README.md` ↔ `README_PL.md`, `docs/en/` ↔ `docs/pl/`); test sprawdza ten sam zestaw stron, tę samą liczbę nagłówków i identyczne bloki kodu (kod i komentarze w kodzie po angielsku w obu wersjach); uruchamiane są tylko bloki EN, a PL tłumaczy prozę. Automat sprawdza strukturę i kod, a przegląd człowieka — równoważność znaczenia prozy; zmienione po drugiej opinii (było: „zgodność sprawdza automat, nie przegląd”); decyzja użytkownika po drugiej opinii: test nie wykrywa rozjazdu znaczenia prozy (druga opinia: Codex / GPT-6). Przykłady: strona tylko w `docs/en/` → czerwony test; blok PL różniący się komentarzem → czerwony; inna proza → zielony i wymaga przeglądu
 
 ## Plasterki
+
+- [01 — Test dokumentacji i nowe README z szybkim startem](tickety/01-test-dokumentacji-i-readme.md)
+- [02 — Strony o modelach i schemacie oraz o zapytaniach i filtrach Q](tickety/02-modele-i-zapytania.md) — po 01
+- [03 — Strona o relacjach i prefetchu](tickety/03-relacje.md) — po 01
+- [04 — Strony o operacjach masowych i agregacjach oraz o transakcjach](tickety/04-masowe-agregacje-transakcje.md) — po 01
+- [05 — Strony o mixinach oraz o konfiguracji i logowaniu](tickety/05-mixiny-konfiguracja.md) — po 01
+- [06 — Pliki APOC w bazie testowej i strona rozszerzeń APOC](tickety/06-apoc.md) — po 01
+- [07 — GDS w bazie testowej i strona rozszerzeń GDS](tickety/07-gds.md) — po 01
+- [08 — Znane ograniczenia, pełne pokrycie i zamknięcie rozjazdów](tickety/08-ograniczenia-i-pokrycie.md) — po 02–07
 
 ## Stan sesji
