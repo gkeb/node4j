@@ -70,3 +70,4 @@ if __name__ == "__main__":
 
 - [Models and schema](docs/en/models-and-schema.md)
 - [Queries and filters](docs/en/queries-and-filters.md)
+- [Relationships](docs/en/relationships.md)

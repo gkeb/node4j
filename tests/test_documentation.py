@@ -821,6 +821,27 @@ def test_s5_models_and_queries_methods_are_in_executable_examples():
     assert "nieznany sufiks" in polish_text and "równość" in polish_text
 
 
+def test_s5_relationships_update_and_prefetch_are_in_executable_examples():
+    path = ROOT / "docs" / "en" / "relationships.md"
+    _, page = _read_page(path)
+    source = "\n".join(
+        block.source for block in _python_blocks(page) if block.skip_reason is None
+    )
+
+    for public_api in (
+        "RelationshipProperty",
+        "RelationshipDirection.IN",
+        "RelationshipDirection.OUT",
+        "RelationshipDirection.UNDIRECTED",
+        "model=GuideAuthorship",
+        ".connect(",
+        ".disconnect(",
+        ".q.update_relationship(",
+        "prefetch={",
+    ):
+        assert public_api in source, public_api
+
+
 def test_s7_documentation_does_not_promise_unimplemented_features():
     for path in _all_pages():
         source, _ = _read_page(path)

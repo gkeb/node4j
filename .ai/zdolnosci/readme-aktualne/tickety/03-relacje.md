@@ -1,10 +1,10 @@
 ---
 nr: "03"
 tytul: Strona o relacjach i prefetchu
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5"]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -24,10 +24,10 @@ README linkuje stronę.
 
 ## Kryteria akceptacji
 
-- [ ] S2: przykłady strony wykonują się na bazie testowej
-- [ ] S4: strona ma odpowiednik PL z identycznym kodem
-- [ ] S5 (część): relacje, `update_relationship` i prefetch są w wykonywanych blokach
-- [ ] Walidacja zielona
+- [x] S2: przykłady strony wykonują się na bazie testowej
+- [x] S4: strona ma odpowiednik PL z identycznym kodem
+- [x] S5 (część): relacje, `update_relationship` i prefetch są w wykonywanych blokach
+- [x] Walidacja zielona
 
 ## Poza zakresem
 
@@ -36,4 +36,4 @@ README linkuje stronę.
 ## Notatki
 
 - S5 kończy ticket 08.
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — strona EN i PL — uwagi
+- Akceptacja wyglądu: oczekuje na użytkownika po podglądzie stron EN i PL na GitHubie

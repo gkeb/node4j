@@ -70,3 +70,4 @@ if __name__ == "__main__":
 
 - [Modele i schemat](docs/pl/models-and-schema.md)
 - [Zapytania i filtry](docs/pl/queries-and-filters.md)
+- [Relacje](docs/pl/relationships.md)
