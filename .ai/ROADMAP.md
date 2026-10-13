@@ -30,6 +30,11 @@
   - jeden commit `ruff --fix` + ręczne poprawki, czy plik po pliku?
   - czy przy okazji formatować `ruff format` (zmienia prawie każdy plik)?
 
+- [`wydanie-pypi`](zdolnosci/wydanie-pypi/mapa.md) — powtarzalne wydanie całej biblioteki jako pakietu `node4j` w PyPI (uv/pip): wersja = tag, changelog, `uv build`, TestPyPI → PyPI przez Trusted Publishing, `yank` jako wycofanie — `pomysl`
+  - czy `node4j/models.py` (przykładowe modele z globalną rejestracją) zostaje w paczce?
+  - backend budowania i wersja startowa (rozjazd `0.2.2` w `pyproject.toml` vs tag `v0.2.3`)
+  - publikacja z CI przez Trusted Publishing — do zbadania przed specem
+
 
 ## Zrobione
 

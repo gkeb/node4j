@@ -21,7 +21,7 @@ Profile: przekrojowe
 - P-14 Dostępność — pominięte: biblioteka bez interfejsu użytkownika
 - P-15 Wersjonowanie — otwarte (stan: tagi `v0.2.0`–`v0.2.3`, (wniosek) semver)
 - P-16 Historia zmian — otwarte (brak `CHANGELOG.md`)
-- P-17 Dystrybucja i wdrożenie — później: dziś instalacja z gita, planowana publikacja w indeksie pakietów (uv/pip) — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
+- P-17 Dystrybucja i wdrożenie — później: dziś instalacja z gita, planowana publikacja w indeksie pakietów (uv/pip) — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje; koncepcja: [wydanie-pypi](zdolnosci/wydanie-pypi/mapa.md) (Mgła, obejmie też P-15, P-16, P-18)
 - P-18 Wycofanie — otwarte
 - P-19 Pielęgnacja — otwarte
 - P-20 Dokumentacja użytkownika — `README.md`, `README_PL.md`; docelowo README + `docs/` w EN i PL z wykonywanymi przykładami — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
