@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-Pokaż strony ticketu 02 w podglądzie GitHuba i uzyskaj akceptację wyglądu (push wymaga zgody użytkownika).
+Uzyskaj akceptację wyglądu stron EN i PL w podglądzie GitHuba.
 
 ## Otwarte pytania
 
@@ -51,4 +51,4 @@ Pokaż strony ticketu 02 w podglądzie GitHuba i uzyskaj akceptację wyglądu (p
 
 ## Stan sesji
 
-Ticket 01 zamknięty po odbiorze README EN/PL (2026-10-13). Ticket 02 zbudowany lokalnie: 89 testów przeszło na Neo4j 2026.09 z APOC, Ruff bez nowych błędów (113 zastanych), trzy niezależne recenzje bez uwag. Pozostał podgląd GitHuba i akceptacja wyglądu EN/PL; push czeka na zgodę użytkownika.
+Ticket 01 zamknięty po odbiorze README EN/PL (2026-10-13). Ticket 02 wypchnięty w `0e30c95`: 89 testów przeszło lokalnie na Neo4j 2026.09 z APOC, Ruff bez nowych błędów (113 zastanych), trzy niezależne recenzje bez uwag. CI nie zwróciło jeszcze statusu; czeka akceptacja wyglądu EN/PL w podglądzie GitHuba.
