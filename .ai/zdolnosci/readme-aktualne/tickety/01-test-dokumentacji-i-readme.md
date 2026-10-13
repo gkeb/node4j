@@ -1,10 +1,10 @@
 ---
 nr: "01"
 tytul: Test dokumentacji i nowe README z szybkim startem
-status: do-zrobienia
+status: w-toku
 blokowany-przez: []
 scenariusze: ["S1", "S2", "S3", "S4", "S7", "S8", "S11", "S12"]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -24,23 +24,23 @@ github: null
   - porównuje EN z PL: strony, liczbę nagłówków, identyczne bloki kodu;
   - sprawdza linki i hierarchię nagłówków (jeden tytuł, bez przeskoków poziomów);
   - sprawdza zakazane treści: import z CSV, triggery poza stroną ograniczeń, `load_dotenv` i `python-dotenv`, czyszczenie całej bazy, ścieżka absolutna dla plików APOC;
-  - sprząta po różnicy stanu (węzły, indeksy, ograniczenia), także po błędzie.
+  - sprząta po różnicy stanu (węzły, relacje, indeksy, ograniczenia), także po błędzie.
 - Zepsuty przykład czerwieni testy, a z `NODE4J_REQUIRE_TEST_DB=1` brak bazy jest błędem.
 
 ## Kryteria akceptacji
 
-- [ ] S1: test akceptacyjny przechodzi
-- [ ] S2: test akceptacyjny przechodzi (mechanizm i bloki README)
-- [ ] S3: test akceptacyjny przechodzi
-- [ ] S4: test akceptacyjny przechodzi
-- [ ] S7: test akceptacyjny przechodzi
-- [ ] S8: test akceptacyjny przechodzi
-- [ ] S12: test akceptacyjny przechodzi
-- [ ] S11 (część): przy wykonywaniu strony węzły, indeksy i ograniczenia wracają do stanu sprzed strony, także gdy blok rzuci błąd w połowie; przykład z usunięciem wszystkich węzłów daje czerwony test
-- [ ] Test wykonujący przykłady jest parametryzowany stronami, a raport wskazuje stronę i numer bloku
-- [ ] Testy struktury biegną bez bazy testowej
-- [ ] Dane w przykładach są syntetyczne
-- [ ] Walidacja z `warsztat.json` zielona (bez nowych błędów ruff)
+- [x] S1: test akceptacyjny przechodzi
+- [x] S2: test akceptacyjny przechodzi (mechanizm i bloki README)
+- [x] S3: test akceptacyjny przechodzi
+- [x] S4: test akceptacyjny przechodzi
+- [x] S7: test akceptacyjny przechodzi
+- [x] S8: test akceptacyjny przechodzi
+- [x] S12: test akceptacyjny przechodzi
+- [x] S11 (część): przy wykonywaniu strony węzły, indeksy i ograniczenia wracają do stanu sprzed strony, także gdy blok rzuci błąd w połowie; przykład z usunięciem wszystkich węzłów daje czerwony test
+- [x] Test wykonujący przykłady jest parametryzowany stronami, a raport wskazuje stronę i numer bloku
+- [x] Testy struktury biegną bez bazy testowej
+- [x] Dane w przykładach są syntetyczne
+- [x] Walidacja z `warsztat.json` zielona (bez nowych błędów ruff)
 
 ## Poza zakresem
 

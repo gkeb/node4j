@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 01
+skill buduj readme-aktualne → ticket 01 (testy zaliczone; pozostał odbiór wyglądu README EN i PL w podglądzie GitHuba)
 
 ## Otwarte pytania
 
@@ -50,3 +50,5 @@ skill buduj readme-aktualne → ticket 01
 - [08 — Znane ograniczenia, pełne pokrycie i zamknięcie rozjazdów](tickety/08-ograniczenia-i-pokrycie.md) — po 02–07
 
 ## Stan sesji
+
+Ticket 01: pełny zestaw przechodzi na Neo4j 2026.09 z APOC (86 testów); sprawdzono też pomijanie testów bez bazy i błąd w trybie `NODE4J_REQUIRE_TEST_DB=1`. Ruff: bez nowych błędów, 113 zastanych. Pozostał ręczny odbiór wyglądu i równoważności prozy README EN/PL w podglądzie GitHuba. Aktualny podgląd wymaga jawnego polecenia push zgodnie z `git.push=pytaj`; lokalny `main` ma 3 commity przed `origin`.
