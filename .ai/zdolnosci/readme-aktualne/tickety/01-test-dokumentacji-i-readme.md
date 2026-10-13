@@ -1,7 +1,7 @@
 ---
 nr: "01"
 tytul: Test dokumentacji i nowe README z szybkim startem
-status: w-toku
+status: zrobione
 blokowany-przez: []
 scenariusze: ["S1", "S2", "S3", "S4", "S7", "S8", "S11", "S12"]
 budowal: "Codex / GPT-6"
@@ -54,4 +54,4 @@ github: null
 - S11 kończy ticket 07.
 - Sprzątanie po różnicy stanu to wyjątek w Z05; warunek: testy nie biegną równolegle.
 - Stare treści README znikają w tym tickecie. Rozjazdy w `zrodla.md` odhacza ticket 08.
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — README EN i PL w podglądzie GitHuba, równoważność prozy — uwagi
+- Akceptacja wyglądu: 2026-10-13 — użytkownik — README EN i PL w podglądzie GitHuba, równoważność prozy — zaakceptowane
