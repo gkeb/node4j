@@ -1,7 +1,7 @@
 ---
 nr: "02"
 tytul: Strony o modelach i schemacie oraz o zapytaniach i filtrach Q
-status: w-toku
+status: zrobione
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5"]
 budowal: "Codex / GPT-6"
@@ -38,4 +38,5 @@ github: null
 ## Notatki
 
 - S5 kończy ticket 08.
-- Akceptacja wyglądu: oczekuje na podgląd GitHuba po pushu.
+- Akceptacja wyglądu: 2026-10-13 — użytkownik — obie strony EN i PL w podglądzie GitHuba — jest ok.
+- CI: [run 21](https://github.com/gkeb/node4j/actions/runs/38471815684) — zielone dla wypchniętej zawartości ticketu 02.
