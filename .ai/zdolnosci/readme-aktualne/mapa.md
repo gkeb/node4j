@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 03
+skill buduj readme-aktualne → ticket 04
 
 ## Otwarte pytania
 
@@ -51,4 +51,4 @@ skill buduj readme-aktualne → ticket 03
 
 ## Stan sesji
 
-Tickety 01 i 02 zamknięte 2026-10-13. Ticket 02 zaakceptowany w podglądzie GitHuba EN/PL; CI run 21 zielone. Lokalnie: 89 testów przeszło na Neo4j 2026.09 z APOC, Ruff bez nowych błędów (113 zastanych), trzy niezależne recenzje bez uwag. Commity ticketu 02: `0e30c95`, stan mapy po pushu `ad4043a`. Następny krok: ticket 03.
+Brak przerwanej sesji. Tickety 01–03 zamknięte. Ticket 02 zaakceptowany w podglądzie GitHuba EN/PL; CI run 21 zielone. Ticket 03 zaakceptowany przez użytkownika w podglądzie GitHuba EN/PL 2026-10-14; lokalnie 91 testów przeszło na Neo4j 2026.09 z APOC, Ruff bez nowych błędów (113 zastanych), dwa niezależne przeglądy bez uwag blokujących. Commit `222884d`; CI run 23 zielone. Następny krok: skill buduj readme-aktualne → ticket 04.

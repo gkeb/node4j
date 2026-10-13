@@ -1,7 +1,7 @@
 ---
 nr: "03"
 tytul: Strona o relacjach i prefetchu
-status: w-toku
+status: zrobione
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5"]
 budowal: "Codex / GPT-6"
@@ -36,4 +36,4 @@ README linkuje stronę.
 ## Notatki
 
 - S5 kończy ticket 08.
-- Akceptacja wyglądu: oczekuje na użytkownika po podglądzie stron EN i PL na GitHubie
+- Akceptacja wyglądu: 2026-10-14 — użytkownik — podgląd stron EN i PL na GitHubie — bez uwag
