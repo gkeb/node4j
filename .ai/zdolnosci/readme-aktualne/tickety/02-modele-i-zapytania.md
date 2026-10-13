@@ -1,10 +1,10 @@
 ---
 nr: "02"
 tytul: Strony o modelach i schemacie oraz o zapytaniach i filtrach Q
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5"]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -25,11 +25,11 @@ github: null
 
 ## Kryteria akceptacji
 
-- [ ] S2: przykłady obu stron wykonują się na bazie testowej
-- [ ] S4: obie strony mają odpowiedniki PL z identycznym kodem
-- [ ] S5 (część): pozycje wykazu z tych stron są w wykonywanych blokach
-- [ ] Każdy operator filtra opisany na stronie jest zgodny z kodem filtra Q; nieznany sufiks jest wymieniony jako pułapka (odsyłacz do „Znanych ograniczeń” dodaje 08)
-- [ ] Walidacja zielona
+- [x] S2: przykłady obu stron wykonują się na bazie testowej
+- [x] S4: obie strony mają odpowiedniki PL z identycznym kodem
+- [x] S5 (część): pozycje wykazu z tych stron są w wykonywanych blokach
+- [x] Każdy operator filtra opisany na stronie jest zgodny z kodem filtra Q; nieznany sufiks jest wymieniony jako pułapka (odsyłacz do „Znanych ograniczeń” dodaje 08)
+- [x] Walidacja zielona
 
 ## Poza zakresem
 
@@ -38,4 +38,4 @@ github: null
 ## Notatki
 
 - S5 kończy ticket 08.
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — obie strony EN i PL w podglądzie GitHuba — uwagi
+- Akceptacja wyglądu: oczekuje na podgląd GitHuba po pushu.

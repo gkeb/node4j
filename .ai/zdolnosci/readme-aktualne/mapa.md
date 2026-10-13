@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 02
+Pokaż strony ticketu 02 w podglądzie GitHuba i uzyskaj akceptację wyglądu (push wymaga zgody użytkownika).
 
 ## Otwarte pytania
 
@@ -51,4 +51,4 @@ skill buduj readme-aktualne → ticket 02
 
 ## Stan sesji
 
-Ticket 01 zamknięty po odbiorze README EN/PL (2026-10-13). Pełny zestaw przeszedł na Neo4j 2026.09 z APOC (86 testów), S12 sprawdzono w trybie zwykłym i wymaganym; Ruff bez nowych błędów (113 zastanych). Commit `c794a65` wypchnięty, CI zielone. Następny krok: ticket 02.
+Ticket 01 zamknięty po odbiorze README EN/PL (2026-10-13). Ticket 02 zbudowany lokalnie: 89 testów przeszło na Neo4j 2026.09 z APOC, Ruff bez nowych błędów (113 zastanych), trzy niezależne recenzje bez uwag. Pozostał podgląd GitHuba i akceptacja wyglądu EN/PL; push czeka na zgodę użytkownika.

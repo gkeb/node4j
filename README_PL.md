@@ -68,4 +68,5 @@ if __name__ == "__main__":
 
 ## Dokumentacja
 
-Nie ma jeszcze stron tematycznych. Będą tu linki do poszczególnych stron, gdy tylko powstaną.
+- [Modele i schemat](docs/pl/models-and-schema.md)
+- [Zapytania i filtry](docs/pl/queries-and-filters.md)

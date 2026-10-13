@@ -771,6 +771,56 @@ def test_s4_english_and_polish_pages_are_mirrored():
         }, f"{polish[key].name} needs an English language link"
 
 
+def test_s5_models_and_queries_methods_are_in_executable_examples():
+    page_paths = [
+        ROOT / "docs" / "en" / "models-and-schema.md",
+        ROOT / "docs" / "en" / "queries-and-filters.md",
+    ]
+    executable_sources = []
+    for path in page_paths:
+        _, page = _read_page(path)
+        executable_sources.extend(
+            block.source for block in _python_blocks(page) if block.skip_reason is None
+        )
+    source = "\n".join(executable_sources)
+
+    for method in (
+        "apply_schema",
+        "create",
+        "match_one",
+        "match_all",
+        "update",
+        "delete",
+        "get_or_create",
+        "update_or_create",
+        "count",
+    ):
+        assert re.search(rf"\.q\.{method}\s*\(", source), method
+
+    assert re.search(r"\bQ\s*\(", source)
+    for operator in (
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "in",
+        "contains",
+        "startswith",
+        "endswith",
+        "ne",
+    ):
+        assert re.search(rf"__{operator}\s*=", source), operator
+    assert "order_by=" in source
+    for hook in ("pre_save", "post_save", "pre_delete", "post_delete"):
+        assert re.search(rf"async def {hook}\s*\(", source), hook
+
+    english_text = _read_page(page_paths[1])[0].lower()
+    polish_path = ROOT / "docs" / "pl" / "queries-and-filters.md"
+    polish_text = _read_page(polish_path)[0].lower()
+    assert "unknown suffix" in english_text and "equality" in english_text
+    assert "nieznany sufiks" in polish_text and "równość" in polish_text
+
+
 def test_s7_documentation_does_not_promise_unimplemented_features():
     for path in _all_pages():
         source, _ = _read_page(path)

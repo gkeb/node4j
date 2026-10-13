@@ -68,4 +68,5 @@ if __name__ == "__main__":
 
 ## Documentation
 
-There are no topic guides yet. This section will link to each guide as it is added.
+- [Models and schema](docs/en/models-and-schema.md)
+- [Queries and filters](docs/en/queries-and-filters.md)
