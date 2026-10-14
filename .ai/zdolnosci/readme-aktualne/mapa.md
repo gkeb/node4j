@@ -49,6 +49,9 @@ skill buduj readme-aktualne → ticket 07
 - [06 — Pliki APOC w bazie testowej i strona rozszerzeń APOC](tickety/06-apoc.md) — po 01
 - [07 — GDS w bazie testowej i strona rozszerzeń GDS](tickety/07-gds.md) — po 01
 - [08 — Znane ograniczenia, pełne pokrycie i zamknięcie rozjazdów](tickety/08-ograniczenia-i-pokrycie.md) — po 02–07
+- [09 — Po weryfikacji R1: test akceptacyjny S12](tickety/09-test-s12.md) — po 01; [weryfikacja](weryfikacja.md) R1.1
+- [10 — Po weryfikacji R1: stany błędów w dokumentacji](tickety/10-stany-bledow.md) — po 01, 05, 06; [weryfikacja](weryfikacja.md) R1.2
+- [11 — Po weryfikacji R1: wzmocnienie testów dokumentacji i drobne poprawki](tickety/11-wzmocnienie-testow.md) — po 01, 06; [weryfikacja](weryfikacja.md) R1.3–R1.8
 
 ## Stan sesji
 
