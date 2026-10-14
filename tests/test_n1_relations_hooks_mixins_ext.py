@@ -8,7 +8,7 @@ from neo4j.exceptions import ClientError
 
 from node4j.db import connection
 from node4j.edges import Edge
-from node4j.ext.apoc import apoc
+from node4j.ext.apoc import apoc, install_apoc_manager
 from node4j.ext.gds import gds
 from node4j.mixins import SoftDeleteMixin
 from node4j.nodes import Node
@@ -411,6 +411,29 @@ async def test_N1_apoc_periodic_iterate_changes_matching_nodes(n1_scope):
     assert processed_after.iterate_changed is True
     assert skipped_after is not None
     assert skipped_after.iterate_changed is False
+
+
+async def test_N1_apoc_create_from_json_passes_params_to_periodic_iterate(monkeypatch):
+    result = {"batches": 1, "total": 1}
+    run = AsyncMock(return_value=[result])
+    monkeypatch.setattr(connection, "run", run)
+    install_apoc_manager(N1ApocNode)
+
+    actual = await N1ApocNode.apoc.create_from_json(
+        "file:///nodes.json", json_path="$.nodes[*]", batch_size=1
+    )
+
+    assert actual == result
+    query, params = run.await_args.args
+    assert "params: {url: $url, path: $path}" in query
+    assert params == {
+        "url": "file:///nodes.json",
+        "path": "$.nodes[*]",
+        "cypher_to_execute": (
+            "CREATE (n:N1ApocNode) SET n = row, n.uid = apoc.create.uuid()"
+        ),
+        "batch_size": 1,
+    }
 
 
 async def test_N1_apoc_trigger_install_preserves_current_database_error(db):

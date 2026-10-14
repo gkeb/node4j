@@ -53,7 +53,7 @@
       "ruff W293 node4j/config.py x1",
       "ruff F401 node4j/db.py x1",
       "ruff I001 node4j/db.py x1",
-      "ruff E501 node4j/ext/apoc.py x6",
+      "ruff E501 node4j/ext/apoc.py x1",
       "ruff F401 node4j/ext/apoc.py x1",
       "ruff F541 node4j/ext/apoc.py x3",
       "ruff I001 node4j/ext/apoc.py x1",

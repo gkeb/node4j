@@ -57,33 +57,42 @@ class APOC:
             await connection.run(query, params)
             log.info("Periodic iterate finished.")
 
-
     class Export:
         @staticmethod
         async def to_json(file_name: str, config: dict | None = None):
             """Eksportuje całą bazę do pliku JSON."""
-            log.info(f"Exporting database to JSON file.", extra={"file_name": file_name, "config": config})
+            log.info(
+                f"Exporting database to JSON file.",
+                extra={"file_name": file_name, "config": config},
+            )
             config = config or {}
             query = "CALL apoc.export.json.all($file_name, $config)"
             await connection.run(query, {"file_name": file_name, "config": config})
             log.info(f"Database export to '{file_name}' finished.")
 
-
     # +++ NOWA KLASA WEWNĘTRZNA DLA TRIGGERÓW +++
     class Triggers:
         @staticmethod
-        async def install(name: str, cypher: str, selector: dict, config: dict | None = None) -> None:
+        async def install(
+            name: str, cypher: str, selector: dict, config: dict | None = None
+        ) -> None:
             """Tworzy i instaluje nowy trigger w bazie danych."""
             log.info(f"Installing APOC trigger '{name}'.")
             config = config or {}
-            query = "CALL apoc.trigger.install('neo4j', $name, $cypher, $selector, $config)"
+            query = (
+                "CALL apoc.trigger.install('neo4j', $name, $cypher, $selector, $config)"
+            )
             await connection.run(
                 query,
-                {"name": name, "cypher": cypher, "selector": selector, "config": config},
+                {
+                    "name": name,
+                    "cypher": cypher,
+                    "selector": selector,
+                    "config": config,
+                },
             )
             # ### ZMIANA ###: Zastąpienie print loggerem
             log.info(f"Successfully installed trigger: '{name}'")
-
 
         @staticmethod
         async def remove(name: str) -> dict:
@@ -95,7 +104,6 @@ class APOC:
             log.info(f"Successfully removed trigger: '{name}'")
             return result[0] if result else {}
 
-
         @staticmethod
         async def remove_all() -> dict:
             """Usuwa wszystkie triggery z bazy."""
@@ -106,14 +114,12 @@ class APOC:
             log.info("Successfully removed all triggers.")
             return result[0] if result else {}
 
-
         @staticmethod
         async def list() -> list[dict]:
             """Zwraca listę wszystkich zainstalowanych triggerów."""
             log.debug("Listing all APOC triggers.")
             query = "CALL apoc.trigger.list()"
             return await connection.run(query)
-
 
 
 # Singleton - globalna instancja do łatwego importu
@@ -150,13 +156,19 @@ class ApocManager:
             },
         )
         labels = ":" + ":".join(self.model.labels())
-        cypher_to_execute = f"CREATE (n{labels}) SET n = row, n.uid = apoc.create.uuid()"
+        cypher_to_execute = (
+            f"CREATE (n{labels}) SET n = row, n.uid = apoc.create.uuid()"
+        )
 
         query = """
         CALL apoc.periodic.iterate(
             'CALL apoc.load.json($url, $path) YIELD value as row RETURN row',
             $cypher_to_execute,
-            {batchSize: $batch_size, parallel: false}
+            {
+                batchSize: $batch_size,
+                parallel: false,
+                params: {url: $url, path: $path}
+            }
         )
         """
         params = {
@@ -186,4 +198,3 @@ def install_apoc_manager(model_class: type[Node]):
         manager_log = log.getChild(f"ApocManager.{model_class.__name__}")
         manager_log.debug("Installing ApocManager on model.")
         model_class.apoc = ApocManager(model_class)
-
