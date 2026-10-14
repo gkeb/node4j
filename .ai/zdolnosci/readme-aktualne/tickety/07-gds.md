@@ -1,7 +1,7 @@
 ---
 nr: "07"
 tytul: GDS w bazie testowej i strona rozszerzeń GDS
-status: w-toku
+status: zrobione
 blokowany-przez: ["01"]
 scenariusze: ["S10", "S11", "S2", "S4", "S5"]
 budowal: "Codex / GPT-6"
@@ -27,7 +27,7 @@ github: null
 - [x] S2: przykłady strony wykonują się na bazie testowej
 - [x] S4: strona ma odpowiednik PL z identycznym kodem
 - [x] S5 (część): projekcja, `run`, `mutate` i usunięcie projekcji są w wykonywanych blokach
-- [ ] CI zielone na obu wersjach Neo4j — pełny zestaw uruchomiony lokalnie: 108 passed na każdej wersji; GitHub CI czeka na push
+- [x] CI zielone na obu wersjach Neo4j
 - [x] Walidacja zielona
 
 ## Poza zakresem
@@ -39,4 +39,5 @@ github: null
 - Ticket kończy S10 i S11.
 - Instalacji GDS przez `NEO4J_PLUGINS` na tagach z CI nikt jeszcze nie uruchomił. Jeśli zawiedzie, zatrzymaj się i wróć do decyzji o GDS w CI (skill `pomysl readme-aktualne`), zamiast oznaczać bloki do pominięcia.
 - Badanie: [zgodność GDS](../../../badania/2026-10-13-gds-zgodnosc.md).
+- CI: [run 38642488811](https://github.com/gkeb/node4j/actions/runs/38642488811) zielony dla commita `20101d6` (Neo4j 5.26 i 2026.09 oraz latest Pydantic).
 - Akceptacja wyglądu: 2026-10-14 — użytkownik — strona EN i PL — uwagi: brak

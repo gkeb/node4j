@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-Po zgodzie użytkownika na push: wypchnąć commit ticketu 07 i sprawdzić CI na obu wersjach Neo4j. Po zielonym CI: skill buduj readme-aktualne → ticket 08.
+skill buduj readme-aktualne → ticket 08
 
 ## Otwarte pytania
 
@@ -52,9 +52,3 @@ Po zgodzie użytkownika na push: wypchnąć commit ticketu 07 i sprawdzić CI na
 - [09 — Po weryfikacji R1: test akceptacyjny S12](tickety/09-test-s12.md) — po 01; [weryfikacja](weryfikacja.md) R1.1
 - [10 — Po weryfikacji R1: stany błędów w dokumentacji](tickety/10-stany-bledow.md) — po 01, 05, 06; [weryfikacja](weryfikacja.md) R1.2
 - [11 — Po weryfikacji R1: wzmocnienie testów dokumentacji i drobne poprawki](tickety/11-wzmocnienie-testow.md) — po 01, 06; [weryfikacja](weryfikacja.md) R1.3–R1.8
-
-## Stan sesji
-
-2026-10-14 — ticket 07 (zaakceptowany odbiór stron; w-toku do CI)
-- Przykłady i pełny zestaw: 108 passed lokalnie na Neo4j 2026.09 i 5.26; walidacja Ruff bez nowych błędów; recenzje bez uwag.
-- GitHub CI niesprawdzone dla `02f0ef8` do pushu. Po zgodzie użytkownika wypchnąć commit, sprawdzić CI i przejść do ticketu 08, jeśli oba joby przejdą.
