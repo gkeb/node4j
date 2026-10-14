@@ -35,6 +35,12 @@
   - backend budowania i wersja startowa (rozjazd `0.2.2` w `pyproject.toml` vs tag `v0.2.3`)
   - publikacja z CI przez Trusted Publishing — do zbadania przed specem
 
+- `zaleznosci-dev-dotenv` — usunięcie `python-dotenv` z grupy dev: nikt w repo go nie importuje, a `.env` czyta `pydantic-settings`, który ciągnie go sam ([obszar zależności](obszary/zaleznosci.md)) — `pomysl`
+  - czy test konfiguracji (`tests/test_n3_config.py`) potrzebuje go bezpośrednio, czy wystarczy zależność przechodnia?
+
+- `podbicie-pydantic-settings` — `pydantic-settings` 2.15.0 → 2.16.0 ([obszar zależności](obszary/zaleznosci.md)) — `pomysl`
+  - osobno czy razem z innymi podbiciami w jednym przeglądzie zależności?
+
 
 ## Zrobione
 
