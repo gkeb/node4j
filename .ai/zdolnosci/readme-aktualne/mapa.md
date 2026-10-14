@@ -55,5 +55,5 @@ skill buduj readme-aktualne → ticket 07
 2026-10-14 — ticket 06 (zrobione)
 - Zrobione: naprawy `create_from_json` rozdzielone do commitów `565d29a` i `cfc9df6`, wypchnięte na `origin/main`; ich CI zielone na Neo4j 2026.09 i 5.26 ([run 38631385439](https://github.com/gkeb/node4j/actions/runs/38631385439)). Strony EN/PL zaakceptowane; konfiguracja testów APOC w CI i AGENTS.md; przykłady strony przechodzą na obu wersjach Neo4j; lokalna walidacja: 23 passed, 10 skipped bez bazy; recenzje zgodności, jakości i bezpieczeństwa bez uwag blokujących.
 - Commit ticketu: `2ab4c88`, CI zielone dla obu wersji Neo4j oraz latest Pydantic ([run 38632727782](https://github.com/gkeb/node4j/actions/runs/38632727782)). Wyniki prototypu są w [raporcie](../../eksperymenty/2026-10-14-apoc-export-import.md).
-- Otwarte: wypchnąć osobny commit zamykający ticket i sprawdzić jego CI.
-- Następny ruch: wypchnąć wynik CI ticketu 06, następnie `skill buduj readme-aktualne → ticket 07`.
+- Końcowy commit statusu `25238f0` jest wypchnięty, a jego CI zielone na obu wersjach Neo4j ([run 38633082656](https://github.com/gkeb/node4j/actions/runs/38633082656)).
+- Następny ruch: `skill buduj readme-aktualne → ticket 07`.
