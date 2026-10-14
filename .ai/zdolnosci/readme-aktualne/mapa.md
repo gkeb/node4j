@@ -57,4 +57,4 @@ Po zgodzie użytkownika na push: wypchnąć commit ticketu 07 i sprawdzić CI na
 
 2026-10-14 — ticket 07 (zaakceptowany odbiór stron; w-toku do CI)
 - Przykłady i pełny zestaw: 108 passed lokalnie na Neo4j 2026.09 i 5.26; walidacja Ruff bez nowych błędów; recenzje bez uwag.
-- GitHub CI dla commita ticketu niesprawdzone do pushu. Po zgodzie użytkownika wypchnąć commit, sprawdzić CI i przejść do ticketu 08, jeśli oba joby przejdą.
+- GitHub CI niesprawdzone dla `02f0ef8` do pushu. Po zgodzie użytkownika wypchnąć commit, sprawdzić CI i przejść do ticketu 08, jeśli oba joby przejdą.
