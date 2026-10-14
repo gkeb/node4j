@@ -555,6 +555,10 @@ def test_s1_readme_is_a_clear_entry_point():
         assert guide.resolve() in {
             target for target, _ in _relative_links(ROOT / "README.md")
         }
+    for guide in (ROOT / "docs" / "pl").rglob("*.md"):
+        assert guide.resolve() in {
+            target for target, _ in _relative_links(ROOT / "README_PL.md")
+        }
 
 
 def test_s1_markdown_links_exist_and_headings_are_accessible():
@@ -753,6 +757,10 @@ def test_s4_english_and_polish_pages_are_mirrored():
     english = {_page_key(path, "en"): path for path in _english_pages()}
     polish = {_page_key(path, "pl"): path for path in _polish_pages()}
     assert set(english) == set(polish)
+    assert {
+        "bulk-operations-and-aggregations.md",
+        "transactions.md",
+    } <= set(english)
 
     for key, english_path in english.items():
         _, english_page = _read_page(english_path)
@@ -840,6 +848,50 @@ def test_s5_relationships_update_and_prefetch_are_in_executable_examples():
         "prefetch={",
     ):
         assert public_api in source, public_api
+
+
+def test_s5_bulk_operations_and_aggregations_are_in_executable_examples():
+    english_path = ROOT / "docs" / "en" / "bulk-operations-and-aggregations.md"
+    polish_path = ROOT / "docs" / "pl" / "bulk-operations-and-aggregations.md"
+    _, english_page = _read_page(english_path)
+    english_source = "\n".join(
+        block.source
+        for block in _python_blocks(english_page)
+        if block.skip_reason is None
+    )
+
+    for method in ("bulk_create", "bulk_update", "aggregate"):
+        assert re.search(rf"\.q\.{method}\s*\(", english_source), method
+    assert 'match_on="sku"' in english_source
+    for hook in ("pre_save", "post_save"):
+        assert re.search(rf"async def {hook}\s*\(", english_source), hook
+
+    english_text, _ = _read_page(english_path)
+    polish_text, _ = _read_page(polish_path)
+    assert (
+        "aggregation expressions and their aliases are inserted directly"
+        in english_text
+    )
+    assert "trusted, developer-written expressions and aliases" in english_text
+    assert "never pass user input" in english_text
+    assert "wyrażeń agregacji i ich aliasy trafiają bezpośrednio" in polish_text
+    assert "zaufanych wyrażeń i aliasów zapisanych przez programistę" in polish_text
+    assert "danych użytkownika" in polish_text
+
+
+def test_s5_transactions_are_in_executable_examples():
+    path = ROOT / "docs" / "en" / "transactions.md"
+    _, page = _read_page(path)
+    source = "\n".join(
+        block.source for block in _python_blocks(page) if block.skip_reason is None
+    )
+
+    assert "async with connection.transaction():" in source
+    assert "@connection.atomic()" in source
+    assert 'raise ValueError("rollback example")' in source
+    assert re.search(r"except RuntimeError(?:\s+as\s+\w+)?:", source)
+    assert "nested_transaction_rejected" in source
+    assert 'filters={"label": rollback_label}' in source
 
 
 def test_s7_documentation_does_not_promise_unimplemented_features():
