@@ -21,7 +21,7 @@ jobs:
         image: neo4j:${{ matrix.neo4j-version }}
         env:
           NEO4J_AUTH: neo4j/test-password-123
-          NEO4J_PLUGINS: '["apoc"]'
+          NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
           NEO4J_apoc_import_file_enabled: "true"
           NEO4J_apoc_export_file_enabled: "true"
         ports:
@@ -109,7 +109,7 @@ jobs:
         image: neo4j:2026.09.0
         env:
           NEO4J_AUTH: neo4j/test-password-123
-          NEO4J_PLUGINS: '["apoc"]'
+          NEO4J_PLUGINS: '["apoc", "graph-data-science"]'
           NEO4J_apoc_import_file_enabled: "true"
           NEO4J_apoc_export_file_enabled: "true"
         ports:

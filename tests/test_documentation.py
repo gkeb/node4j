@@ -40,6 +40,7 @@ class DatabaseSnapshot:
     nodes_without_unique_uid: int
     indexes: dict[str, tuple[str | None, str | None]]
     constraints: dict[str, str | None]
+    gds_projections: frozenset[str]
 
 
 def _english_pages() -> list[Path]:
@@ -283,6 +284,11 @@ async def _schema_snapshot(
     )
 
 
+async def _gds_projection_names(db) -> frozenset[str]:
+    projections = await db.run("CALL gds.graph.list() YIELD graphName RETURN graphName")
+    return frozenset(record["graphName"] for record in projections)
+
+
 def _relationship_sort_key(
     relationship: tuple[object | None, object | None, str, dict[str, object]],
 ) -> tuple[object, ...]:
@@ -341,6 +347,7 @@ async def _database_snapshot(db, require_unique_uids: bool = False) -> DatabaseS
         nodes_without_unique_uid=nodes_without_unique_uid,
         indexes=indexes,
         constraints=constraints,
+        gds_projections=await _gds_projection_names(db),
     )
 
 
@@ -351,6 +358,9 @@ def _quote_identifier(name: str) -> str:
 
 async def _restore_database_snapshot(db, baseline: DatabaseSnapshot) -> None:
     current = await _database_snapshot(db)
+    for graph_name in current.gds_projections - baseline.gds_projections:
+        await db.run("CALL gds.graph.drop($graph_name)", {"graph_name": graph_name})
+
     graph_changed = (
         current.nodes != baseline.nodes
         or current.relationships != baseline.relationships
@@ -500,6 +510,9 @@ async def _restore_database_snapshot(db, baseline: DatabaseSnapshot) -> None:
     )
     assert restored.constraints == baseline.constraints, (
         "Documentation examples did not restore the original constraints."
+    )
+    assert restored.gds_projections == baseline.gds_projections, (
+        "Documentation examples did not restore the original GDS projections."
     )
 
 
@@ -783,6 +796,7 @@ def test_s4_english_and_polish_pages_are_mirrored():
     assert set(english) == set(polish)
     assert {
         "apoc-extensions.md",
+        "gds-extensions.md",
         "bulk-operations-and-aggregations.md",
         "transactions.md",
         "mixins.md",
@@ -859,6 +873,47 @@ def test_s9_apoc_file_access_is_enabled_for_local_and_ci_test_databases():
     ):
         assert f"-e {setting}=true" in agent_instructions
         assert ci_workflow.count(f'{setting}: "true"') == 2
+
+
+def test_s10_gds_versions_security_and_missing_projection_are_documented():
+    source = (ROOT / "docs" / "en" / "gds-extensions.md").read_text(
+        encoding="utf-8-sig"
+    )
+
+    assert "| 5.26 LTS | 2.13 |" in source
+    assert "| 2026.09 | 2026.09 |" in source
+    assert "NEO4J_PLUGINS" in source
+    assert "never pass a user-provided algorithm name" in source
+    assert "failIfMissing=true" in source
+    assert "does not expose that option" in source
+
+
+def test_s10_gds_is_enabled_for_local_and_ci_test_databases():
+    agent_instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8-sig")
+    ci_workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+        encoding="utf-8-sig"
+    )
+
+    expected_plugins = '["apoc", "graph-data-science"]'
+    assert expected_plugins in agent_instructions
+    assert ci_workflow.count(expected_plugins) == 2
+
+
+async def test_s10_gds_documentation_examples_execute(db, tmp_path, cleanup_ttl_job):
+    path = ROOT / "docs" / "en" / "gds-extensions.md"
+    _, page = _read_page(path)
+    blocks = _python_blocks(page)
+
+    assert blocks
+    assert all(block.skip_reason is None for block in blocks)
+
+    result = await _run_page_blocks(
+        db, path, blocks, tmp_path, cleanup_ttl_job=cleanup_ttl_job
+    )
+    assert result.returncode == 0, (
+        f"{path.name} documentation example failed:\n"
+        f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    )
 
 
 def test_s5_models_and_queries_methods_are_in_executable_examples():
@@ -1019,6 +1074,22 @@ def test_s5_apoc_methods_are_in_executable_examples():
     assert ".apoc.create_from_json(" in source
 
 
+def test_s5_gds_methods_are_in_executable_examples():
+    path = ROOT / "docs" / "en" / "gds-extensions.md"
+    _, page = _read_page(path)
+    source = "\n".join(
+        block.source for block in _python_blocks(page) if block.skip_reason is None
+    )
+
+    for method in (
+        "gds.Graph.project(",
+        "gds.Algo.run(",
+        "gds.Algo.mutate(",
+        "gds.Graph.drop(",
+    ):
+        assert method in source, method
+
+
 def test_s7_documentation_does_not_promise_unimplemented_features():
     for path in _all_pages():
         source, _ = _read_page(path)
@@ -1113,50 +1184,73 @@ async def test_s11_page_state_is_restored_after_an_example_error(
     removed_uid = str(uuid4())
     index_name = f"docs_probe_index_{suffix}"
     constraint_name = f"docs_probe_constraint_{suffix}"
+    baseline_graph_name = f"docs_baseline_{suffix}"
+    failure_graph_name = f"docs_failure_{suffix}"
+    original_projections = await _gds_projection_names(db)
     try:
         await db.run(
-            "CREATE (first:DocsBaseline:DocsOriginal "
-            "{uid: $first_uid, marker: $marker, value: 'kept'}), "
-            "(second:DocsBaseline "
-            "{uid: $removed_uid, marker: $removed, value: 'restored'}), "
-            "(first)-[:DOCS_LINK {value: 'original'}]->(second)",
+            "CREATE (first:`DocsBaseline`:`DocsOriginal` "
+            "{`uid`: $first_uid, `marker`: $marker, `value`: $kept}), "
+            "(second:`DocsBaseline` "
+            "{`uid`: $removed_uid, `marker`: $removed, `value`: $restored}), "
+            "(first)-[:`DOCS_LINK` {`value`: $relationship_value}]->(second)",
             {
                 "first_uid": baseline_uid,
                 "marker": baseline_marker,
+                "kept": "kept",
                 "removed_uid": removed_uid,
                 "removed": removed_marker,
+                "restored": "restored",
+                "relationship_value": "original",
             },
         )
+        await db.run(
+            "CALL gds.graph.project($graph_name, $node_projection, "
+            "$relationship_projection)",
+            {
+                "graph_name": baseline_graph_name,
+                "node_projection": "DocsBaseline",
+                "relationship_projection": {"DOCS_LINK": {"orientation": "UNDIRECTED"}},
+            },
+        )
+        baseline_projections = original_projections | {baseline_graph_name}
         before = await _schema_snapshot(db)
         source = f'''
 import asyncio
 
 from node4j.db import connection
+from node4j.ext.gds import gds
 from node4j.mixins import TTLMixin
 
 
 async def main():
     await TTLMixin.setup_ttl_infrastructure()
     await connection.run(
-        "MATCH (node:DocsBaseline {{marker: $marker}}) "
-        "SET node.value = 'changed' SET node:DocsChanged",
-        {{"marker": "{baseline_marker}"}},
+        "MATCH (node:`DocsBaseline` {{`marker`: $marker}}) "
+        "SET node.`value` = $changed SET node:`DocsChanged`",
+        {{"marker": "{baseline_marker}", "changed": "changed"}},
     )
     await connection.run(
-        "MATCH (node:DocsBaseline {{marker: $marker}}) DETACH DELETE node",
+        "MATCH (node:`DocsBaseline` {{`marker`: $marker}}) DETACH DELETE node",
         {{"marker": "{removed_marker}"}},
     )
     await connection.run(
-        "CREATE (:DocsProbe {{index_value: $value, unique_value: $value}})",
+        "CREATE (:`DocsProbe` "
+        "{{`index_value`: $value, `unique_value`: $value}})",
         {{"value": "{suffix}"}},
     )
     await connection.run(
         "CREATE INDEX {chr(96)}{index_name}{chr(96)} IF NOT EXISTS "
-        "FOR (node:DocsProbe) ON (node.index_value)"
+        "FOR (node:`DocsProbe`) ON (node.`index_value`)"
     )
     await connection.run(
         "CREATE CONSTRAINT {chr(96)}{constraint_name}{chr(96)} IF NOT EXISTS "
-        "FOR (node:DocsProbe) REQUIRE node.unique_value IS UNIQUE"
+        "FOR (node:`DocsProbe`) REQUIRE node.`unique_value` IS UNIQUE"
+    )
+    await gds.Graph.project(
+        "{failure_graph_name}",
+        "DocsBaseline",
+        {{"DOCS_LINK": {{"orientation": "UNDIRECTED"}}}},
     )
     raise RuntimeError("intentional documentation example failure")
 
@@ -1176,9 +1270,9 @@ asyncio.run(main())
         assert "failing-example.md Python block 1 failed" in result.stderr
         assert "intentional documentation example failure" in result.stderr
         restored_nodes = await db.run(
-            "MATCH (node:DocsBaseline) WHERE node.marker IN $markers "
-            "RETURN labels(node) AS labels, node.marker AS marker, "
-            "node.value AS value ORDER BY marker",
+            "MATCH (node:`DocsBaseline`) WHERE node.`marker` IN $markers "
+            "RETURN labels(node) AS labels, node.`marker` AS marker, "
+            "node.`value` AS value ORDER BY marker",
             {"markers": [baseline_marker, removed_marker]},
         )
         assert [dict(record) for record in restored_nodes] == [
@@ -1194,9 +1288,10 @@ asyncio.run(main())
             },
         ]
         restored_relationships = await db.run(
-            "MATCH (first:DocsBaseline {marker: $first}) "
-            "-[relationship:DOCS_LINK]->(second:DocsBaseline {marker: $second}) "
-            "RETURN relationship.value AS value",
+            "MATCH (first:`DocsBaseline` {`marker`: $first}) "
+            "-[relationship:`DOCS_LINK`]->"
+            "(second:`DocsBaseline` {`marker`: $second}) "
+            "RETURN relationship.`value` AS value",
             {"first": baseline_marker, "second": removed_marker},
         )
         assert [dict(record) for record in restored_relationships] == [
@@ -1204,22 +1299,26 @@ asyncio.run(main())
         ]
         restored_schema = await _schema_snapshot(db)
         assert restored_schema == before
+        assert await _gds_projection_names(db) == baseline_projections
         assert (
             await db.run(
-                "MATCH (node:DocsProbe {unique_value: $value}) RETURN node",
+                "MATCH (node:`DocsProbe` {`unique_value`: $value}) RETURN node",
                 {"value": suffix},
             )
             == []
         )
     finally:
+        current_projections = await _gds_projection_names(db)
+        for graph_name in current_projections - original_projections:
+            await db.run("CALL gds.graph.drop($graph_name)", {"graph_name": graph_name})
         await db.run(f"DROP CONSTRAINT {_quote_identifier(constraint_name)} IF EXISTS")
         await db.run(f"DROP INDEX {_quote_identifier(index_name)} IF EXISTS")
         await db.run(
-            "MATCH (node:DocsProbe {unique_value: $value}) DETACH DELETE node",
+            "MATCH (node:`DocsProbe` {`unique_value`: $value}) DETACH DELETE node",
             {"value": suffix},
         )
         await db.run(
-            "MATCH (node:DocsBaseline) WHERE node.marker IN $markers "
+            "MATCH (node:`DocsBaseline`) WHERE node.`marker` IN $markers "
             "DETACH DELETE node",
             {"markers": [baseline_marker, removed_marker]},
         )

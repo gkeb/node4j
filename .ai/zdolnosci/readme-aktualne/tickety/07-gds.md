@@ -1,10 +1,10 @@
 ---
 nr: "07"
 tytul: GDS w bazie testowej i strona rozszerzeń GDS
-status: do-zrobienia
+status: w-toku
 blokowany-przez: ["01"]
 scenariusze: ["S10", "S11", "S2", "S4", "S5"]
-budowal: null
+budowal: "Codex / GPT-6"
 github: null
 ---
 
@@ -22,13 +22,13 @@ github: null
 
 ## Kryteria akceptacji
 
-- [ ] S10: test akceptacyjny przechodzi
-- [ ] S11: test akceptacyjny przechodzi w całości (węzły, schemat, TTL, projekcje GDS)
-- [ ] S2: przykłady strony wykonują się na bazie testowej
-- [ ] S4: strona ma odpowiednik PL z identycznym kodem
-- [ ] S5 (część): projekcja, `run`, `mutate` i usunięcie projekcji są w wykonywanych blokach
-- [ ] CI zielone na obu wersjach Neo4j
-- [ ] Walidacja zielona
+- [x] S10: test akceptacyjny przechodzi
+- [x] S11: test akceptacyjny przechodzi w całości (węzły, schemat, TTL, projekcje GDS)
+- [x] S2: przykłady strony wykonują się na bazie testowej
+- [x] S4: strona ma odpowiednik PL z identycznym kodem
+- [x] S5 (część): projekcja, `run`, `mutate` i usunięcie projekcji są w wykonywanych blokach
+- [ ] CI zielone na obu wersjach Neo4j — pełny zestaw uruchomiony lokalnie: 108 passed na każdej wersji; GitHub CI czeka na push
+- [x] Walidacja zielona
 
 ## Poza zakresem
 
@@ -39,4 +39,4 @@ github: null
 - Ticket kończy S10 i S11.
 - Instalacji GDS przez `NEO4J_PLUGINS` na tagach z CI nikt jeszcze nie uruchomił. Jeśli zawiedzie, zatrzymaj się i wróć do decyzji o GDS w CI (skill `pomysl readme-aktualne`), zamiast oznaczać bloki do pominięcia.
 - Badanie: [zgodność GDS](../../../badania/2026-10-13-gds-zgodnosc.md).
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — strona EN i PL — uwagi
+- Akceptacja wyglądu: 2026-10-14 — użytkownik — strona EN i PL — uwagi: brak

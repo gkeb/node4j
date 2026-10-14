@@ -76,3 +76,4 @@ if __name__ == "__main__":
 - [Mixiny](docs/pl/mixins.md)
 - [Konfiguracja i logowanie](docs/pl/configuration-and-logging.md)
 - [Rozszerzenia APOC](docs/pl/apoc-extensions.md)
+- [Rozszerzenia GDS](docs/pl/gds-extensions.md)

@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 07
+Po zgodzie użytkownika na push: wypchnąć commit ticketu 07 i sprawdzić CI na obu wersjach Neo4j. Po zielonym CI: skill buduj readme-aktualne → ticket 08.
 
 ## Otwarte pytania
 
@@ -55,8 +55,6 @@ skill buduj readme-aktualne → ticket 07
 
 ## Stan sesji
 
-2026-10-14 — ticket 06 (zrobione)
-- Zrobione: naprawy `create_from_json` rozdzielone do commitów `565d29a` i `cfc9df6`, wypchnięte na `origin/main`; ich CI zielone na Neo4j 2026.09 i 5.26 ([run 38631385439](https://github.com/gkeb/node4j/actions/runs/38631385439)). Strony EN/PL zaakceptowane; konfiguracja testów APOC w CI i AGENTS.md; przykłady strony przechodzą na obu wersjach Neo4j; lokalna walidacja: 23 passed, 10 skipped bez bazy; recenzje zgodności, jakości i bezpieczeństwa bez uwag blokujących.
-- Commit ticketu: `2ab4c88`, CI zielone dla obu wersji Neo4j oraz latest Pydantic ([run 38632727782](https://github.com/gkeb/node4j/actions/runs/38632727782)). Wyniki prototypu są w [raporcie](../../eksperymenty/2026-10-14-apoc-export-import.md).
-- Końcowy commit statusu `25238f0` jest wypchnięty, a jego CI zielone na obu wersjach Neo4j ([run 38633082656](https://github.com/gkeb/node4j/actions/runs/38633082656)).
-- Następny ruch: `skill buduj readme-aktualne → ticket 07`.
+2026-10-14 — ticket 07 (zaakceptowany odbiór stron; w-toku do CI)
+- Przykłady i pełny zestaw: 108 passed lokalnie na Neo4j 2026.09 i 5.26; walidacja Ruff bez nowych błędów; recenzje bez uwag.
+- GitHub CI dla commita ticketu niesprawdzone do pushu. Po zgodzie użytkownika wypchnąć commit, sprawdzić CI i przejść do ticketu 08, jeśli oba joby przejdą.
