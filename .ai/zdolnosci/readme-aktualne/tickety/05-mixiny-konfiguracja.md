@@ -1,10 +1,10 @@
 ---
 nr: "05"
 tytul: Strony o mixinach oraz o konfiguracji i logowaniu
-status: do-zrobienia
+status: zrobione
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5", "S11"]
-budowal: null
+budowal: 2026-10-14 — Codex / GPT-6
 github: null
 ---
 
@@ -24,11 +24,11 @@ github: null
 
 ## Kryteria akceptacji
 
-- [ ] S2: przykłady obu stron wykonują się na bazie testowej
-- [ ] S4: obie strony mają odpowiedniki PL z identycznym kodem
-- [ ] S5 (część): mixiny i konfiguracja `NODE4J_*` są w wykonywanych blokach
-- [ ] S11 (część): po stronie, która uruchomiła zadanie TTL, zadanie jest anulowane, także gdy blok rzucił błąd
-- [ ] Walidacja zielona
+- [x] S2: przykłady obu stron wykonują się na bazie testowej
+- [x] S4: obie strony mają odpowiedniki PL z identycznym kodem
+- [x] S5 (część): mixiny i konfiguracja `NODE4J_*` są w wykonywanych blokach
+- [x] S11 (część): po stronie, która uruchomiła zadanie TTL, zadanie jest anulowane, także gdy blok rzucił błąd
+- [x] Walidacja zielona
 
 ## Poza zakresem
 
@@ -38,4 +38,4 @@ github: null
 
 - S5 kończy ticket 08, a S11 ticket 07.
 - Decyzja z mapy (2026-10-13): osobna fikstura anuluje zadanie TTL w teardownie.
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — obie strony EN i PL — uwagi
+- Akceptacja wyglądu: 2026-10-14 — użytkownik — obie strony EN i PL — bez uwag

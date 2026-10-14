@@ -504,7 +504,11 @@ async def _restore_database_snapshot(db, baseline: DatabaseSnapshot) -> None:
 
 
 async def _run_page_blocks(
-    db, path: Path, blocks: list[CodeBlock], tmp_path: Path
+    db,
+    path: Path,
+    blocks: list[CodeBlock],
+    tmp_path: Path,
+    cleanup_ttl_job=None,
 ) -> subprocess.CompletedProcess[str]:
     baseline = await _database_snapshot(db, require_unique_uids=True)
     runner_path = tmp_path / "run_documentation_examples.py"
@@ -513,14 +517,34 @@ async def _run_page_blocks(
         return await asyncio.to_thread(
             subprocess.run,
             [sys.executable, str(runner_path)],
-            cwd=ROOT,
+            cwd=tmp_path,
             capture_output=True,
             text=True,
             check=False,
             timeout=120,
         )
     finally:
-        await _restore_database_snapshot(db, baseline)
+        try:
+            if cleanup_ttl_job is not None:
+                await cleanup_ttl_job()
+        finally:
+            await _restore_database_snapshot(db, baseline)
+
+
+@pytest.fixture
+async def cleanup_ttl_job(db):
+    async def cancel_and_check():
+        await db.run(
+            "CALL apoc.periodic.cancel($job_name)",
+            {"job_name": "ttl_cleanup_job"},
+        )
+        jobs = await db.run("CALL apoc.periodic.list()")
+        assert not any(job["name"] == "ttl_cleanup_job" for job in jobs)
+
+    try:
+        yield cancel_and_check
+    finally:
+        await cancel_and_check()
 
 
 def test_s1_readme_is_a_clear_entry_point():
@@ -760,6 +784,8 @@ def test_s4_english_and_polish_pages_are_mirrored():
     assert {
         "bulk-operations-and-aggregations.md",
         "transactions.md",
+        "mixins.md",
+        "configuration-and-logging.md",
     } <= set(english)
 
     for key, english_path in english.items():
@@ -894,6 +920,34 @@ def test_s5_transactions_are_in_executable_examples():
     assert 'filters={"label": rollback_label}' in source
 
 
+def test_s5_mixins_and_configuration_are_in_executable_examples():
+    page_paths = [
+        ROOT / "docs" / "en" / "mixins.md",
+        ROOT / "docs" / "en" / "configuration-and-logging.md",
+    ]
+    executable_sources = []
+    for path in page_paths:
+        _, page = _read_page(path)
+        executable_sources.extend(
+            block.source for block in _python_blocks(page) if block.skip_reason is None
+        )
+    source = "\n".join(executable_sources)
+
+    for method in (
+        "set_expiry",
+        "save_with_expiry",
+        "setup_ttl_infrastructure",
+        "soft_delete",
+        "restore",
+        "setup_soft_delete_manager",
+    ):
+        assert re.search(rf"\.{method}\s*\(", source), method
+
+    assert ".all_objects" in source
+    for variable in ("NODE4J_URI", "NODE4J_USER", "NODE4J_PASSWORD"):
+        assert variable in source
+
+
 def test_s7_documentation_does_not_promise_unimplemented_features():
     for path in _all_pages():
         source, _ = _read_page(path)
@@ -953,7 +1007,9 @@ def test_s11_full_database_clear_detector_rejects_a_bad_example():
     _english_pages(),
     ids=lambda path: path.relative_to(ROOT).as_posix(),
 )
-async def test_s2_english_documentation_examples_execute(db, tmp_path, path, request):
+async def test_s2_english_documentation_examples_execute(
+    db, tmp_path, path, request, cleanup_ttl_job
+):
     _, page = _read_page(path)
     blocks = _python_blocks(page)
     executable = [block for block in blocks if block.skip_reason is None]
@@ -966,7 +1022,9 @@ async def test_s2_english_documentation_examples_execute(db, tmp_path, path, req
         _report_skipped_blocks(path, skipped, request)
         return
 
-    result = await _run_page_blocks(db, path, blocks, tmp_path)
+    result = await _run_page_blocks(
+        db, path, blocks, tmp_path, cleanup_ttl_job=cleanup_ttl_job
+    )
     assert result.returncode == 0, (
         f"{path.name} documentation example failed:\n"
         f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
@@ -974,7 +1032,9 @@ async def test_s2_english_documentation_examples_execute(db, tmp_path, path, req
     _report_skipped_blocks(path, skipped, request)
 
 
-async def test_s11_page_state_is_restored_after_an_example_error(db, tmp_path):
+async def test_s11_page_state_is_restored_after_an_example_error(
+    db, tmp_path, cleanup_ttl_job
+):
     suffix = uuid4().hex
     baseline_marker = f"baseline_{suffix}"
     removed_marker = f"removed_{suffix}"
@@ -1001,9 +1061,11 @@ async def test_s11_page_state_is_restored_after_an_example_error(db, tmp_path):
 import asyncio
 
 from node4j.db import connection
+from node4j.mixins import TTLMixin
 
 
 async def main():
+    await TTLMixin.setup_ttl_infrastructure()
     await connection.run(
         "MATCH (node:DocsBaseline {{marker: $marker}}) "
         "SET node.value = 'changed' SET node:DocsChanged",
@@ -1032,7 +1094,11 @@ asyncio.run(main())
 '''
         block = CodeBlock(1, "python", source, None)
         result = await _run_page_blocks(
-            db, ROOT / "docs" / "en" / "failing-example.md", [block], tmp_path
+            db,
+            ROOT / "docs" / "en" / "failing-example.md",
+            [block],
+            tmp_path,
+            cleanup_ttl_job=cleanup_ttl_job,
         )
 
         assert result.returncode != 0

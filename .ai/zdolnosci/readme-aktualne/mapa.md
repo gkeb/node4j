@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 05
+skill buduj readme-aktualne → ticket 06
 
 ## Otwarte pytania
 
@@ -51,4 +51,4 @@ skill buduj readme-aktualne → ticket 05
 
 ## Stan sesji
 
-Brak przerwanej sesji. CI run 38613161228 zielone dla commita 23d3a6f.
+Brak przerwanej sesji. Ticket 05 jest lokalnie gotowy do pushu; CI niesprawdzone. CI run 38613161228 zielone dla commita 23d3a6f.

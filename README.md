@@ -73,3 +73,5 @@ if __name__ == "__main__":
 - [Relationships](docs/en/relationships.md)
 - [Bulk operations and aggregations](docs/en/bulk-operations-and-aggregations.md)
 - [Transactions](docs/en/transactions.md)
+- [Mixins](docs/en/mixins.md)
+- [Configuration and logging](docs/en/configuration-and-logging.md)
