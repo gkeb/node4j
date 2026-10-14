@@ -51,4 +51,4 @@ skill buduj readme-aktualne → ticket 05
 
 ## Stan sesji
 
-Brak przerwanej sesji. CI niesprawdzone — commit ticketu 04 niewypchnięty.
+Brak przerwanej sesji. CI run 38613161228 zielone dla commita 23d3a6f.
