@@ -51,4 +51,4 @@ skill buduj readme-aktualne → ticket 06
 
 ## Stan sesji
 
-Brak przerwanej sesji. Ticket 05 jest lokalnie gotowy do pushu; CI niesprawdzone. CI run 38613161228 zielone dla commita 23d3a6f.
+Brak przerwanej sesji. CI run 38618402192 zielone dla commita 1ec3893.
