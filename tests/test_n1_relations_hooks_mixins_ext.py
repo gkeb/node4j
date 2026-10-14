@@ -430,7 +430,7 @@ async def test_N1_apoc_create_from_json_passes_params_to_periodic_iterate(monkey
         "url": "file:///nodes.json",
         "path": "$.nodes[*]",
         "cypher_to_execute": (
-            "CREATE (n:N1ApocNode) SET n = row, n.uid = apoc.create.uuid()"
+            "CREATE (n:N1ApocNode) SET n = row, n.uid = randomUUID()"
         ),
         "batch_size": 1,
     }

@@ -156,9 +156,7 @@ class ApocManager:
             },
         )
         labels = ":" + ":".join(self.model.labels())
-        cypher_to_execute = (
-            f"CREATE (n{labels}) SET n = row, n.uid = apoc.create.uuid()"
-        )
+        cypher_to_execute = f"CREATE (n{labels}) SET n = row, n.uid = randomUUID()"
 
         query = """
         CALL apoc.periodic.iterate(

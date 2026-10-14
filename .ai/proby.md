@@ -1,3 +1,12 @@
+## 2026-10-14 — `apoc.create.uuid()` w importerze APOC [readme-aktualne]
+
+- Status: nie-dziala
+- Hasła: APOC, `create_from_json`, `uid`, UUID, `randomUUID`, ADR 0003
+- Warunki: Neo4j 2026.09.0 z APOC; `create_from_json` wykonuje tworzenie węzłów przez `apoc.periodic.iterate`.
+- Wynik: zapytanie z `apoc.create.uuid()` kończyło się `Unknown function`; Cypher `randomUUID()` przechodzi na Neo4j 2026.09 i 5.26.
+- Zamiast tego: w `create_from_json` używaj `randomUUID()` po stronie Neo4j zgodnie z wyjątkiem w [ADR 0003](decyzje/0003-tozsamosc-wezla-uid.md).
+- Wróć, gdy: `randomUUID()` przestanie działać w obsługiwanej wersji Neo4j albo pojawi się potrzeba zmiany przepływu importu. [Raport](eksperymenty/2026-10-14-apoc-export-import.md)
+
 ## 2026-10-12 — Wywołania triggerów APOC z domyślnej bazy [aktualizacja-zaleznosci]
 
 - Status: nierozwiazane

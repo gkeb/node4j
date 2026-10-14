@@ -6,7 +6,7 @@
 
 ## Pojęcia
 
-- **Węzeł (model węzła)** — klasa Pydantic dziedzicząca po `Node`, odwzorowana na węzły Neo4j. _Zawsze:_ ma pole `uid` (UUID generowany po stronie klienta). Źródło: `node4j/nodes.py` → `Node`.
+- **Węzeł (model węzła)** — klasa Pydantic dziedzicząca po `Node`, odwzorowana na węzły Neo4j. _Zawsze:_ ma pole `uid`; instancja modelu dostaje UUID po stronie klienta, a surowy węzeł utworzony przez `ApocManager.create_from_json` dostaje go po stronie Neo4j. Źródło: `node4j/nodes.py` → `Node`; wyjątek: [ADR 0003](decyzje/0003-tozsamosc-wezla-uid.md).
 - **Etykieta** — etykieta Neo4j węzła. _Zawsze:_ zbiór = nazwa klasy + etykiety wszystkich przodków (bez `Node`), posortowany; zapytanie przez model rodzica znajduje też węzły podklas. Źródło: `node4j/nodes.py` → `NodeBase.__new__`; ADR 0002.
 - **Rejestr modeli** — `node_registry`: nazwa klasy → klasa modelu, wypełniany przez metaklasę. Relacje wskazują cel po nazwie i rozwiązują go w rejestrze dopiero przy zapytaniu. _Zawsze:_ klucz to nazwa klasy, nie moduł. Źródło: `node4j/registry.py`; ADR 0002.
 - **Menedżer (`.q`)** — `NodeManager` przypięty do modelu; wszystkie operacje na bazie dla tego modelu (CRUD, bulk, `count`, `aggregate`, `apply_schema`). Źródło: `node4j/manager.py`.

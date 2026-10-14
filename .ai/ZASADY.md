@@ -72,6 +72,14 @@
 - Dlaczego: sprzątanie po oczekiwanej etykiecie zostawiało dane, gdy test wykrywał jej brak (przegląd, 2026-10-12, dwa wystąpienia); wzór: `tests/test_n1_manager_and_filters.py` → fikstura `n1_scope`
 - Wyjątki: test przykładów z dokumentacji użytkownika (przykłady to kod czytelnika i nie niosą `scope`) sprząta po różnicy stanu. Przed stroną zapisuje istniejące węzły, indeksy, ograniczenia i projekcje GDS, a po niej, także po błędzie, usuwa wszystko spoza tego zbioru i anuluje zadanie TTL. Warunek: testy nie biegną równolegle na tej samej bazie — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md), 2026-10-13
 
+### Z06. Węzły tworzone z modeli dostają `uid` po stronie klienta; wyjątek dotyczy wyłącznie importera APOC
+
+- Siła: twarda
+- Egzekwowanie: automat — test `test_N1_apoc_create_from_json_passes_params_to_periodic_iterate` i wykonujący przykład test dokumentacji w pytest/CI; przegląd pilnuje zakresu wyjątku
+- Status: obowiązuje
+- Dlaczego: [ADR 0003](decyzje/0003-tozsamosc-wezla-uid.md)
+- Wyjątki: `node4j/ext/apoc.py` → `ApocManager.create_from_json` nadaje UID po stronie Neo4j przez Cypher `randomUUID()`.
+
 ## Niefunkcjonalne
 
 <!-- Bezpieczeństwo, wydajność, dostępność, prywatność — tylko jeśli obowiązują w całym projekcie. -->
