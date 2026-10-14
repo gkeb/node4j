@@ -11,18 +11,19 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 06
+dokończ ticket 06 po rozdzieleniu napraw `create_from_json`: CI napraw jest zielone na Neo4j 2026.09 i 5.26; przejrzyj i zacommituj dokumentację, potem sprawdź CI ticketu
 
 ## Otwarte pytania
 
 - [x] [badanie] Czy nazwa `node4j` jest wolna w PyPI (pod planowaną publikację) — na 2026-10-12 tak (404 w JSON i Simple API na PyPI i TestPyPI). Nie jest jednak rezerwowana do pierwszego uploadu, a listy nazw zabronionych i reguły „too similar” nie da się sprawdzić bez próbnego uploadu (np. na TestPyPI przy wydaniu) — [badanie](../../badania/2026-10-12-nazwa-node4j-pypi.md); nie blokuje spec
 - [x] [grill] Lista stron w `docs/` i kolejność czytania — ustalone przy krojeniu 2026-10-13: README → modele i schemat → zapytania i filtry → relacje → operacje masowe i agregacje → transakcje → mixiny → konfiguracja i logowanie → APOC → GDS → znane ograniczenia (tickety 01–08)
 - [x] [badanie] Jakie URL-e/ścieżki `apoc.load.json` obsługuje i gdzie plik musi być dostępny — po stronie aplikacji czy serwera Neo4j? — plik czyta i zapisuje **serwer**. Import i eksport plików są domyślnie wyłączone (`apoc.import.file.enabled`, `apoc.export.file.enabled` = `false`, ustawiane w `apoc.conf` albo w Dockerze przez `NEO4J_apoc_*`). `file:///x.json` jest rozwiązywane względem katalogu import serwera, a ścieżka absolutna spoza niego nie działa. HTTP(S) działa bez tych ustawień. `apoc.export.json.all` pisze do katalogu import. Obecny CI dostałby błąd „not enabled” — [badanie](../../badania/2026-10-13-apoc-load-json-sciezki.md); źródło: druga opinia Codex / GPT-6
-- [ ] [prototyp] Jak plik wejściowy dla przykładu `create_from_json` trafia do katalogu import serwera? Założenie „`Export.to_json` zapisze, `create_from_json` wczyta” jest niepewne: `apoc.export.json.all` eksportuje całą bazę (także dane innych testów) jako rekordy węzłów i relacji z zagnieżdżoną mapą `properties`, a `create_from_json` robi `SET n = row`, co dla zagnieżdżonych map może się nie udać. Do sprawdzenia: eksport z `json_path` (np. `$.properties`) albo fikstura, która zapisuje płaski plik przez procedurę eksportu zapytania — nie blokuje spec (to sposób budowy testu, nie zachowanie dokumentacji); do sprawdzenia przy budowie na bazie testowej
+- [x] [prototyp] Jak plik wejściowy dla przykładu `create_from_json` trafia do katalogu import serwera? `APOC.Export.to_json` zapisuje plik na serwerze w katalogu import, a `apoc.load.json` odczytuje go jako rekord z kluczami `id`, `labels`, `properties`, `type`. Prototyp przed poprawką zgłosił brak parametrów `url` i `path`; poprawkę z testem regresji zawiera osobny commit `565d29a`, a fałszywe założenie zapisano w [lekcjach](../../lekcje.md). [Raport prototypu](../../eksperymenty/2026-10-14-apoc-export-import.md)
 - [x] [badanie] Jakie wersje Neo4j i GDS można opisać jako zgodne, skoro CI uruchamia tylko APOC? — według dokumentacji GDS: Neo4j 5.26 ↔ GDS 2.13, Neo4j 2026.09 ↔ GDS 2026.09; plugin `graph-data-science` (Community darmowe, do 4 rdzeni). Wywołania z `node4j/ext/gds.py` pasują do sygnatur w obu wersjach. Niesprawdzone uruchomieniem — CI nie stawia GDS — [badanie](../../badania/2026-10-13-gds-zgodnosc.md); nie blokuje spec; źródło: druga opinia Codex / GPT-6
 
 ## Decyzje
 
+- 2026-10-14 — importer `ApocManager.create_from_json` tworzy `uid` po stronie Neo4j przez `randomUUID()` jako ograniczony wyjątek od generowania UID po stronie klienta — [ADR 0003](../../decyzje/0003-tozsamosc-wezla-uid.md)
 - 2026-10-12 — Zakres: przepisanie dokumentacji od nowa (nowa struktura), a nie tylko poprawki istniejącego README — decyzja użytkownika; zastępuje otwarte pytanie o zakres (poprawność / brakujące API)
 - 2026-10-12 — Forma: krótkie README (czym jest, instalacja, szybki start, linki) + strony Markdown w `docs/`, czytane na GitHubie; bez generatora stron i hostingu — zero nowych zależności, pakiet i tak nie jest publikowany (P-17 otwarte); generowana strona (MkDocs) odłożona (`proby.md` 2026-10-12)
 - 2026-10-12 — Czytelnik: programista znający Pythona, async i podstawy Neo4j, który używa biblioteki we własnej aplikacji; dokumentacja prowadzi od instalacji po rozszerzenia, a pułapki (daty jako tekst, nieznany sufiks filtra = równość) opisuje wprost. Strona dla kontrybutorów jest poza zakresem — ta wiedza zostaje w AGENTS.md (rozstrzyga P-01)
@@ -51,4 +52,9 @@ skill buduj readme-aktualne → ticket 06
 
 ## Stan sesji
 
-Brak przerwanej sesji. CI run 38618402192 zielone dla commita 1ec3893.
+2026-10-14 — ticket 06 (w toku)
+- Zrobione: naprawy `create_from_json` rozdzielone do commitów `565d29a` i `cfc9df6`, wypchnięte na `origin/main`; recenzje zgodności i jakości napraw bez uwag blokujących; ostrzeżenie SSRF z recenzji bezpieczeństwa jest na obu stronach APOC. Strony EN/PL zaakceptowane; konfiguracja testów APOC w CI i AGENTS.md; S2 strony APOC przechodzi na Neo4j 2026.09 + APOC; lokalna walidacja zielona.
+- Otwarte: CI napraw dla `cfc9df6` jest zielone na obu wersjach Neo4j ([run 38631385439](https://github.com/gkeb/node4j/actions/runs/38631385439)); trzeba jeszcze uruchomić CI dla zmian ticketu na obu wersjach Neo4j.
+- Do zrobienia: po zielonym CI napraw zacommitować dokumentację, sprawdzić CI ticketu i zaktualizować status ticketu. Wyniki prototypu są w [raporcie](../../eksperymenty/2026-10-14-apoc-export-import.md).
+- Niezacommitowane: tak — `.ai/lekcje.md`, `.ai/zdolnosci/readme-aktualne/tickety/06-apoc.md`, `.ai/zdolnosci/readme-aktualne/mapa.md`, `.github/workflows/ci.yml`, `AGENTS.md`, `README.md`, `README_PL.md`, `tests/test_documentation.py`, `docs/en/apoc-extensions.md`, `docs/pl/apoc-extensions.md`.
+- Następny ruch: niezależny przegląd diffu ticketu 06, commit, push i CI.

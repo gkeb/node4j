@@ -22,6 +22,8 @@ jobs:
         env:
           NEO4J_AUTH: neo4j/test-password-123
           NEO4J_PLUGINS: '["apoc"]'
+          NEO4J_apoc_import_file_enabled: "true"
+          NEO4J_apoc_export_file_enabled: "true"
         ports:
           - 7687:7687
         options: >-
@@ -108,6 +110,8 @@ jobs:
         env:
           NEO4J_AUTH: neo4j/test-password-123
           NEO4J_PLUGINS: '["apoc"]'
+          NEO4J_apoc_import_file_enabled: "true"
+          NEO4J_apoc_export_file_enabled: "true"
         ports:
           - 7687:7687
         options: >-

@@ -75,3 +75,4 @@ if __name__ == "__main__":
 - [Transakcje](docs/pl/transactions.md)
 - [Mixiny](docs/pl/mixins.md)
 - [Konfiguracja i logowanie](docs/pl/configuration-and-logging.md)
+- [Rozszerzenia APOC](docs/pl/apoc-extensions.md)

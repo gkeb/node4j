@@ -782,6 +782,7 @@ def test_s4_english_and_polish_pages_are_mirrored():
     polish = {_page_key(path, "pl"): path for path in _polish_pages()}
     assert set(english) == set(polish)
     assert {
+        "apoc-extensions.md",
         "bulk-operations-and-aggregations.md",
         "transactions.md",
         "mixins.md",
@@ -800,9 +801,64 @@ def test_s4_english_and_polish_pages_are_mirrored():
         assert polish[key].resolve() in {
             target for target, _ in _relative_links(english_path)
         }, f"{english_path.name} needs a Polish language link"
+        if english_path.name == "apoc-extensions.md":
+            assert (ROOT / "README.md").resolve() in {
+                target for target, _ in _relative_links(english_path)
+            }, f"{english_path.name} needs a README link"
         assert english_path.resolve() in {
             target for target, _ in _relative_links(polish[key])
         }, f"{polish[key].name} needs an English language link"
+        if polish[key].name == "apoc-extensions.md":
+            assert (ROOT / "README_PL.md").resolve() in {
+                target for target, _ in _relative_links(polish[key])
+            }, f"{polish[key].name} needs a Polish README link"
+
+
+def test_s9_apoc_files_are_read_and_written_by_the_neo4j_server():
+    english_path = ROOT / "docs" / "en" / "apoc-extensions.md"
+    polish_path = ROOT / "docs" / "pl" / "apoc-extensions.md"
+    english, _ = _read_page(english_path)
+    polish, _ = _read_page(polish_path)
+
+    for source in (english, polish):
+        assert "NEO4J_apoc_import_file_enabled=true" in source
+        assert "NEO4J_apoc_export_file_enabled=true" in source
+        assert "file:///" in source
+        assert "apoc.import.file.enabled=true" in source
+        assert "Import from files not enabled" in source
+
+    assert "Neo4j server" in english
+    assert "serwerze Neo4j" in polish
+    assert (
+        "`file:///people.json` means `people.json` in that server's import directory"
+        in english
+    )
+    assert (
+        "`file:///people.json` oznacza plik `people.json` "
+        "w katalogu import tego serwera" in polish
+    )
+    assert "user-controlled URLs" in english
+    assert "kontrolowanych przez użytkownika" in polish
+    assert "credentials or tokens" in english
+    assert "danych logowania ani tokenów" in polish
+    assert "test database" in english
+    assert "bazie testowej" in polish
+    assert "does not recommend it for production" in english
+    assert "nie zaleca tej metody na produkcji" in polish
+
+
+def test_s9_apoc_file_access_is_enabled_for_local_and_ci_test_databases():
+    agent_instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8-sig")
+    ci_workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+        encoding="utf-8-sig"
+    )
+
+    for setting in (
+        "NEO4J_apoc_import_file_enabled",
+        "NEO4J_apoc_export_file_enabled",
+    ):
+        assert f"-e {setting}=true" in agent_instructions
+        assert ci_workflow.count(f'{setting}: "true"') == 2
 
 
 def test_s5_models_and_queries_methods_are_in_executable_examples():
@@ -946,6 +1002,21 @@ def test_s5_mixins_and_configuration_are_in_executable_examples():
     assert ".all_objects" in source
     for variable in ("NODE4J_URI", "NODE4J_USER", "NODE4J_PASSWORD"):
         assert variable in source
+
+
+def test_s5_apoc_methods_are_in_executable_examples():
+    path = ROOT / "docs" / "en" / "apoc-extensions.md"
+    _, page = _read_page(path)
+    source = "\n".join(
+        block.source for block in _python_blocks(page) if block.skip_reason is None
+    )
+
+    assert "await apoc.version()" in source
+    assert "await apoc.Periodic.iterate(" in source
+    assert "CALL apoc.periodic.iterate(" in source
+    assert "params: {marker: $marker}" in source
+    assert "await apoc.Export.to_json(" in source
+    assert ".apoc.create_from_json(" in source
 
 
 def test_s7_documentation_does_not_promise_unimplemented_features():
