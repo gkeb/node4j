@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-dokończ ticket 06 po rozdzieleniu napraw `create_from_json`: CI napraw jest zielone na Neo4j 2026.09 i 5.26; przejrzyj i zacommituj dokumentację, potem sprawdź CI ticketu
+skill buduj readme-aktualne → ticket 07
 
 ## Otwarte pytania
 
@@ -52,9 +52,8 @@ dokończ ticket 06 po rozdzieleniu napraw `create_from_json`: CI napraw jest zie
 
 ## Stan sesji
 
-2026-10-14 — ticket 06 (w toku)
-- Zrobione: naprawy `create_from_json` rozdzielone do commitów `565d29a` i `cfc9df6`, wypchnięte na `origin/main`; recenzje zgodności i jakości napraw bez uwag blokujących; ostrzeżenie SSRF z recenzji bezpieczeństwa jest na obu stronach APOC. Strony EN/PL zaakceptowane; konfiguracja testów APOC w CI i AGENTS.md; S2 strony APOC przechodzi na Neo4j 2026.09 + APOC; lokalna walidacja zielona.
-- Otwarte: CI napraw dla `cfc9df6` jest zielone na obu wersjach Neo4j ([run 38631385439](https://github.com/gkeb/node4j/actions/runs/38631385439)); trzeba jeszcze uruchomić CI dla zmian ticketu na obu wersjach Neo4j.
-- Do zrobienia: po zielonym CI napraw zacommitować dokumentację, sprawdzić CI ticketu i zaktualizować status ticketu. Wyniki prototypu są w [raporcie](../../eksperymenty/2026-10-14-apoc-export-import.md).
-- Niezacommitowane: tak — `.ai/lekcje.md`, `.ai/zdolnosci/readme-aktualne/tickety/06-apoc.md`, `.ai/zdolnosci/readme-aktualne/mapa.md`, `.github/workflows/ci.yml`, `AGENTS.md`, `README.md`, `README_PL.md`, `tests/test_documentation.py`, `docs/en/apoc-extensions.md`, `docs/pl/apoc-extensions.md`.
-- Następny ruch: niezależny przegląd diffu ticketu 06, commit, push i CI.
+2026-10-14 — ticket 06 (zrobione)
+- Zrobione: naprawy `create_from_json` rozdzielone do commitów `565d29a` i `cfc9df6`, wypchnięte na `origin/main`; ich CI zielone na Neo4j 2026.09 i 5.26 ([run 38631385439](https://github.com/gkeb/node4j/actions/runs/38631385439)). Strony EN/PL zaakceptowane; konfiguracja testów APOC w CI i AGENTS.md; przykłady strony przechodzą na obu wersjach Neo4j; lokalna walidacja: 23 passed, 10 skipped bez bazy; recenzje zgodności, jakości i bezpieczeństwa bez uwag blokujących.
+- Commit ticketu: `2ab4c88`, CI zielone dla obu wersji Neo4j oraz latest Pydantic ([run 38632727782](https://github.com/gkeb/node4j/actions/runs/38632727782)). Wyniki prototypu są w [raporcie](../../eksperymenty/2026-10-14-apoc-export-import.md).
+- Otwarte: wypchnąć osobny commit zamykający ticket i sprawdzić jego CI.
+- Następny ruch: wypchnąć wynik CI ticketu 06, następnie `skill buduj readme-aktualne → ticket 07`.
