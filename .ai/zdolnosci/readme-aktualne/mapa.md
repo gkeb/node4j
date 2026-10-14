@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne → ticket 08
+skill weryfikuj readme-aktualne → runda R2
 
 ## Otwarte pytania
 

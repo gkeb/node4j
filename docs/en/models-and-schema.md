@@ -4,7 +4,9 @@
 
 ## Define a node
 
-Create a class that inherits from `Node` and declare its data as Pydantic fields. Every node gets a `uid` UUID4 by default. The library stores `uid` in Neo4j as text.
+Create a class that inherits from `Node` and declare its data as Pydantic fields. Every node gets a `uid` UUID4 by default. The library stores `uid` in Neo4j as text. Date and datetime fields are also persisted as text; see [Known limitations](known-limitations.md) for the consequences and handling advice.
+
+The global registry is keyed by class name, so model class names must be unique across the application. See [Known limitations](known-limitations.md) for details.
 
 ```python
 from node4j.nodes import Node

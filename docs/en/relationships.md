@@ -4,7 +4,7 @@
 
 ## Declare relationship attributes
 
-Declare a relationship on a `Node` model with `RelationshipProperty`. Its target is the target model's class name, which must be unique in the registry. Direction controls how the relationship is matched: `OUT` points from this model to the target, `IN` points from the target to this model, and `UNDIRECTED` matches either way. A connection made through `UNDIRECTED` still starts at the current node.
+Declare a relationship on a `Node` model with `RelationshipProperty`. Its target is the target model's class name, which must be unique in the registry; see [Known limitations](known-limitations.md) for details. Direction controls how the relationship is matched: `OUT` points from this model to the target, `IN` points from the target to this model, and `UNDIRECTED` matches either way. A connection made through `UNDIRECTED` still starts at the current node.
 
 Use an `Edge` subclass when relationship properties need validation and typed access:
 

@@ -77,3 +77,4 @@ if __name__ == "__main__":
 - [Configuration and logging](docs/en/configuration-and-logging.md)
 - [APOC extensions](docs/en/apoc-extensions.md)
 - [GDS extensions](docs/en/gds-extensions.md)
+- [Known limitations](docs/en/known-limitations.md)

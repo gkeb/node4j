@@ -41,4 +41,6 @@ logging.basicConfig(level=logging.INFO)
 # logging.getLogger("node4j").setLevel(logging.DEBUG)
 ```
 
-DEBUG records and ERROR records for failed queries include Cypher parameters. They can contain sensitive data, so enable DEBUG only when those values are safe to write to your logs and configure error log handlers with the same care.
+`connection.queries` also retains every query and its parameters for the lifetime of the connection. See [Known limitations](known-limitations.md) for its memory impact.
+
+DEBUG records and ERROR records for failed queries include Cypher parameters. They can contain sensitive data, so enable DEBUG only when those values are safe to write to your logs and configure error log handlers with the same care. See [Known limitations](known-limitations.md) for logging precautions.

@@ -1,8 +1,10 @@
 import asyncio
+import io
 import json
 import re
 import subprocess
 import sys
+import tokenize
 import warnings
 from collections import Counter
 from dataclasses import dataclass
@@ -195,6 +197,22 @@ def _has_full_database_clear(source: str) -> bool:
 
 def _python_blocks(page: MarkdownPage) -> list[CodeBlock]:
     return [block for block in page.blocks if block.language == "python"]
+
+
+def _remove_python_comments(source: str) -> str:
+    lines = source.splitlines(keepends=True)
+    tokens = tokenize.generate_tokens(io.StringIO(source).readline)
+    for token in tokens:
+        if token.type != tokenize.COMMENT:
+            continue
+        line_number, start_column = token.start
+        _, end_column = token.end
+        line = lines[line_number - 1]
+        comment = line[start_column:end_column]
+        lines[line_number - 1] = (
+            line[:start_column] + " " * len(comment) + line[end_column:]
+        )
+    return "".join(lines)
 
 
 def _skip_report(path: Path, blocks: list[CodeBlock]) -> str:
@@ -1090,21 +1108,201 @@ def test_s5_gds_methods_are_in_executable_examples():
         assert method in source, method
 
 
+def test_s5_complete_coverage_inventory_is_in_executable_examples():
+    source = "\n".join(
+        _remove_python_comments(block.source)
+        for path in _english_pages()
+        for block in _python_blocks(_read_page(path)[1])
+        if block.skip_reason is None
+    )
+
+    manager_methods = (
+        "apply_schema",
+        "create",
+        "match_one",
+        "match_all",
+        "update",
+        "delete",
+        "get_or_create",
+        "update_or_create",
+        "count",
+        "aggregate",
+        "bulk_create",
+        "bulk_update",
+        "update_relationship",
+    )
+    for method in manager_methods:
+        assert re.search(rf"\.q\.{method}\s*\(", source), method
+
+    for public_api in (
+        "RelationshipProperty",
+        "RelationshipDirection.IN",
+        "RelationshipDirection.OUT",
+        "RelationshipDirection.UNDIRECTED",
+        ".connect(",
+        ".disconnect(",
+        "await author.books",
+        "prefetch={",
+        "Q(",
+        "async def pre_save(",
+        "async def post_save(",
+        "async def pre_delete(",
+        "async def post_delete(",
+        "connection.transaction()",
+        "@connection.atomic()",
+        "set_expiry(",
+        "save_with_expiry(",
+        "setup_ttl_infrastructure(",
+        "soft_delete(",
+        "restore(",
+        "setup_soft_delete_manager(",
+        ".all_objects",
+        "NODE4J_URI",
+        "NODE4J_USER",
+        "NODE4J_PASSWORD",
+        "await apoc.version()",
+        "apoc.Periodic.iterate(",
+        "apoc.Export.to_json(",
+        ".apoc.create_from_json(",
+        "gds.Graph.project(",
+        "gds.Algo.run(",
+        "gds.Algo.mutate(",
+        "gds.Graph.drop(",
+    ):
+        assert public_api in source, public_api
+
+    for operator in (
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "in",
+        "contains",
+        "startswith",
+        "endswith",
+        "ne",
+    ):
+        assert re.search(rf"__{operator}\s*=", source), operator
+
+
+def test_s5_coverage_ignores_commented_out_calls():
+    source = _remove_python_comments(
+        "# await GuidePerson.q.create(name='not executed')\n"
+        "await GuidePerson.q.match_all()  # .q.delete()\n"
+    )
+
+    assert ".q.create(" not in source
+    assert ".q.match_all(" in source
+    assert ".q.delete(" not in source
+
+
 def test_s7_documentation_does_not_promise_unimplemented_features():
+    csv_import_pattern = re.compile(
+        r"\bconnect_from_csv\b|\bcsv\s+import\w*\b|"
+        r"\bimport\w*(?:\s+(?:from|z))?\s+csv\b",
+        flags=re.IGNORECASE,
+    )
+    for phrase in (
+        "connect_from_csv",
+        "CSV import",
+        "CSV imports",
+        "import from CSV",
+        "import CSV",
+        "importing CSV",
+        "importing from CSV",
+        "import z CSV",
+        "importowanie CSV",
+        "importowanie z CSV",
+    ):
+        assert csv_import_pattern.search(phrase), phrase
+
+    trigger_pattern = re.compile(
+        r"\b(?:apoc\.trigger|trigger\w*)\b",
+        flags=re.IGNORECASE,
+    )
+    for phrase in (
+        "APOC trigger",
+        "triggers",
+        "triggery",
+        "triggerów",
+        "triggerami",
+        "triggerach",
+    ):
+        assert trigger_pattern.search(phrase), phrase
+
     for path in _all_pages():
         source, _ = _read_page(path)
-        assert not re.search(
-            r"\bconnect_from_csv\b|\bimport\s+from\s+CSV\b",
-            source,
-            flags=re.IGNORECASE,
-        ), path.name
-        mentions_triggers = re.search(
-            r"\b(?:apoc\.trigger|triggers?|triggery|triggerów)\b",
-            source,
-            flags=re.IGNORECASE,
-        )
+        assert not csv_import_pattern.search(source), path.name
+        mentions_triggers = trigger_pattern.search(source)
         if mentions_triggers:
             assert path.stem in {"known-limitations", "znane-ograniczenia"}
+
+
+def test_s6_known_limitations_are_explained_in_both_languages():
+    expected_phrases = {
+        "en": (
+            "triggers",
+            "default database",
+            "datetime values",
+            "uid",
+            "stored as text",
+            "unknown suffix",
+            "equality",
+            "registry",
+            "class name",
+            "connection.queries",
+            "grows",
+            "DEBUG",
+            "ERROR",
+            "parameters",
+            "What to do:",
+        ),
+        "pl": (
+            "triggerami",
+            "domyślnej bazie",
+            "daty",
+            "uid",
+            "jako tekst",
+            "nieznany sufiks",
+            "równość",
+            "rejestr",
+            "nazwą klasy",
+            "connection.queries",
+            "rośnie",
+            "DEBUG",
+            "ERROR",
+            "parametry",
+            "Co zrobić:",
+        ),
+    }
+    for language, phrases in expected_phrases.items():
+        stem = "known-limitations"
+        source, _ = _read_page(ROOT / "docs" / language / f"{stem}.md")
+        normalized = source.lower()
+        for phrase in phrases:
+            assert phrase.lower() in normalized, (language, phrase)
+        action_label = "What to do:" if language == "en" else "Co zrobić:"
+        assert source.count(action_label) == 6
+
+    linked_pages = {
+        "en": (
+            ("README.md", "docs/en/known-limitations.md"),
+            ("docs/en/models-and-schema.md", "known-limitations.md"),
+            ("docs/en/queries-and-filters.md", "known-limitations.md"),
+            ("docs/en/configuration-and-logging.md", "known-limitations.md"),
+        ),
+        "pl": (
+            ("README_PL.md", "docs/pl/known-limitations.md"),
+            ("docs/pl/models-and-schema.md", "known-limitations.md"),
+            ("docs/pl/queries-and-filters.md", "known-limitations.md"),
+            ("docs/pl/configuration-and-logging.md", "known-limitations.md"),
+        ),
+    }
+    for language_pages in linked_pages.values():
+        for page_name, target in language_pages:
+            page_path = ROOT / page_name
+            _, page = _read_page(page_path)
+            assert target in page.links, (page_name, target)
 
 
 def test_s8_configuration_uses_only_builtin_settings():

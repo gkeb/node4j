@@ -1,10 +1,10 @@
 ---
 nr: "08"
 tytul: Znane ograniczenia, pełne pokrycie i zamknięcie rozjazdów
-status: do-zrobienia
+status: zrobione
 blokowany-przez: ["02", "03", "04", "05", "06", "07"]
 scenariusze: ["S6", "S5", "S7"]
-budowal: null
+budowal: 2026-10-15 — Codex / GPT-6
 github: null
 ---
 
@@ -26,11 +26,11 @@ github: null
 
 ## Kryteria akceptacji
 
-- [ ] S6: strona ograniczeń zawiera wszystkie pozycje ze specu (test treści) i przechodzi przegląd w odbiorze
-- [ ] S5: test akceptacyjny przechodzi z pełnym wykazem
-- [ ] S7: test przechodzi także ze stroną ograniczeń, bo triggery są tylko tam
-- [ ] Rozjazdy README w `zrodla.md` zamknięte. Tag `v0.2.3` i wersja w metadanych zostają otwarte, bo są poza zakresem
-- [ ] Walidacja zielona
+- [x] S6: strona ograniczeń zawiera wszystkie pozycje ze specu (test treści) i przechodzi przegląd w odbiorze
+- [x] S5: test akceptacyjny przechodzi z pełnym wykazem
+- [x] S7: test przechodzi także ze stroną ograniczeń, bo triggery są tylko tam
+- [x] Rozjazdy README w `zrodla.md` zamknięte. Tag `v0.2.3` i wersja w metadanych zostają otwarte, bo są poza zakresem
+- [x] Walidacja zielona
 
 ## Poza zakresem
 
@@ -39,4 +39,5 @@ github: null
 ## Notatki
 
 - Ticket kończy S5 i S6.
-- Akceptacja wyglądu: RRRR-MM-DD — użytkownik — strona ograniczeń EN i PL plus przejście całej dokumentacji od README — uwagi
+- Akceptacja wyglądu: 2026-10-15 — użytkownik — strona ograniczeń EN i PL plus przejście całej dokumentacji od README — zaakceptowano
+- Walidacja lokalna: pytest 42 passed, 70 skipped (testy bazy Neo4j bez dostępnej bazy); Ruff bez nowych błędów, 108 znanych.

@@ -79,7 +79,7 @@ Użyj `Q(pole=wartość)` do równości i łącz warunki operatorami `&` (AND), 
 | `endswith` | tekst kończy się wartością (`ENDS WITH`) |
 | `ne` | nierówność (`<>`) |
 
-Nieznany sufiks po cichu zamienia warunek na równość. Literówka w sufiksie może więc dać inny wynik, niż oczekujesz.
+Nieznany sufiks po cichu zamienia warunek na równość. Literówka w sufiksie może więc dać inny wynik, niż oczekujesz. Zobacz [Znane ograniczenia](known-limitations.md), gdzie opisano sposób postępowania.
 
 ```python
 from node4j.query import Q

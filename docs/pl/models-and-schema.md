@@ -4,7 +4,9 @@
 
 ## Definiowanie węzła
 
-Utwórz klasę dziedziczącą po `Node` i zadeklaruj dane jako pola Pydantic. Każdy węzeł dostaje domyślnie `uid` typu UUID4. Biblioteka zapisuje `uid` w Neo4j jako tekst.
+Utwórz klasę dziedziczącą po `Node` i zadeklaruj dane jako pola Pydantic. Każdy węzeł dostaje domyślnie `uid` typu UUID4. Biblioteka zapisuje `uid` w Neo4j jako tekst. Pola daty i czasu także są zapisywane jako tekst; zobacz [Znane ograniczenia](known-limitations.md), gdzie opisano skutki i sposób postępowania.
+
+Globalny rejestr jest kluczowany nazwą klasy, dlatego nazwy klas modeli muszą być unikalne w całej aplikacji. Szczegóły opisują [Znane ograniczenia](known-limitations.md).
 
 ```python
 from node4j.nodes import Node

@@ -4,7 +4,7 @@
 
 ## Deklarowanie atrybutów relacji
 
-Zadeklaruj relację na modelu `Node` za pomocą `RelationshipProperty`. Cel wskazuje nazwa klasy modelu docelowego, która musi być unikalna w rejestrze. Kierunek określa sposób wyszukiwania relacji: `OUT` prowadzi od tego modelu do celu, `IN` prowadzi od celu do tego modelu, a `UNDIRECTED` dopasowuje ją w obu kierunkach. Połączenie utworzone przez `UNDIRECTED` nadal zaczyna się w bieżącym węźle.
+Zadeklaruj relację na modelu `Node` za pomocą `RelationshipProperty`. Cel wskazuje nazwa klasy modelu docelowego, która musi być unikalna w rejestrze; szczegóły opisują [Znane ograniczenia](known-limitations.md). Kierunek określa sposób wyszukiwania relacji: `OUT` prowadzi od tego modelu do celu, `IN` prowadzi od celu do tego modelu, a `UNDIRECTED` dopasowuje ją w obu kierunkach. Połączenie utworzone przez `UNDIRECTED` nadal zaczyna się w bieżącym węźle.
 
 Użyj podklasy `Edge`, gdy właściwości relacji mają być walidowane i dostępne z typami:
 

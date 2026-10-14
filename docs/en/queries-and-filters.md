@@ -79,7 +79,7 @@ Use `Q(field=value)` for equality and join conditions with `&` (AND), `|` (OR), 
 | `endswith` | string ends with a value (`ENDS WITH`) |
 | `ne` | not equal (`<>`) |
 
-An unknown suffix silently falls back to equality. A misspelled suffix can therefore produce a different result than intended.
+An unknown suffix silently falls back to equality. A misspelled suffix can therefore produce a different result than intended. See [Known limitations](known-limitations.md) for a safe response.
 
 ```python
 from node4j.query import Q

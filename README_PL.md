@@ -77,3 +77,4 @@ if __name__ == "__main__":
 - [Konfiguracja i logowanie](docs/pl/configuration-and-logging.md)
 - [Rozszerzenia APOC](docs/pl/apoc-extensions.md)
 - [Rozszerzenia GDS](docs/pl/gds-extensions.md)
+- [Znane ograniczenia](docs/pl/known-limitations.md)

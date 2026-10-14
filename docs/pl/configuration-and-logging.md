@@ -41,4 +41,6 @@ logging.basicConfig(level=logging.INFO)
 # logging.getLogger("node4j").setLevel(logging.DEBUG)
 ```
 
-Logi DEBUG oraz wpisy ERROR dla nieudanych zapytań zawierają parametry Cyphera. Mogą zawierać dane wrażliwe, dlatego włączaj DEBUG tylko wtedy, gdy te wartości mogą trafić do logów, a handlery logów błędów skonfiguruj z taką samą ostrożnością.
+`connection.queries` przechowuje też wszystkie zapytania i ich parametry przez cały czas działania połączenia. W [Znanych ograniczeniach](known-limitations.md) opisano wpływ tej listy na pamięć.
+
+Logi DEBUG oraz wpisy ERROR dla nieudanych zapytań zawierają parametry Cyphera. Mogą zawierać dane wrażliwe, dlatego włączaj DEBUG tylko wtedy, gdy te wartości mogą trafić do logów, a handlery logów błędów skonfiguruj z taką samą ostrożnością. Zobacz [Znane ograniczenia](known-limitations.md), gdzie opisano środki ostrożności.
