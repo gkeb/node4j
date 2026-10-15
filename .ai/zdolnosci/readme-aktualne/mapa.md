@@ -11,9 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill weryfikuj readme-aktualne
+skill buduj readme-aktualne — ticket 12
 
-Ticket 11 zrobiony; poprawka S3 w `18f7595`, CI run `38786614471` zielone dla wszystkich pięciu zadań.
+Weryfikacja R2 (2026-10-15) nie przeszła: uwaga blokująca R2.1 — `Periodic` zniknął z wykonywanych przykładów, a test pokrycia S5 osłabiono. Ticket 12 obejmuje R2.1 i R2.2; R2.3 zostaje otwarta. Po tickecie 12 → `skill weryfikuj readme-aktualne` (runda R3, inny model niż Codex / GPT-6).
 
 ## Otwarte pytania
 
@@ -54,3 +54,4 @@ Ticket 11 zrobiony; poprawka S3 w `18f7595`, CI run `38786614471` zielone dla ws
 - [09 — Po weryfikacji R1: test akceptacyjny S12](tickety/09-test-s12.md) — po 01; [weryfikacja](weryfikacja.md) R1.1
 - [10 — Po weryfikacji R1: stany błędów w dokumentacji](tickety/10-stany-bledow.md) — po 01, 05, 06; [weryfikacja](weryfikacja.md) R1.2
 - [11 — Po weryfikacji R1: wzmocnienie testów dokumentacji i drobne poprawki](tickety/11-wzmocnienie-testow.md) — po 01, 06; [weryfikacja](weryfikacja.md) R1.3–R1.8
+- [12 — Po weryfikacji R2: przykład Periodic i pokrycie związane ze specem](tickety/12-periodic-i-pokrycie-ze-specu.md) — po 06, 11; [weryfikacja](weryfikacja.md) R2.1, R2.2
