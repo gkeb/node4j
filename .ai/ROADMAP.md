@@ -10,7 +10,10 @@
 
 ## Teraz
 
-- [`readme-aktualne`](zdolnosci/readme-aktualne/mapa.md) — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `weryfikacja`
+- [`wydanie-pypi`](zdolnosci/wydanie-pypi/mapa.md) — powtarzalne wydanie całej biblioteki jako pakietu `node4j` w PyPI (uv/pip): wersja = tag, changelog, `uv build`, TestPyPI → PyPI przez Trusted Publishing, `yank` jako wycofanie — `grill`
+  - czy `node4j/models.py` (przykładowe modele z globalną rejestracją) zostaje w paczce?
+  - backend budowania i wersja startowa (rozjazd `0.2.2` w `pyproject.toml` vs tag `v0.2.3`)
+  - publikacja z CI przez Trusted Publishing — do zbadania przed specem
 
 ## Dalej
 
@@ -30,11 +33,6 @@
   - jeden commit `ruff --fix` + ręczne poprawki, czy plik po pliku?
   - czy przy okazji formatować `ruff format` (zmienia prawie każdy plik)?
 
-- [`wydanie-pypi`](zdolnosci/wydanie-pypi/mapa.md) — powtarzalne wydanie całej biblioteki jako pakietu `node4j` w PyPI (uv/pip): wersja = tag, changelog, `uv build`, TestPyPI → PyPI przez Trusted Publishing, `yank` jako wycofanie — `pomysl`
-  - czy `node4j/models.py` (przykładowe modele z globalną rejestracją) zostaje w paczce?
-  - backend budowania i wersja startowa (rozjazd `0.2.2` w `pyproject.toml` vs tag `v0.2.3`)
-  - publikacja z CI przez Trusted Publishing — do zbadania przed specem
-
 - `zaleznosci-dev-dotenv` — usunięcie `python-dotenv` z grupy dev: nikt w repo go nie importuje, a `.env` czyta `pydantic-settings`, który ciągnie go sam ([obszar zależności](obszary/zaleznosci.md)) — `pomysl`
   - czy test konfiguracji (`tests/test_n3_config.py`) potrzebuje go bezpośrednio, czy wystarczy zależność przechodnia?
 
@@ -44,6 +42,7 @@
 
 ## Zrobione
 
+- [`readme-aktualne`](zdolnosci/readme-aktualne/mapa.md) — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — gotowe 2026-10 — weryfikacja R3, odbiór 2026-10-15
 - [`aktualizacja-zaleznosci`](zdolnosci/aktualizacja-zaleznosci/mapa.md) — aktualne biblioteki i serwer Neo4j, zachowanie bez zmian — gotowe 2026-10 — weryfikacja R3, odbiór 2026-10-12
 
 ## Porzucone

@@ -11,9 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill zamknij readme-aktualne
+— zamknięte 2026-10-15
 
-Weryfikacja R3 (2026-10-15) przeszła — Claude Code / claude-opus-5-5, niezależna. Otwarte uwagi nieblokujące: R3.1 (warto), R3.2 i R2.3 (drobne) — decyzja przy zamknięciu, czy zostają, czy idą do ticketów.
+Weryfikacja R3 przeszła (Claude Code / claude-opus-5-5, niezależna), odbiór 2026-10-15 przeszedł ([odbior.md](odbior.md)). Uwagi nieblokujące R3.1, R3.2 i R2.3 zostają otwarte w [weryfikacja.md](weryfikacja.md) — decyzja użytkownika przy R3.
 
 ## Otwarte pytania
 

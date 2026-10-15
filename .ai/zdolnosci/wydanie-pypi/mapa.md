@@ -11,7 +11,7 @@ Node4j da się dziś zainstalować tylko z gita, więc użytkownik biblioteki (P
 
 ## Następny krok
 
-Mgła — wraca do Dalej decyzją człowieka; wtedy `skill pomysl wydanie-pypi` od pytania o zakres pakietu (`node4j/models.py`).
+skill pomysl wydanie-pypi — od pytania o zakres pakietu (`node4j/models.py`). W Teraz od 2026-10-15 (decyzja człowieka po zamknięciu `readme-aktualne`).
 
 ## Koncepcja robocza
 

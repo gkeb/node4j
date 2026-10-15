@@ -24,7 +24,7 @@ Profile: przekrojowe
 - P-17 Dystrybucja i wdrożenie — później: dziś instalacja z gita, planowana publikacja w indeksie pakietów (uv/pip) — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje; koncepcja: [wydanie-pypi](zdolnosci/wydanie-pypi/mapa.md) (Mgła, obejmie też P-15, P-16, P-18)
 - P-18 Wycofanie — otwarte
 - P-19 Pielęgnacja — otwarte
-- P-20 Dokumentacja użytkownika — `README.md`, `README_PL.md`; docelowo README + `docs/` w EN i PL z wykonywanymi przykładami — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
+- P-20 Dokumentacja użytkownika — README + `docs/` w EN i PL; przykłady wykonywane w teście na bazie z APOC i GDS, zgodność EN ↔ PL pilnowana automatem (dowiezione 2026-10-15) — [readme-aktualne](zdolnosci/readme-aktualne/mapa.md) → Decyzje
 - P-21 Licencja i prawa — `LICENSE` (MIT)
 - P-22 Dane trwałe — pominięte: biblioteka nie przechowuje własnych danych; schemat bazy tworzy `apply_schema` z `Meta`
 - P-23 Git i GitHub — `warsztat.json` → `git`, `tracker`, `github`
