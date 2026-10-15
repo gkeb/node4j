@@ -11,9 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill weryfikuj readme-aktualne — runda R3 w innym modelu niż budujący
+skill zamknij readme-aktualne
 
-Weryfikacja R2 (2026-10-15) nie przeszła: uwaga blokująca R2.1 — `Periodic` zniknął z wykonywanych przykładów, a test pokrycia S5 osłabiono. Ticket 12 obejmuje R2.1 i R2.2; R2.3 zostaje otwarta. Po tickecie 12 → `skill weryfikuj readme-aktualne` (runda R3, inny model niż Codex / GPT-6).
+Weryfikacja R3 (2026-10-15) przeszła — Claude Code / claude-opus-5-5, niezależna. Otwarte uwagi nieblokujące: R3.1 (warto), R3.2 i R2.3 (drobne) — decyzja przy zamknięciu, czy zostają, czy idą do ticketów.
 
 ## Otwarte pytania
 
