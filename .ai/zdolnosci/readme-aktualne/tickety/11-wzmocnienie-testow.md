@@ -1,7 +1,7 @@
 ---
 nr: "11"
 tytul: "Po weryfikacji R1: wzmocnienie testów dokumentacji i drobne poprawki"
-status: w-toku
+status: zrobione
 blokowany-przez: ["01", "06"]
 scenariusze: ["S3", "S7", "S9"]
 budowal: Codex / GPT-6
@@ -46,4 +46,4 @@ Do tego:
 - Walidacja: `tests/test_documentation.py` — 45 passed na Neo4j 2026.09 z APOC i GDS; `ruff format --check`, `ruff check`, `scripts/check_ruff_baseline.py` i `git diff --check` zielone.
 - Przegląd: zgodność, jakość i bezpieczeństwo sprawdzone niezależnie; po poprawkach S3/S9 brak uwag blokujących.
 - Uwagi weryfikacji: R1.3, R1.4, R1.5, R1.6, R1.7, R1.8 ([weryfikacja](../weryfikacja.md)).
-- CI dla `a498275`: przebieg `38781058570` nie przeszedł — syntetyczna strona S3 w katalogu tymczasowym była poza repozytorium, a generator raportu używa ścieżki repozytoryjnej do etykiety błędu. Test dostał osobną etykietę `guide.md` z repozytorium; lokalny test regresji przechodzi, oczekuje na CI poprawki.
+- CI dla `a498275`: przebieg `38781058570` nie przeszedł — syntetyczna strona S3 w katalogu tymczasowym była poza repozytorium, a generator raportu używa ścieżki repozytoryjnej do etykiety błędu. Test dostał osobną etykietę `guide.md` z repozytorium. Poprawka w `18f7595`; CI `38786614471` dla `18f7595` zakończyło się sukcesem we wszystkich pięciu zadaniach.
