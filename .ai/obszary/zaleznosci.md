@@ -1,12 +1,12 @@
 ---
-poznany-commit: 5dde256458a957ffd4d9d82cfc814031d3c4f916
+poznany-commit: c26a768f5e37d4c0175537950d940956ba94f0f8
 zrodla-kodu: ["pyproject.toml", "uv.lock", ".python-version", "node4j/db.py", "node4j/manager.py", "node4j/nodes.py", "node4j/properties.py", "node4j/config.py", "node4j/models.py", "node4j/ext/", "README.md", "docs/en/", "tests/", "test.py", ".github/workflows/ci.yml", "scripts/check_ruff_baseline.py"]
 ---
 
 # Obszar: zależności
 
 - Katalogi: `pyproject.toml`, `uv.lock`, `.python-version`; punkty styku w `node4j/`, `tests/`, `test.py`; CI w `.github/workflows/ci.yml`
-- Poznany: 2026-10-11, odświeżony 2026-10-12 po zdolności `aktualizacja-zaleznosci` i 2026-10-14 w trakcie `readme-aktualne` (tickety 01–07)
+- Poznany: 2026-10-11, odświeżony 2026-10-12 po zdolności `aktualizacja-zaleznosci` 2026-10-14 w trakcie `readme-aktualne` (tickety 01–07) i 2026-10-15 po jej zamknięciu (tickety 08–12)
 
 ## Za co odpowiada
 
@@ -18,13 +18,13 @@ Stan na `uv.lock` po zdolności `aktualizacja-zaleznosci` (`uv tree --outdated -
 
 | Biblioteka | Wersja w locku (najnowsza) | Grupa, granice | Używa jej |
 | --- | --- | --- | --- |
-| `neo4j` | 6.4.0 | runtime, `>=6.4.0,<7` | `node4j/db.py`, `node4j/manager.py`, `node4j/properties.py`, testy |
+| `neo4j` | 6.4.0 (6.4.1, `uv tree --outdated`, 2026-10-15) | runtime, `>=6.4.0,<7` | `node4j/db.py`, `node4j/manager.py`, `node4j/properties.py`, testy |
 | `pydantic` | 2.14.1 | runtime, `>=2.14.1,<3` | `node4j/nodes.py`, `node4j/manager.py`, `node4j/properties.py`, `node4j/edges.py`, `node4j/models.py` |
 | `pydantic-settings` | 2.15.0 (2.16.0, `uv tree --outdated`, 2026-10-14) | runtime, `>=2.15.0,<3` | `node4j/config.py` |
 | `python-dotenv` | 1.1.1 (1.2.4) | dev; do runtime przychodzi przez `pydantic-settings` (`uv tree`) | nikt w repo go nie importuje (`grep dotenv`, 2026-10-14); dokumentacja zakazuje `load_dotenv` ([spec readme-aktualne](../zdolnosci/readme-aktualne/spec.md) → S8, `tests/test_documentation.py` → `test_s8_configuration_uses_only_builtin_settings`); `.env` czyta `pydantic-settings` (`node4j/config.py`), który ciągnie go sam — (wniosek) wpis w dev zbędny, Mgła `zaleznosci-dev-dotenv` |
 | `structlog` | 26.1.0 | dev | tylko `test.py` |
 | `pytest`, `pytest-asyncio` | 9.1.1, 1.4.0 | dev | `tests/` |
-| `ruff` | 0.17.0 | dev | walidacja (`pyproject.toml` → `[tool.ruff]`) |
+| `ruff` | 0.17.0 (0.17.1, 2026-10-15) | dev | walidacja (`pyproject.toml` → `[tool.ruff]`) |
 
 Runtime to tylko trzy biblioteki z `[project] dependencies`; reszta w `[dependency-groups] dev` (`pyproject.toml`). Podział i granice: [mapa zdolności](../zdolnosci/aktualizacja-zaleznosci/mapa.md) → Decyzje. Wcześniej `pytest` i `structlog` były w runtime (`1bf857a`, `1bb03e3`), przeniesione w `d014c0c`.
 
@@ -57,6 +57,8 @@ Zmiany 6.x względem tych miejsc: [badanie 2026-10-11](../badania/2026-10-11-ste
 - Uruchomienie: `uv run pytest` na bazie testowej (AGENTS.md → Uruchamianie). `NODE4J_REQUIRE_TEST_DB=1` zamienia brak bazy i pominięty test integracyjny (test z fiksturą `db`) w błąd (`tests/conftest.py` → `db`, `pytest_sessionfinish`).
 - CI (`.github/workflows/ci.yml`): job `test` — macierz Python 3.12/3.15 × Neo4j `2026.09.0`/`5.26` z APOC i GDS (dostęp APOC do plików włączony) na `uv.lock`, potem `test.py`, ruff względem `odniesienie.znane` (`scripts/check_ruff_baseline.py` sam uruchamia `python -m ruff`), budowa paczki i import 10 modułów publicznego API z instalacji poza checkoutem z samymi zależnościami runtime; job `latest-pydantic` — najnowszy Pydantic 2.x na Neo4j 2026.09.
 - Test dokumentacji (`tests/test_documentation.py`) wykonuje bloki Pythona z README i `docs/en/` w podprocesie przez `sys.executable` — przykłady widzą tylko zainstalowane zależności (runtime + dev). Zrzut stanu bazy przed i po stronie wywołuje `gds.graph.list()` (`_gds_projection_names`), więc każdy test wykonujący przykłady wymaga GDS na bazie testowej, także dla stron bez GDS.
+- Test S5 związany ze specem (`tests/test_documentation.py` → `test_s5_spec_inventory_requires_executable_python_references`) czyta wykaz pokrycia z `.ai/zdolnosci/readme-aktualne/spec.md` — przeniesienie albo archiwizacja tego pliku warsztatu czerwieni testy.
+- Testy S3 i S12 (`test_s3_public_pytest_runner_reports_skipped_documentation_block`, `test_s12_missing_test_database_uses_public_pytest_runner`) uruchamiają potomny `pytest` przez `sys.executable` z okrojonym środowiskiem (`PATH`, `SYSTEMROOT`, `TEMP`, `TMP`) — wymagają `pytest` z grupy dev w tym samym środowisku.
 - `test.py` przechodzi większość API, ale z niewieloma asercjami; w CI dostaje `NODE4J_*` jawnie zmapowane z `NODE4J_TEST_*`.
 
 ## Decyzje
@@ -73,6 +75,8 @@ Zmiany 6.x względem tych miejsc: [badanie 2026-10-11](../badania/2026-10-11-ste
 - Job `latest-pydantic` działa tylko na Neo4j 2026.09 i nie uruchamia `test.py`; zgodność najnowszego Pydantic z 5.26 nie jest sprawdzana osobno.
 - `scripts/check_ruff_baseline.py` porównuje z licznikami `odniesienie.znane` w `.ai/warsztat.json`. Licznik wyższy niż stan kodu kończy się błędem z podpowiedzią nowej wartości (`main` → `stale`, retro 2026-10-12), więc rozwiązany problem z weryfikacji R3.2 pilnuje automat; poprawka zmniejsza licznik w tym samym commicie.
 - Wtyczka niedostępna albo w złej wersji (np. GDS niepasujące do Neo4j) czerwieni testy dokumentacji wszystkich stron, nie tylko strony GDS — zob. Testy.
+- Dokumentacja cytuje komunikat `ServiceUnavailable` sterownika (`docs/en/configuration-and-logging.md` → „Troubleshoot Neo4j connection errors”, także PL), którego żaden test nie przypina (uwaga R2.3 w [weryfikacji](../zdolnosci/readme-aktualne/weryfikacja.md)) — przy podbiciu `neo4j` sprawdź go ręcznie.
+- Komunikat serwera `ProcedureNotFound` z `docs/en/apoc-extensions.md` przypina `tests/test_documentation.py` → `test_10_apoc_unregistered_procedure_error_comes_from_server` — podbicie obrazu Neo4j może go zaczerwienić; wtedy zaktualizuj test i obie strony razem.
 
 ## Źródła
 
@@ -80,5 +84,5 @@ Zmiany 6.x względem tych miejsc: [badanie 2026-10-11](../badania/2026-10-11-ste
 - `.github/workflows/ci.yml`, `scripts/check_ruff_baseline.py`, `tests/conftest.py`
 - Kod: pliki i symbole wymienione wyżej
 - `docs/en/apoc-extensions.md`, `docs/en/gds-extensions.md`, `tests/test_documentation.py`, `node4j/ext/`
-- Historia: commity `readme-aktualne#01`–`#07` i naprawy `565d29a`, `cfc9df6` (`c794a65..5dde256`); `git log -- pyproject.toml uv.lock` (`1bf857a`, `1bb03e3`, `8a27795`); commity `aktualizacja-zaleznosci#01`–`#10` (`bfdeb3d..4e84cab`)
+- Historia: commity `readme-aktualne#01`–`#12` i naprawy `565d29a`, `cfc9df6` (`c794a65..1405785`); `git log -- pyproject.toml uv.lock` (`1bf857a`, `1bb03e3`, `8a27795`); commity `aktualizacja-zaleznosci#01`–`#10` (`bfdeb3d..4e84cab`)
 - [Badanie sterownika neo4j 6.x](../badania/2026-10-11-sterownik-neo4j-6.md)

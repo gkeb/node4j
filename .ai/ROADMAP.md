@@ -36,8 +36,9 @@
 - `zaleznosci-dev-dotenv` — usunięcie `python-dotenv` z grupy dev: nikt w repo go nie importuje, a `.env` czyta `pydantic-settings`, który ciągnie go sam ([obszar zależności](obszary/zaleznosci.md)) — `pomysl`
   - czy test konfiguracji (`tests/test_n3_config.py`) potrzebuje go bezpośrednio, czy wystarczy zależność przechodnia?
 
-- `podbicie-pydantic-settings` — `pydantic-settings` 2.15.0 → 2.16.0 ([obszar zależności](obszary/zaleznosci.md)) — `pomysl`
-  - osobno czy razem z innymi podbiciami w jednym przeglądzie zależności?
+- `podbicie-zaleznosci` — jeden przegląd podbić: `pydantic-settings` 2.15.0 → 2.16.0, `neo4j` 6.4.0 → 6.4.1, `ruff` 0.17.0 → 0.17.1 (dev) ([obszar zależności](obszary/zaleznosci.md), 2026-10-15) — `pomysl`
+  - po podbiciu `neo4j`: czy komunikat `ServiceUnavailable` cytowany w dokumentacji się nie zmienił (nieprzypięty testem)?
+  - czy `ruff` 0.17.1 zmienia liczniki `odniesienie.znane` — razem z `porzadek-lint` czy osobno?
 
 
 ## Zrobione
