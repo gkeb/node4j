@@ -11,7 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill weryfikuj readme-aktualne → runda R2
+CI niesprawdzone — zmiany ticketu 09 nie są wypchnięte.
+
+skill buduj readme-aktualne → ticket 10
 
 ## Otwarte pytania
 

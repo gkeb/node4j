@@ -1,7 +1,9 @@
 import asyncio
 import io
 import json
+import os
 import re
+import socket
 import subprocess
 import sys
 import tokenize
@@ -1520,3 +1522,89 @@ asyncio.run(main())
             "DETACH DELETE node",
             {"markers": [baseline_marker, removed_marker]},
         )
+
+
+def test_s12_missing_test_database_uses_public_pytest_runner(tmp_path):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as unavailable_database:
+        unavailable_database.bind(("127.0.0.1", 0))
+        port = unavailable_database.getsockname()[1]
+        test_uri = f"bolt://127.0.0.1:{port}"
+
+        def run_documentation_tests(*, database_required, basetemp_name):
+            child_env = {
+                name: os.environ[name]
+                for name in ("PATH", "SYSTEMROOT", "TEMP", "TMP")
+                if name in os.environ
+            }
+            child_env.update(
+                {
+                    "NODE4J_TEST_URI": test_uri,
+                    "NODE4J_URI": test_uri,
+                    "NODE4J_TEST_USER": "neo4j",
+                    "NODE4J_USER": "neo4j",
+                    "NODE4J_TEST_PASSWORD": "test-password-123",
+                    "NODE4J_PASSWORD": "test-password-123",
+                    "PYTHONUTF8": "1",
+                }
+            )
+            if database_required:
+                child_env["NODE4J_REQUIRE_TEST_DB"] = "1"
+
+            return subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "pytest",
+                    "-v",
+                    "-rA",
+                    "-p",
+                    "no:cacheprovider",
+                    "--basetemp",
+                    str(tmp_path / basetemp_name),
+                    "-k",
+                    "not test_s12_missing_test_database_uses_public_pytest_runner "
+                    "and (not test_s2_english_documentation_examples_execute "
+                    "or README)",
+                    "tests/test_documentation.py",
+                ],
+                cwd=ROOT,
+                env=child_env,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                check=False,
+            )
+
+        optional_database = run_documentation_tests(
+            database_required=False, basetemp_name="optional-database"
+        )
+        optional_report = optional_database.stdout + optional_database.stderr
+        assert optional_database.returncode == 0, optional_report
+        for test_name in (
+            "test_s1_markdown_links_exist_and_headings_are_accessible",
+            "test_s4_english_and_polish_pages_are_mirrored",
+            "test_s7_documentation_does_not_promise_unimplemented_features",
+        ):
+            assert any(
+                test_name in line and "PASSED" in line
+                for line in optional_report.splitlines()
+            ), optional_report
+        for test_name in (
+            "test_s2_english_documentation_examples_execute",
+            "test_s10_gds_documentation_examples_execute",
+            "test_s11_page_state_is_restored_after_an_example_error",
+        ):
+            assert any(
+                test_name in line and "SKIPPED" in line
+                for line in optional_report.splitlines()
+            ), optional_report
+
+        required_database = run_documentation_tests(
+            database_required=True, basetemp_name="required-database"
+        )
+        required_report = required_database.stdout + required_database.stderr
+        assert required_database.returncode != 0, required_report
+        assert "test_s2_english_documentation_examples_execute" in required_report
+        assert "Wymagana baza testowa Neo4j jest niedostępna" in required_report
