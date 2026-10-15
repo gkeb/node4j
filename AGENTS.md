@@ -46,7 +46,8 @@ Architektura, wzorce i zasady kodu: `.ai/ZASADY.md`. Przeczytaj przed zmianą st
 - Nieznany sufiks w filtrze (`age__gtt`) po cichu staje się równością (`node4j/query.py` → `Q._compile_clause`).
 - Import `node4j.models` rejestruje przykładowe modele globalnie; rejestr jest kluczowany nazwą klasy — dwie klasy o tej samej nazwie się nadpisują.
 - `connection.queries` rośnie bez końca (`node4j/db.py` → `AsyncDatabase.run`).
-- Logi DEBUG z `node4j.db` zawierają parametry zapytań — mogą zawierać dane osobowe.
+- Logi DEBUG z `node4j.db` oraz wpisy ERROR dla nieudanych zapytań zawierają parametry zapytań — mogą zawierać dane osobowe (`node4j/db.py` → `AsyncDatabase.run`).
+- `NodeManager.aggregate` dopisuje `node.` do wyrażenia: `count(node)` staje się `count(node.node)`. Węzły liczysz przez `count(uid)` albo jawnie kwalifikowaną właściwość (`node4j/manager.py` → `aggregate`).
 - `NodeBase` dziedziczy po wewnętrznej metaklasie pydantic (`type(BaseModel)`) — po podbiciu `pydantic` najpierw uruchom testy (`node4j/nodes.py`).
 - `test.py` czyści całą bazę (`MATCH (n) DETACH DELETE n`) — uruchamiaj tylko na bazie testowej.
 

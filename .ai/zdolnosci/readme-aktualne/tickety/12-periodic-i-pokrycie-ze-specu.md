@@ -37,4 +37,4 @@ github: null
 
 - Uwagi weryfikacji: R2.1, R2.2 ([weryfikacja](../weryfikacja.md)).
 - Wskazówka (nie wymóg): przykład wrappera może działać na etykiecie, której nie używa nic poza tym blokiem (np. tworzonej tylko tutaj). Kroki iteracji wtedy nie potrzebują markera, a izolację względem strony zapewnia sprzątanie po różnicy stanu (wyjątek Z05). Sprawdź, czy lekcja „znacznik sprzątania sam ograniczy mutacje przykładu `Periodic.iterate`” w `lekcje.md` dotyczy też takiej etykiety.
-- Lekcja: „asercje testu akceptacyjnego zmieniamy, żeby przeszedł” w `lekcje.md` (2026-10-15).
+- Zasada (retro 2026-10-15): asercji testu akceptacyjnego nie usuwasz ani nie osłabiasz bez zmiany specu albo zgody człowieka w Notatkach (skill `buduj`). Przegląd wypisuje usunięte asercje skryptem warsztatu `usuniete-asercje.mjs`. Wzorzec warsztatu: `naprawa-oslabia-test-ktory-ja-pilnowal`.

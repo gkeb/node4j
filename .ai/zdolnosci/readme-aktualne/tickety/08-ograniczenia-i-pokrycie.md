@@ -4,7 +4,7 @@ tytul: Znane ograniczenia, pełne pokrycie i zamknięcie rozjazdów
 status: zrobione
 blokowany-przez: ["02", "03", "04", "05", "06", "07"]
 scenariusze: ["S6", "S5", "S7"]
-budowal: 2026-10-15 — Codex / GPT-6
+budowal: Codex / GPT-6
 github: null
 ---
 
