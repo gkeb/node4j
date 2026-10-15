@@ -11,15 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill buduj readme-aktualne — ticket 12
-
-## Stan sesji
-
-2026-10-15 — ticket 12 (`w-toku`)
-- Zrobione: kryteria S2/S3/S4/S5, walidacja lokalna na obu Neo4j i niezależny przegląd — szczegóły w [tickecie 12](tickety/12-periodic-i-pokrycie-ze-specu.md).
-- Nieoczywiste: wrapper `Periodic.iterate` nie przyjmuje parametrów; przykład izoluje dane etykietą z UUID używaną jako identyfikator Cypher w backtickach ([próby](../../proby.md)).
-- Akceptacja wyglądu: użytkownik polecił wypchnięcie po prezentacji czterech podglądów; zapisana w tickecie 12.
-- Następny krok po commicie i pushu: sprawdź CI; po zielonym wyniku domknij status ticketu i przejdź do weryfikacji R3.
+skill weryfikuj readme-aktualne — runda R3 w innym modelu niż budujący
 
 Weryfikacja R2 (2026-10-15) nie przeszła: uwaga blokująca R2.1 — `Periodic` zniknął z wykonywanych przykładów, a test pokrycia S5 osłabiono. Ticket 12 obejmuje R2.1 i R2.2; R2.3 zostaje otwarta. Po tickecie 12 → `skill weryfikuj readme-aktualne` (runda R3, inny model niż Codex / GPT-6).
 

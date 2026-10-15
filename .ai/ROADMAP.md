@@ -10,7 +10,7 @@
 
 ## Teraz
 
-- [`readme-aktualne`](zdolnosci/readme-aktualne/mapa.md) — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `budowa`
+- [`readme-aktualne`](zdolnosci/readme-aktualne/mapa.md) — README EN i PL zgodne z kodem po aktualizacji (w tym rozjazdy z `zrodla.md`) — `weryfikacja`
 
 ## Dalej
 
