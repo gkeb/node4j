@@ -11,9 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-skill weryfikuj readme-aktualne
+Dokończyć ticket 11 po czerwonym CI: naprawa testu S3 lokalnie przechodzi; commit poprawki i ponowny przebieg CI.
 
-Ticket 11 zrobiony lokalnie; CI dla jego commitu niesprawdzone do wypchnięcia.
+CI dla `a498275`: run `38781058570` nie przeszedł w `test_s3_public_pytest_runner_reports_skipped_documentation_block`; poprawka jest lokalna i czeka na wypchnięcie.
 
 ## Otwarte pytania
 
