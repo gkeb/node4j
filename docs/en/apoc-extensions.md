@@ -54,7 +54,7 @@ The procedures and settings are described in the [APOC JSON export guide](https:
 
 ## Check APOC and run batches
 
-`await apoc.version()` returns the version installed on the connected server. `apoc.Periodic.iterate()` wraps a read query and an update query that run in batches; `batch_size` defaults to 1000. The wrapper has no argument for runtime query values, so the example calls the APOC procedure through `connection.run` and passes a unique marker in `config.params`. It verifies that the matching node changed and the neighboring node did not. Keep the query text developer-written and never interpolate user input.
+`await apoc.version()` returns the version installed on the connected server. `apoc.Periodic.iterate()` wraps a read query and an update query that run in batches; `batch_size` defaults to 1000. The first example creates per-run labels from generated UUIDs, so the wrapper only selects nodes created by this example. The row selected by the read query is passed to the update query. A later `connection.run` example shows how to pass runtime query values through `config.params`. Keep query text developer-written and never interpolate user input; generated labels are identifiers and are enclosed in backticks.
 
 ## Export and import JSON
 
@@ -87,6 +87,12 @@ marker = str(uuid4())
 other_marker = str(uuid4())
 backup_file = f"node4j-apoc-backup-{marker}.json"
 import_file = f"node4j-apoc-import-{marker}.json"
+periodic_source_label = f"GuideApocPeriodicSource_{uuid4().hex}"
+periodic_neighbor_label = f"GuideApocPeriodicNeighbor_{uuid4().hex}"
+GuideApocPeriodicSource = type(periodic_source_label, (Node,), {})
+GuideApocPeriodicNeighbor = type(periodic_neighbor_label, (Node,), {})
+periodic_source = None
+periodic_neighbor = None
 
 try:
     version = await apoc.version()
@@ -130,6 +136,24 @@ try:
         {"marker": other_marker},
     )
     assert untouched[0]["unchanged"] is True
+
+    periodic_source = await GuideApocPeriodicSource.q.create()
+    periodic_neighbor = await GuideApocPeriodicNeighbor.q.create()
+    await apoc.Periodic.iterate(
+        f"MATCH (source:`{periodic_source_label}`) RETURN source",
+        "SET source.`apoc_processed` = randomUUID()",
+        batch_size=100,
+    )
+    processed = await connection.run(
+        f"MATCH (source:`{periodic_source_label}`) "
+        "RETURN source.`apoc_processed` IS NOT NULL AS processed"
+    )
+    assert processed[0]["processed"] is True
+    neighbor = await connection.run(
+        f"MATCH (node:`{periodic_neighbor_label}`) "
+        "RETURN node.`apoc_processed` IS NULL AS unchanged"
+    )
+    assert neighbor[0]["unchanged"] is True
 
     await apoc.Export.to_json(backup_file, {"jsonFormat": "JSON_LINES"})
 
@@ -182,8 +206,17 @@ try:
     assert imported_uid != source_uid
 finally:
     await connection.run(
-        "MATCH (node) WHERE node.`marker` IN $markers DETACH DELETE node",
-        {"markers": [marker, other_marker]},
+        "MATCH (node) "
+        "WHERE node.`marker` IN $markers OR node.`uid` IN $uids "
+        "DETACH DELETE node",
+        {
+            "markers": [marker, other_marker],
+            "uids": [
+                str(node.uid)
+                for node in (periodic_source, periodic_neighbor)
+                if node is not None
+            ],
+        },
     )
 ```
 

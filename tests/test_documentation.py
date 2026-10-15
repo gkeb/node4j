@@ -1,3 +1,4 @@
+import ast
 import asyncio
 import io
 import json
@@ -7,6 +8,7 @@ import socket
 import subprocess
 import sys
 import tokenize
+import unicodedata
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -47,9 +49,9 @@ class DatabaseSnapshot:
     gds_projections: frozenset[str]
 
 
-def _english_pages() -> list[Path]:
-    pages = [ROOT / "README.md"]
-    docs = ROOT / "docs" / "en"
+def _english_pages(root: Path = ROOT) -> list[Path]:
+    pages = [root / "README.md"]
+    docs = root / "docs" / "en"
     if docs.exists():
         pages.extend(sorted(docs.rglob("*.md")))
     return pages
@@ -649,25 +651,219 @@ def test_s3_skip_markers_require_a_reason():
         )
 
 
-def _marked_documentation_block_cases():
+def _marked_documentation_block_cases(root: Path = ROOT):
     return [
         pytest.param(
             path,
             block,
-            id=f"{path.relative_to(ROOT).as_posix()}-block-{block.number}",
+            id=f"{path.relative_to(root).as_posix()}-block-{block.number}",
         )
-        for path in _english_pages()
+        for path in _english_pages(root)
         for block in _python_blocks(_read_page(path)[1])
         if block.skip_reason is not None
     ]
 
 
 _MARKED_DOCUMENTATION_BLOCK_CASES = _marked_documentation_block_cases()
-if _MARKED_DOCUMENTATION_BLOCK_CASES:
+if not _MARKED_DOCUMENTATION_BLOCK_CASES:
+    _MARKED_DOCUMENTATION_BLOCK_CASES = [
+        pytest.param(
+            None,
+            None,
+            marks=pytest.mark.skip(reason="No marked documentation blocks."),
+        )
+    ]
 
-    @pytest.mark.parametrize("path,block", _MARKED_DOCUMENTATION_BLOCK_CASES)
-    def test_s3_marked_documentation_block_is_reported_as_skipped(path, block, request):
-        _report_skipped_blocks(path, [block], request)
+
+@pytest.mark.parametrize("path,block", _MARKED_DOCUMENTATION_BLOCK_CASES)
+def test_s3_marked_documentation_block_is_reported_as_skipped(path, block, request):
+    if path is None:
+        return
+    _report_skipped_blocks(path, [block], request)
+
+
+def _dotted_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        parent = _dotted_name(node.value)
+        return f"{parent}.{node.attr}" if parent else None
+    return None
+
+
+def _s5_inventory_symbols(spec: str) -> list[str]:
+    lines = spec.splitlines()
+    start = next(
+        index
+        for index, line in enumerate(lines)
+        if line.strip() == "- Wykaz pokrycia (S5):"
+    )
+    inventory_lines: list[str] = []
+    for line in lines[start + 1 :]:
+        if line.startswith("-"):
+            break
+        if re.match(r"^\s+-\s", line):
+            inventory_lines.append(line)
+    symbols: list[str] = []
+    for line in inventory_lines:
+        symbols.extend(re.findall(r"`([^`]+)`", line))
+        prose = re.sub(r"`[^`]+`", "", line).strip()
+        prose = re.sub(r"^-\s*", "", prose)
+        if ":" in prose:
+            _, prose = prose.split(":", maxsplit=1)
+
+        # Parentheses group API lists after descriptive category names such as
+        # "relationships" and "atomic transaction". Collect their contents,
+        # then parse the remaining comma-separated inventory positions.
+        parenthetical_items: list[str] = []
+        for match in re.finditer(r"\(([^()]*)\)", prose):
+            parenthetical_items.extend(
+                re.split(r"\s*,\s*|\s+(?:and|i)\s+", match.group(1))
+            )
+        prose = re.sub(r"\([^()]*\)", "", prose)
+        prose = re.sub(
+            r"\b(?:manager|relationships|mixins|configuration|mened\w*|"
+            r"relacj\w*|mixiny|konfiguracj\w*)\b",
+            "",
+            prose,
+            flags=re.IGNORECASE,
+        )
+        prose_items = re.split(r"\s*[;,]\s*|\s+(?:and|i)\s+", prose)
+        symbols.extend(
+            item.strip(" .:-")
+            for item in [*parenthetical_items, *prose_items]
+            if item.strip(" .:-")
+        )
+    return symbols
+
+
+def _missing_s5_inventory_symbols(spec: str, sources: list[str]) -> list[str]:
+    trees = [ast.parse(source) for source in sources]
+    calls = {
+        name
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and (name := _dotted_name(node.func)) is not None
+    }
+    names = {
+        node.id
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load)
+    }
+    attributes = {
+        node.attr
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Attribute) and isinstance(node.ctx, ast.Load)
+    }
+    keyword_names = {
+        node.arg
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, ast.keyword)
+    }
+    constants = {
+        node.value
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    }
+    function_names = {
+        node.name
+        for tree in trees
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    required_groups = {
+        "crud": {"create", "match_one", "match_all", "update", "delete"},
+        "bulk operations": {"bulk_create", "bulk_update"},
+        "operacje masowe": {"bulk_create", "bulk_update"},
+        "lazy load": {"await_relationship"},
+        "q filters": {"Q"},
+        "filtr q": {"Q"},
+        "lifecycle hooks": {
+            "pre_save",
+            "post_save",
+            "pre_delete",
+            "post_delete",
+        },
+        "haki cyklu zycia": {
+            "pre_save",
+            "post_save",
+            "pre_delete",
+            "post_delete",
+        },
+        "transakcja atomowa": {"connection.transaction", "connection.atomic"},
+        "ttl": {"TTLMixin"},
+        "soft delete": {"SoftDeleteMixin"},
+        "miekkiego usuniecia": {"SoftDeleteMixin"},
+        "projection": {"gds.Graph.project"},
+        "projekcja": {"gds.Graph.project"},
+        "projection removal": {"gds.Graph.drop"},
+        "usuniecie projekcji": {"gds.Graph.drop"},
+    }
+
+    def is_referenced(symbol: str) -> bool:
+        normalized = symbol.lstrip(".")
+        phrase = "".join(
+            char
+            for char in unicodedata.normalize("NFKD", normalized).casefold()
+            if not unicodedata.combining(char)
+        )
+        phrase = re.sub(r"\s+", " ", phrase).strip()
+        if phrase in required_groups:
+            requirements = required_groups[phrase]
+            if requirements == {"await_relationship"}:
+                return any(
+                    "RelationshipProperty"
+                    in {
+                        _dotted_name(node.func)
+                        for node in ast.walk(tree)
+                        if isinstance(node, ast.Call)
+                    }
+                    and any(
+                        isinstance(node, ast.Await)
+                        and isinstance(node.value, ast.Attribute)
+                        and isinstance(node.value.ctx, ast.Load)
+                        for node in ast.walk(tree)
+                    )
+                    for tree in trees
+                )
+            return all(
+                requirement in calls
+                or requirement in attributes
+                or requirement in names
+                or requirement in function_names
+                or requirement in keyword_names
+                for requirement in requirements
+            )
+        if symbol == "Periodic":
+            return "apoc.Periodic.iterate" in calls
+        if symbol == "Export":
+            return "apoc.Export.to_json" in calls
+        if symbol == "NODE4J_*":
+            return {"NODE4J_URI", "NODE4J_USER", "NODE4J_PASSWORD"}.issubset(constants)
+        if normalized.endswith("()"):
+            suffix = normalized[:-2]
+            return any(call == suffix or call.endswith(f".{suffix}") for call in calls)
+        return (
+            normalized in names
+            or normalized in attributes
+            or normalized in keyword_names
+            or any(
+                call == normalized or call.endswith(f".{normalized}") for call in calls
+            )
+        )
+
+    return [
+        symbol for symbol in _s5_inventory_symbols(spec) if not is_referenced(symbol)
+    ]
+
+
+def _assert_s5_inventory_is_executable(spec: str, sources: list[str]) -> None:
+    missing = _missing_s5_inventory_symbols(spec, sources)
+    assert not missing, f"S5 inventory missing from executed Python blocks: {missing}"
 
 
 def test_s3_skipped_block_is_omitted_and_reported():
@@ -713,7 +909,11 @@ def test_s3_skipped_block_report_is_a_skip():
 
 def test_s3_public_pytest_runner_reports_skipped_documentation_block(tmp_path):
     fence = chr(96) * 3
-    page_path = tmp_path / "guide.md"
+    docs_root = tmp_path / "docs-root"
+    english_docs = docs_root / "docs" / "en"
+    english_docs.mkdir(parents=True)
+    (docs_root / "README.md").write_text("# Guide\n", encoding="utf-8")
+    page_path = english_docs / "guide.md"
     page_path.write_text(
         f"{fence}python\nprint('before block ran')\n{fence}\n"
         "<!-- docs-test: skip: Requires an optional plugin. -->\n"
@@ -728,17 +928,21 @@ def test_s3_public_pytest_runner_reports_skipped_documentation_block(tmp_path):
                 "import subprocess",
                 "import sys",
                 "from pathlib import Path",
+                "import pytest",
                 f"sys.path.insert(0, {str(ROOT / 'tests')!r})",
                 "from test_documentation import (",
+                "    _marked_documentation_block_cases,",
                 "    _page_runner_source,",
                 "    _python_blocks,",
                 "    _read_page,",
                 "    _report_skipped_blocks,",
                 ")",
                 f"PAGE_PATH = Path({str(page_path)!r})",
+                f"DOCS_ROOT = Path({str(docs_root)!r})",
                 f"PAGE_LABEL_PATH = Path({str(ROOT / 'guide.md')!r})",
                 "_, PAGE = _read_page(PAGE_PATH)",
                 "BLOCKS = _python_blocks(PAGE)",
+                "MARKED_BLOCK_CASES = _marked_documentation_block_cases(DOCS_ROOT)",
                 "RUNNER = Path(__file__).with_name('page_runner.py')",
                 "",
                 "def test_s3_page_with_marker_executes_unskipped_blocks():",
@@ -758,9 +962,11 @@ def test_s3_public_pytest_runner_reports_skipped_documentation_block(tmp_path):
                 "    assert 'after block ran' in result.stdout",
                 "    assert 'skipped block ran' not in result.stdout",
                 "",
-                "def test_s3_page_reports_each_skipped_block_as_skipped(request):",
-                "    skipped = [block for block in BLOCKS if block.skip_reason]",
-                "    _report_skipped_blocks(PAGE_PATH, skipped, request)",
+                "@pytest.mark.parametrize('path, block', MARKED_BLOCK_CASES)",
+                "def test_s3_page_reports_each_skipped_block_as_skipped(",
+                "    path, block, request",
+                "):",
+                "    _report_skipped_blocks(path, [block], request)",
             )
         ),
         encoding="utf-8",
@@ -798,12 +1004,132 @@ def test_s3_public_pytest_runner_reports_skipped_documentation_block(tmp_path):
 
     assert result.returncode == 0, report
     assert "test_s3_page_with_marker_executes_unskipped_blocks PASSED" in report, report
-    assert "test_s3_page_reports_each_skipped_block_as_skipped SKIPPED" in report, (
-        report
-    )
+    assert (
+        "test_s3_page_reports_each_skipped_block_as_skipped"
+        "[docs/en/guide.md-block-2] SKIPPED"
+    ) in report, report
     assert (
         "guide.md skipped documentation examples: block 2: Requires an optional plugin."
     ) in report
+
+
+def test_s5_spec_inventory_requires_executable_python_references():
+    spec = (ROOT / ".ai" / "zdolnosci" / "readme-aktualne" / "spec.md").read_text(
+        encoding="utf-8"
+    )
+    sources = [
+        "\n".join(
+            block.source
+            for block in _python_blocks(_read_page(path)[1])
+            if block.skip_reason is None
+        )
+        for path in _english_pages()
+    ]
+
+    _assert_s5_inventory_is_executable(spec, sources)
+
+
+def test_s5_periodic_inventory_requires_the_wrapper_call():
+    tick = chr(96)
+    inventory = "- Wykaz pokrycia (S5):\n  - APOC: " + tick + "Periodic" + tick + "."
+    non_calls = (
+        "description = 'apoc.Periodic.iterate'",
+        "cypher = 'CALL apoc.periodic.iterate('",
+        "# await apoc.Periodic.iterate(...)\nvalue = 1",
+    )
+
+    for source in non_calls:
+        with pytest.raises(AssertionError, match="Periodic"):
+            _assert_s5_inventory_is_executable(inventory, [source])
+
+    _assert_s5_inventory_is_executable(
+        inventory, ["await apoc.Periodic.iterate('MATCH (n) RETURN n', 'RETURN n')"]
+    )
+
+
+def test_s5_new_spec_inventory_item_fails_when_example_omits_it():
+    tick = chr(96)
+    synthetic_inventory = (
+        "- Wykaz pokrycia (S5):\n  - Example model API: "
+        + tick
+        + "future_method"
+        + tick
+        + "."
+    )
+
+    with pytest.raises(AssertionError, match="future_method"):
+        _assert_s5_inventory_is_executable(
+            synthetic_inventory, ["await model.existing_method()"]
+        )
+
+    _assert_s5_inventory_is_executable(
+        synthetic_inventory, ["await model.future_method()"]
+    )
+
+
+def test_s5_unquoted_inventory_positions_are_checked():
+    inventory = "- Wykaz pokrycia (S5):\n  - menedżer `.q`: operacje masowe."
+
+    with pytest.raises(AssertionError, match="operacje masowe"):
+        _assert_s5_inventory_is_executable(inventory, ["value = 1"])
+
+    _assert_s5_inventory_is_executable(
+        inventory,
+        [
+            "await manager.q.bulk_create([{}])",
+            "await manager.q.bulk_update(filters={}, data={})",
+        ],
+    )
+
+
+def test_s5_assignment_target_does_not_reference_an_inventory_api():
+    tick = chr(96)
+    inventory = (
+        "- Wykaz pokrycia (S5):\n  - manager: " + tick + "get_or_create" + tick + "."
+    )
+
+    with pytest.raises(AssertionError, match="get_or_create"):
+        _assert_s5_inventory_is_executable(inventory, ["get_or_create = None"])
+
+    with pytest.raises(AssertionError, match="get_or_create"):
+        _assert_s5_inventory_is_executable(inventory, ["manager.get_or_create = None"])
+
+    _assert_s5_inventory_is_executable(
+        inventory, ["await manager.get_or_create(filters={})"]
+    )
+
+
+def test_s5_lazy_load_requires_an_awaited_attribute_reference():
+    inventory = "- Wykaz pokrycia (S5):\n  - relacje (lazy load)."
+
+    for source in (
+        "await asyncio.sleep(0)",
+        "await apoc.version()",
+        "books = await author.books",
+    ):
+        with pytest.raises(AssertionError, match="lazy load"):
+            _assert_s5_inventory_is_executable(inventory, [source])
+
+    _assert_s5_inventory_is_executable(
+        inventory,
+        [
+            "\n".join(
+                [
+                    'books_property = RelationshipProperty("HAS_BOOK", "Book")',
+                    "books = await author.books",
+                ]
+            )
+        ],
+    )
+
+    with pytest.raises(AssertionError, match="lazy load"):
+        _assert_s5_inventory_is_executable(
+            inventory,
+            [
+                "books = await author.books",
+                'books_property = RelationshipProperty("HAS_BOOK", "Book")',
+            ],
+        )
 
 
 def test_s2_page_runner_shares_names_and_supports_top_level_await(tmp_path):

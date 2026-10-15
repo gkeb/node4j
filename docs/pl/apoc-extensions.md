@@ -54,7 +54,7 @@ Procedury i ustawienia opisują [przewodnik APOC po eksporcie JSON](https://neo4
 
 ## Sprawdzenie APOC i operacje partiami
 
-`await apoc.version()` zwraca wersję zainstalowaną na połączonym serwerze. `apoc.Periodic.iterate()` opakowuje zapytanie odczytujące i aktualizujące wykonywane w partiach; domyślna wartość `batch_size` to 1000. Wrapper nie przyjmuje argumentu na wartości używane w zapytaniu, dlatego przykład wywołuje procedurę APOC przez `connection.run` i przekazuje unikalny marker w `config.params`. Sprawdza, że zmienił się pasujący węzeł, a sąsiedni pozostał bez zmian. Treść zapytań zapisuj po stronie programisty i nigdy nie wstawiaj do nich danych użytkownika.
+`await apoc.version()` zwraca wersję zainstalowaną na połączonym serwerze. `apoc.Periodic.iterate()` opakowuje zapytanie odczytujące i aktualizujące wykonywane w partiach; domyślna wartość `batch_size` to 1000. Pierwszy przykład tworzy etykiety unikalne dla każdego uruchomienia na podstawie generowanych UUID, więc wrapper wybiera tylko węzły utworzone przez ten przykład; wiersz wybrany przez zapytanie odczytujące trafia do zapytania aktualizującego. Późniejszy przykład z `connection.run` pokazuje, jak przekazywać wartości używane w zapytaniu przez `config.params`. Treść zapytań zapisuj po stronie programisty i nigdy nie wstawiaj do nich danych użytkownika; generowane etykiety są nazwami identyfikatorów ujętymi w backticki.
 
 ## Eksport i import JSON
 
@@ -87,6 +87,12 @@ marker = str(uuid4())
 other_marker = str(uuid4())
 backup_file = f"node4j-apoc-backup-{marker}.json"
 import_file = f"node4j-apoc-import-{marker}.json"
+periodic_source_label = f"GuideApocPeriodicSource_{uuid4().hex}"
+periodic_neighbor_label = f"GuideApocPeriodicNeighbor_{uuid4().hex}"
+GuideApocPeriodicSource = type(periodic_source_label, (Node,), {})
+GuideApocPeriodicNeighbor = type(periodic_neighbor_label, (Node,), {})
+periodic_source = None
+periodic_neighbor = None
 
 try:
     version = await apoc.version()
@@ -130,6 +136,24 @@ try:
         {"marker": other_marker},
     )
     assert untouched[0]["unchanged"] is True
+
+    periodic_source = await GuideApocPeriodicSource.q.create()
+    periodic_neighbor = await GuideApocPeriodicNeighbor.q.create()
+    await apoc.Periodic.iterate(
+        f"MATCH (source:`{periodic_source_label}`) RETURN source",
+        "SET source.`apoc_processed` = randomUUID()",
+        batch_size=100,
+    )
+    processed = await connection.run(
+        f"MATCH (source:`{periodic_source_label}`) "
+        "RETURN source.`apoc_processed` IS NOT NULL AS processed"
+    )
+    assert processed[0]["processed"] is True
+    neighbor = await connection.run(
+        f"MATCH (node:`{periodic_neighbor_label}`) "
+        "RETURN node.`apoc_processed` IS NULL AS unchanged"
+    )
+    assert neighbor[0]["unchanged"] is True
 
     await apoc.Export.to_json(backup_file, {"jsonFormat": "JSON_LINES"})
 
@@ -182,8 +206,17 @@ try:
     assert imported_uid != source_uid
 finally:
     await connection.run(
-        "MATCH (node) WHERE node.`marker` IN $markers DETACH DELETE node",
-        {"markers": [marker, other_marker]},
+        "MATCH (node) "
+        "WHERE node.`marker` IN $markers OR node.`uid` IN $uids "
+        "DETACH DELETE node",
+        {
+            "markers": [marker, other_marker],
+            "uids": [
+                str(node.uid)
+                for node in (periodic_source, periodic_neighbor)
+                if node is not None
+            ],
+        },
     )
 ```
 
