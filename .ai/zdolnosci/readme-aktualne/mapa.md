@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-CI niesprawdzone — zmiany ticketu 09 nie są wypchnięte.
+CI zielone dla `fadf64a` ([run 38768198814](https://github.com/gkeb/node4j/actions/runs/38768198814)).
 
 skill buduj readme-aktualne → ticket 10
 
