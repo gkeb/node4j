@@ -11,7 +11,7 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-CI niesprawdzone dla zmian ticketu 10 (commit nie został wypchnięty).
+CI zielone dla `1afed52` ([run 38773991643](https://github.com/gkeb/node4j/actions/runs/38773991643)).
 
 skill buduj readme-aktualne → ticket 11
 
