@@ -1,3 +1,11 @@
+## 2026-10-15 — Bezpieczny przykład wrappera `Periodic.iterate` [readme-aktualne]
+
+- Status: odlozone
+- Hasła: APOC, `Periodic.iterate`, `config.params`, marker, Z02, Z05
+- Warunki: wrapper `apoc.Periodic.iterate` przyjmuje tylko tekst obu zapytań i `batch_size`; wewnętrzna konfiguracja przekazuje wyłącznie `batchSize`.
+- Wynik: wrapper nie pozwala przekazać unikalnego markera. Zapytanie tylko po etykiecie może zmienić starsze węzły z przykładu; wstawienie markera do tekstu Cyphera przeczy Z02, a zmiana wrappera jest poza zakresem ticketu 11. Ticket 11 pokazuje zmianę pojedynczego węzła przez `connection.run` z markerem w `config.params`.
+- Wróć, gdy: osobny ticket dopuści dodanie parametrów do wrappera i test charakteryzujący tę sygnaturę.
+
 ## 2026-10-14 — `apoc.create.uuid()` w importerze APOC [readme-aktualne]
 
 - Status: nie-dziala

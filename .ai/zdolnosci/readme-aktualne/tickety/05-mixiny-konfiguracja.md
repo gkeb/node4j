@@ -4,7 +4,7 @@ tytul: Strony o mixinach oraz o konfiguracji i logowaniu
 status: zrobione
 blokowany-przez: ["01"]
 scenariusze: ["S2", "S4", "S5", "S11"]
-budowal: 2026-10-14 — Codex / GPT-6
+budowal: Codex / GPT-6
 github: null
 ---
 

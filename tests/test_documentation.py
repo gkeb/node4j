@@ -7,7 +7,6 @@ import socket
 import subprocess
 import sys
 import tokenize
-import warnings
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -228,7 +227,7 @@ def _report_skipped_blocks(path: Path, blocks: list[CodeBlock], request) -> None
         return
     report = _skip_report(path, blocks)
     request.node.user_properties.append(("skipped_documentation_blocks", report))
-    warnings.warn(report, UserWarning, stacklevel=2)
+    pytest.skip(report)
 
 
 def _page_runner_source(path: Path, blocks: list[CodeBlock]) -> str:
@@ -650,6 +649,27 @@ def test_s3_skip_markers_require_a_reason():
         )
 
 
+def _marked_documentation_block_cases():
+    return [
+        pytest.param(
+            path,
+            block,
+            id=f"{path.relative_to(ROOT).as_posix()}-block-{block.number}",
+        )
+        for path in _english_pages()
+        for block in _python_blocks(_read_page(path)[1])
+        if block.skip_reason is not None
+    ]
+
+
+_MARKED_DOCUMENTATION_BLOCK_CASES = _marked_documentation_block_cases()
+if _MARKED_DOCUMENTATION_BLOCK_CASES:
+
+    @pytest.mark.parametrize("path,block", _MARKED_DOCUMENTATION_BLOCK_CASES)
+    def test_s3_marked_documentation_block_is_reported_as_skipped(path, block, request):
+        _report_skipped_blocks(path, [block], request)
+
+
 def test_s3_skipped_block_is_omitted_and_reported():
     fence = chr(96) * 3
     page = _parse_markdown(
@@ -666,7 +686,7 @@ def test_s3_skipped_block_is_omitted_and_reported():
     )
 
 
-def test_s3_skipped_block_report_does_not_skip_the_page():
+def test_s3_skipped_block_report_is_a_skip():
     fence = chr(96) * 3
     page = _parse_markdown(
         f"<!-- docs-test: skip: Requires an optional plugin. -->\n"
@@ -679,7 +699,7 @@ def test_s3_skipped_block_report_does_not_skip_the_page():
     class Request:
         node = Node()
 
-    with pytest.warns(UserWarning, match="Requires an optional plugin"):
+    with pytest.raises(pytest.skip.Exception, match="Requires an optional plugin"):
         _report_skipped_blocks(ROOT / "README.md", _python_blocks(page), Request())
 
     assert Request.node.user_properties == [
@@ -689,6 +709,99 @@ def test_s3_skipped_block_report_does_not_skip_the_page():
             "Requires an optional plugin.",
         )
     ]
+
+
+def test_s3_public_pytest_runner_reports_skipped_documentation_block(tmp_path):
+    fence = chr(96) * 3
+    page_path = tmp_path / "guide.md"
+    page_path.write_text(
+        f"{fence}python\nprint('before block ran')\n{fence}\n"
+        "<!-- docs-test: skip: Requires an optional plugin. -->\n"
+        f"{fence}python\nprint('skipped block ran')\n{fence}\n"
+        f"{fence}python\nprint('after block ran')\n{fence}\n",
+        encoding="utf-8",
+    )
+    child_test = tmp_path / "test_skipped_documentation_page.py"
+    child_test.write_text(
+        "\n".join(
+            (
+                "import subprocess",
+                "import sys",
+                "from pathlib import Path",
+                f"sys.path.insert(0, {str(ROOT / 'tests')!r})",
+                "from test_documentation import (",
+                "    _page_runner_source,",
+                "    _python_blocks,",
+                "    _read_page,",
+                "    _report_skipped_blocks,",
+                ")",
+                f"PAGE_PATH = Path({str(page_path)!r})",
+                "_, PAGE = _read_page(PAGE_PATH)",
+                "BLOCKS = _python_blocks(PAGE)",
+                "RUNNER = Path(__file__).with_name('page_runner.py')",
+                "",
+                "def test_s3_page_with_marker_executes_unskipped_blocks():",
+                "    RUNNER.write_text(",
+                "        _page_runner_source(PAGE_PATH, BLOCKS), encoding='utf-8'",
+                "    )",
+                "    result = subprocess.run(",
+                "        [sys.executable, str(RUNNER)],",
+                "        capture_output=True,",
+                "        text=True,",
+                "        check=False,",
+                "        timeout=60,",
+                "    )",
+                "    assert result.returncode == 0, result.stderr",
+                "    assert 'before block ran' in result.stdout",
+                "    assert 'after block ran' in result.stdout",
+                "    assert 'skipped block ran' not in result.stdout",
+                "",
+                "def test_s3_page_reports_each_skipped_block_as_skipped(request):",
+                "    skipped = [block for block in BLOCKS if block.skip_reason]",
+                "    _report_skipped_blocks(PAGE_PATH, skipped, request)",
+            )
+        ),
+        encoding="utf-8",
+    )
+    child_env = {
+        name: os.environ[name]
+        for name in ("PATH", "SYSTEMROOT", "TEMP", "TMP")
+        if name in os.environ
+    }
+    child_env["PYTHONUTF8"] = "1"
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pytest",
+            "-v",
+            "-rA",
+            "-p",
+            "no:cacheprovider",
+            "--basetemp",
+            str(tmp_path / "child-basetemp"),
+            str(child_test),
+        ],
+        cwd=ROOT,
+        env=child_env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=60,
+        check=False,
+    )
+    report = result.stdout + result.stderr
+
+    assert result.returncode == 0, report
+    assert "test_s3_page_with_marker_executes_unskipped_blocks PASSED" in report, report
+    assert "test_s3_page_reports_each_skipped_block_as_skipped SKIPPED" in report, (
+        report
+    )
+    assert (
+        "guide.md skipped documentation examples: block 2: Requires an optional plugin."
+    ) in report
 
 
 def test_s2_page_runner_shares_names_and_supports_top_level_await(tmp_path):
@@ -836,14 +949,14 @@ def test_s4_english_and_polish_pages_are_mirrored():
         assert polish[key].resolve() in {
             target for target, _ in _relative_links(english_path)
         }, f"{english_path.name} needs a Polish language link"
-        if english_path.name == "apoc-extensions.md":
+        if english_path.is_relative_to(ROOT / "docs" / "en"):
             assert (ROOT / "README.md").resolve() in {
                 target for target, _ in _relative_links(english_path)
             }, f"{english_path.name} needs a README link"
         assert english_path.resolve() in {
             target for target, _ in _relative_links(polish[key])
         }, f"{polish[key].name} needs an English language link"
-        if polish[key].name == "apoc-extensions.md":
+        if polish[key].is_relative_to(ROOT / "docs" / "pl"):
             assert (ROOT / "README_PL.md").resolve() in {
                 target for target, _ in _relative_links(polish[key])
             }, f"{polish[key].name} needs a Polish README link"
@@ -1088,9 +1201,10 @@ def test_s5_apoc_methods_are_in_executable_examples():
     )
 
     assert "await apoc.version()" in source
-    assert "await apoc.Periodic.iterate(" in source
     assert "CALL apoc.periodic.iterate(" in source
     assert "params: {marker: $marker}" in source
+    assert 'assert processed[0]["processed"] is True' in source
+    assert 'assert untouched[0]["unchanged"] is True' in source
     assert "await apoc.Export.to_json(" in source
     assert ".apoc.create_from_json(" in source
 
@@ -1164,7 +1278,7 @@ def test_s5_complete_coverage_inventory_is_in_executable_examples():
         "NODE4J_USER",
         "NODE4J_PASSWORD",
         "await apoc.version()",
-        "apoc.Periodic.iterate(",
+        "CALL apoc.periodic.iterate(",
         "apoc.Export.to_json(",
         ".apoc.create_from_json(",
         "gds.Graph.project(",
@@ -1330,9 +1444,20 @@ def test_s11_documentation_does_not_clear_every_node():
 
 def test_documentation_does_not_use_absolute_apoc_file_paths():
     absolute_apoc_path = re.compile(
-        r"file:///(?:[a-z]:/|(?:path/to|home|users|var|tmp|mnt|etc)/)",
+        r"file:///(?:[a-z]:/|(?:path/to|home|users|var|tmp|mnt|etc)/)|"
+        r"\babsolute\s+paths?\b|"
+        r"\b(?:ścieżk(?:a|i|ę|ą|ach|ami)|ścieżce)\s+absolutn\w*\b",
         flags=re.IGNORECASE,
     )
+    for claim in (
+        "absolute path",
+        "absolute paths",
+        "ścieżka absolutna",
+        "ścieżki absolutnej",
+        "ścieżce absolutnej",
+    ):
+        assert absolute_apoc_path.search(claim), claim
+
     for path in _all_pages():
         source, _ = _read_page(path)
         assert absolute_apoc_path.search(source) is None, path.name
@@ -1372,7 +1497,6 @@ async def test_s2_english_documentation_examples_execute(
         f"{path.name} documentation example failed:\n"
         f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
     )
-    _report_skipped_blocks(path, skipped, request)
 
 
 async def test_s11_page_state_is_restored_after_an_example_error(

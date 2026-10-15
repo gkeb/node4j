@@ -54,7 +54,7 @@ Procedury i ustawienia opisują [przewodnik APOC po eksporcie JSON](https://neo4
 
 ## Sprawdzenie APOC i operacje partiami
 
-`await apoc.version()` zwraca wersję zainstalowaną na połączonym serwerze. `apoc.Periodic.iterate()` opakowuje zapytanie odczytujące i aktualizujące wykonywane w partiach; domyślna wartość `batch_size` to 1000. Wrapper nie przyjmuje argumentu na wartości używane w zapytaniu. Przy partii z parametrami wywołaj procedurę APOC przez `connection.run` i przekaż wartości w `config.params`, jak w przykładzie. Treść zapytań zapisuj po stronie programisty i nigdy nie wstawiaj do nich danych użytkownika.
+`await apoc.version()` zwraca wersję zainstalowaną na połączonym serwerze. `apoc.Periodic.iterate()` opakowuje zapytanie odczytujące i aktualizujące wykonywane w partiach; domyślna wartość `batch_size` to 1000. Wrapper nie przyjmuje argumentu na wartości używane w zapytaniu, dlatego przykład wywołuje procedurę APOC przez `connection.run` i przekazuje unikalny marker w `config.params`. Sprawdza, że zmienił się pasujący węzeł, a sąsiedni pozostał bez zmian. Treść zapytań zapisuj po stronie programisty i nigdy nie wstawiaj do nich danych użytkownika.
 
 ## Eksport i import JSON
 
@@ -67,7 +67,7 @@ Przykład eksportu całej bazy uruchamiaj tylko na bazie testowej, chyba że cel
 `create_from_json` przekazuje `file_url` do `apoc.load.json`, który może też pobierać zdalne URL-e. Nie przekazuj URL-i kontrolowanych przez użytkownika: serwer Neo4j mógłby uzyskać dostęp do usług w sieci wewnętrznej. API zapisuje `file_url` w logu INFO, więc nigdy nie umieszczaj w nim danych logowania ani tokenów. Stosuj się do [zaleceń bezpieczeństwa APOC dotyczących SSRF](https://neo4j.com/docs/apoc/current/security-guidelines/) odpowiednich dla swojej edycji Neo4j.
 
 ```python
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from node4j.db import connection
 from node4j.ext.apoc import apoc, install_apoc_manager
@@ -92,14 +92,14 @@ try:
     version = await apoc.version()
     assert version is not None
 
-    await apoc.Periodic.iterate(
-        "UNWIND [] AS source RETURN source",
-        "SET source.`apoc_processed` = true",
-        batch_size=100,
-    )
-
     await GuideApocSource.q.create(marker=marker)
     await GuideApocSource.q.create(marker=other_marker)
+    source = await connection.run(
+        "MATCH (source:`GuideApocSource`) WHERE source.`marker` = $marker "
+        "RETURN source.`uid` AS uid",
+        {"marker": marker},
+    )
+    source_uid = UUID(source[0]["uid"])
     await connection.run(
         """
         CALL apoc.periodic.iterate(
@@ -174,10 +174,12 @@ try:
     imported = await connection.run(
         "MATCH (node:`GuideApocImported`) "
         "WHERE node.`marker` = $marker "
-        "RETURN count(node) AS total",
+        "RETURN node.`uid` AS uid",
         {"marker": marker},
     )
-    assert imported[0]["total"] == 1, import_result
+    assert len(imported) == 1, import_result
+    imported_uid = UUID(imported[0]["uid"])
+    assert imported_uid != source_uid
 finally:
     await connection.run(
         "MATCH (node) WHERE node.`marker` IN $markers DETACH DELETE node",

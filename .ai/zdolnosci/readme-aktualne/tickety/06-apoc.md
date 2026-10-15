@@ -2,9 +2,9 @@
 nr: "06"
 tytul: Pliki APOC w bazie testowej i strona rozszerzeń APOC
 status: zrobione
-blokowany-przez: []
+blokowany-przez: ["01"]
 scenariusze: ["S9", "S2", "S4", "S5"]
-budowal: 2026-10-14 — Codex / GPT-6
+budowal: Codex / GPT-6
 github: null
 ---
 

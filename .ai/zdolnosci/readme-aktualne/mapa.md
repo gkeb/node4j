@@ -11,9 +11,9 @@ Spec: [spec.md](spec.md) — zaakceptowany 2026-10-13
 
 ## Następny krok
 
-CI zielone dla `1afed52` ([run 38773991643](https://github.com/gkeb/node4j/actions/runs/38773991643)).
+skill weryfikuj readme-aktualne
 
-skill buduj readme-aktualne → ticket 11
+Ticket 11 zrobiony lokalnie; CI dla jego commitu niesprawdzone do wypchnięcia.
 
 ## Otwarte pytania
 
