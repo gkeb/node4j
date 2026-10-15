@@ -28,6 +28,17 @@ resolved_settings = {
 assert all(resolved_settings.values())
 ```
 
+## Troubleshoot Neo4j connection errors
+
+If `connection.connect()` cannot reach the server, the driver raises `ServiceUnavailable`. For example, with no Neo4j server listening at the configured address, the official driver returned:
+
+```text
+ServiceUnavailable: Couldn't connect to 127.0.0.1:7687 (resolved to ('127.0.0.1:7687',)):
+Timed out trying to establish connection to ResolvedIPv4Address(('127.0.0.1', 7687))
+```
+
+Check that Neo4j is running and reachable, then compare the host and port in `NODE4J_URI` with the server's Bolt address. The host, port, and final detail in the message depend on your setup.
+
 ## Enable application logging
 
 The library uses Python loggers under `node4j.*` and does not configure application handlers. Configure logging in your application, for example with `basicConfig()`:

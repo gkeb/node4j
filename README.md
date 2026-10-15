@@ -32,6 +32,8 @@ NODE4J_USER=neo4j
 NODE4J_PASSWORD=change-me
 ```
 
+If `connection.connect()` cannot reach Neo4j, check that the server is running and that `NODE4J_URI` has the right host and port. See [connection troubleshooting](docs/en/configuration-and-logging.md#troubleshoot-neo4j-connection-errors).
+
 Save the following as `quickstart.py` and run it with Python. It creates two nodes, connects them, reads one node back, and loads its relationship.
 
 ```python

@@ -23,6 +23,16 @@ Flagi importu i eksportu włączają dostęp serwera do plików. W Dockerze odpo
 
 Neo4j opisuje `NEO4J_PLUGINS` jako ułatwienie dla środowisk deweloperskich i nie zaleca tej metody na produkcji. W produkcji zainstaluj plugin JAR APOC zgodny z wersją Neo4j i zamontuj go w `/plugins`; zobacz [oficjalny przewodnik instalacji APOC](https://neo4j.com/docs/apoc/current/installation/).
 
+## Rozwiązywanie problemów z brakującymi procedurami APOC
+
+Jeśli `await apoc.version()` albo inne wywołanie APOC kończy się błędem `Neo.ClientError.Procedure.ProcedureNotFound`, Neo4j nie zarejestrował tej procedury na połączonym serwerze. Komunikat serwera ma taką postać:
+
+```text
+There is no procedure with the name `apoc.version` registered for this database instance. Please ensure you've spelled the procedure name correctly and that the procedure is properly deployed.
+```
+
+Sprawdź, czy APOC jest zainstalowany dla używanej wersji Neo4j, włączony i załadowany po restarcie serwera. W Dockerze zobacz konfigurację pluginu powyżej; w innych instalacjach skorzystaj z [oficjalnego przewodnika instalacji APOC](https://neo4j.com/docs/apoc/current/installation/). Jeśli brakuje tylko jednej procedury APOC, sprawdź, czy zawiera ją zainstalowane wydanie pluginu.
+
 ## Dostęp do plików na serwerze Neo4j
 
 APOC odczytuje i zapisuje pliki na **serwerze Neo4j**. Przy domyślnej konfiguracji serwera `file:///people.json` oznacza plik `people.json` w katalogu import tego serwera. Plik dostępny tylko na komputerze aplikacji Python nie jest dostępny pod tym URL-em. Dostęp APOC do importu i eksportu plików jest domyślnie wyłączony.

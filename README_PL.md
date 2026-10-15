@@ -32,6 +32,8 @@ NODE4J_USER=neo4j
 NODE4J_PASSWORD=change-me
 ```
 
+Jeśli `connection.connect()` nie może połączyć się z Neo4j, sprawdź, czy serwer działa i czy `NODE4J_URI` wskazuje właściwy host i port. Zobacz [rozwiązywanie problemów z połączeniem](docs/pl/configuration-and-logging.md#rozwiązywanie-problemów-z-połączeniem-z-neo4j).
+
 Zapisz poniższy kod w pliku `quickstart.py` i uruchom go Pythonem. Tworzy dwa węzły, łączy je, odczytuje jeden węzeł i ładuje jego relację.
 
 ```python

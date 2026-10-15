@@ -28,6 +28,17 @@ resolved_settings = {
 assert all(resolved_settings.values())
 ```
 
+## Rozwiązywanie problemów z połączeniem z Neo4j
+
+Jeśli `connection.connect()` nie może dotrzeć do serwera, sterownik zgłasza `ServiceUnavailable`. Na przykład gdy pod skonfigurowanym adresem nie nasłuchiwał serwer Neo4j, oficjalny sterownik zwrócił:
+
+```text
+ServiceUnavailable: Couldn't connect to 127.0.0.1:7687 (resolved to ('127.0.0.1:7687',)):
+Timed out trying to establish connection to ResolvedIPv4Address(('127.0.0.1', 7687))
+```
+
+Sprawdź, czy Neo4j działa i jest osiągalne, a następnie porównaj host i port w `NODE4J_URI` z adresem Bolt serwera. Host, port i końcowa część komunikatu zależą od konfiguracji.
+
 ## Włączenie logowania w aplikacji
 
 Biblioteka używa loggerów Pythona z nazwami `node4j.*` i nie konfiguruje handlerów aplikacji. Skonfiguruj logowanie w swojej aplikacji, na przykład przez `basicConfig()`:

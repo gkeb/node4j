@@ -15,6 +15,7 @@ from urllib.parse import unquote, urlsplit
 from uuid import uuid4
 
 import pytest
+from neo4j.exceptions import ClientError
 
 ROOT = Path(__file__).parents[1]
 SKIP_PREFIX = "<!-- docs-test: skip"
@@ -1608,3 +1609,18 @@ def test_s12_missing_test_database_uses_public_pytest_runner(tmp_path):
         assert required_database.returncode != 0, required_report
         assert "test_s2_english_documentation_examples_execute" in required_report
         assert "Wymagana baza testowa Neo4j jest niedostępna" in required_report
+
+
+async def test_10_apoc_unregistered_procedure_error_comes_from_server(db):
+    with pytest.raises(ClientError) as error:
+        await db.run("CALL apoc.__node4j_missing_for_ticket_10__()")
+
+    assert error.value.code == "Neo.ClientError.Procedure.ProcedureNotFound"
+    assert error.value.message.startswith(
+        "There is no procedure with the name "
+        "`apoc.__node4j_missing_for_ticket_10__` registered for this database instance."
+    )
+    assert error.value.message.endswith(
+        "Please ensure you've spelled the procedure name correctly and that the "
+        "procedure is properly deployed."
+    )
